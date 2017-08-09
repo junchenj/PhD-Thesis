@@ -1,0 +1,134 @@
+\chapter{Cross-Session Throughput Prediction for Initial Video Bitrate Selection}
+\label{ch:dda}
+
+\providecommand{\name}{{DDA}\xspace}
+
+\providecommand{\session}{\ensuremath{\mathit{s}}}
+\providecommand{\SimilarSessions}[1]{\ensuremath{\mathit{SimilarSessions(#1)}}}
+\providecommand{\timestamp}[1]{\ensuremath{\mathit{t_{#1}}}}
+\providecommand{\AllFeatures}{\ensuremath{\mathcal{F}}}
+\providecommand{\Features}{\ensuremath{\mathit{F}}}
+\providecommand{\FeatureValues}[2]{\ensuremath{\mathit{FV(#1,#2)}}}
+\providecommand{\TimeWindow}[2]{\ensuremath{\mathit{TimeWindow(#1,#2)}}}
+\providecommand{\TimeDim}[2]{\ensuremath{\mathit{T_{#1,#2}}}}
+\providecommand{\TimeRange}{\ensuremath{\mathit{T}}}
+\providecommand{\Aggregation}[3]{\ensuremath{\mathit{Agg(#1,#2,#3)}}}
+%\providecommand{\QualitySummary}{\ensuremath{\mathit{F}}}
+\providecommand{\QualitySummary}{\ensuremath{\mathit{Median}}}
+\providecommand{\Error}[2]{\ensuremath{\mathit{Err(#1,#2)}}}
+\providecommand{\Pred}[1]{\ensuremath{\mathit{Pred(#1)}}}
+\providecommand{\Throughput}[1]{\ensuremath{\mathit{#1_{w}}}}
+\providecommand{\Pair}[2]{\ensuremath{\mathit{\langle#1,#2\rangle}}}
+\providecommand{\optimal}{\ensuremath{\mathit{*}}}
+\providecommand{\Est}{\ensuremath{\mathit{Est}}}
+\providecommand{\Estimation}[1]{\ensuremath{\mathit{\Est(#1)}}}
+\providecommand{\Model}{\ensuremath{\mathit{M}}}
+\providecommand{\Agg}[2]{\ensuremath{\mathit{Agg(#1,#2)}}}
+
+In the previous chapter, we have demonstrated that if we observe the QoE of many 
+video sessions, we can improve QoE by predicting QoE of any given
+video session based on that of similar sessions. 
+However, it is not always possible for anyone to measure 
+QoE directly, 
+as it requires access to the internal states of the client-side applications.
+In the meantime, there are public datasets on 
+throughput measurements, e.g., FCC Measuring 
+BroadBand America Platform~\cite{fcc-2014}.
+Inspired by this opportunity, in this chapter, we remove the assumption that QoE 
+can be observed from video sessions from the CFA formulation, and 
+pose the question that whether it is feasible to prediction end-to-end 
+throughput of any video session based on the throughput 
+observed from other HTTP sessions in third-party datasets.
+
+Achieving the new objective of throughput prediction can still greatly improve today's
+video QoE. For most video players today start
+streaming video in a low bitrate and then gradually increase 
+the bitrate using a local logic, which
+typically takes several seconds to tens of seconds 
+before it reaches a high and sustainable bitrate,
+if it ever does.
+In contrast, if the player can accurately predict throughput before 
+a video session starts,
+it can start directly with the highest-yet-sustainable initial video bitrate 
+(Section~\ref{sec:dda:back}).
+
+To accurately predict end-to-end throughput, this chapter 
+argues for a {\em cross-session} prediction approach inspired by \ddn, 
+where throughput measured on sessions of different servers and clients 
+is used to predict the throughput of a new session.
+We observe that there are substantial similarity among
+throughput of similar sessions, but it is challenging
+to transform such similarity to accurate throughput
+prediction due to complex relations between session-level features 
+and throughput. 
+We develop an accurate throughput predictor called \name, which 
+combines the nearest neighbor model with the domain-specific 
+insight that
+throughput only depends a subset of session-level features 
+(Section~\ref{sec:dda:design}). \name can be viewed as another illustration 
+of how persistent structures used for predicting end-to-end performance.
+Using two throughput measurement datasets, we show that \name 
+predicts throughput more accurately than simple predictors and 
+conventional machine learning algorithms; e.g., \name's 80\%ile 
+prediction error of \name is $\geq$ 50\% lower than other algorithms. 
+We also show that this 
+improved accuracy enables video players to select a higher 
+sustainable initial bitrate; e.g., compared to initial bitrate without 
+prediction, \name leads to $4\times$ higher average bitrate 
+(Section~\ref{sec:dda:eval}).
+
+
+
+%Video QoE could be greatly improved by selecting a high-yet-sustainable initial video bitrate, and it is therefore critical to accurately predict throughput before a video session starts.
+%%Accurate prediction of throughput is crucial for video streaming to optimize user experience.
+%% by picking a highest bitrate below the predicted throughput. Ideally, we would like to predict the throughput of a video session when it starts. However, existing approaches either require substantial historical throughput measurement collected from the same client, which is often unavailable, or waist the first few video chunks (e.g., tens of seconds) to warm-up before the player can predict the throughput. 
+%Inspired by previous studies that show similarity among throughput of similar sessions (e.g., those sharing same bottleneck link), we argue for a {\em cross-session} prediction approach, where throughput measured on sessions of different servers and clients is used to predict the throughput of a new session. 
+%%This approach has recently become plausible as many video service providers begin to constantly collect throughput measurements from video players. 
+%%Despite of throughput similarity among sessions of spatial and temporal correlation, it is, however, much more challenging to turn such similarity into accurate prediction than it first appears. 
+%In this paper, we study the challenges of cross-session throughput prediction, develop an accurate throughput predictor called \name, and evaluate the performance of the predictor with real-world datasets. We show that \name predicts throughput more accurately than simple predictors and conventional machine learning algorithms; e.g., \name's 80\%ile prediction error of \name is $\geq$ 50\% lower than other algorithms. We also show that this 
+%improved accuracy enables video players to select a higher sustainable initial bitrate; e.g., compared to initial bitrate without prediction, \name leads to $4\times$ higher average bitrate.
+%
+%This chapter is organized as follows. 
+%First, we motivate the need for throughput prediction
+%in video bitrate selection, and uses a dataset of real-world throughput measurement
+%of 9.9 million sessions to show the challenges of
+%cross-session throughput prediction (Section~\ref{sec:dda:back}).
+%Second, we present a concrete cross-session throughput
+%predictor, DDA that addresses the above challenges (Section~\ref{sec:dda:design}).
+%Finally, our evaluation based on two real-world datasets
+%shows that DDA can predict throughput more accurately
+%than simple predictors and conventional machine learning
+%algorithms, and that due to more accurate throughput
+%prediction, DDA allows a video player to select a higher-yet-sustainable
+%initial bitrate  (Section~\ref{sec:dda:eval}).
+%Section~\ref{sec:dda:related} discusses the related work, and
+%Section~\ref{sec:dda:summary} concludes the section.
+
+\input{dda-back}
+
+\input{dda-design}
+
+\input{dda-eval}
+
+\input{dda-related}
+
+
+
+\section{Summary}
+\label{sec:dda:summary}
+%In this chapter, we have generalized the CFA algorithm to achieve 
+%throughput prediction. 
+Inspired by the \ddn paradigm, this chapter
+has presented \name to demonstrate the feasibility of using 
+throughput measurement on many HTTP sessions to 
+accurately predict throughput and has applied \name to initial video bitrate
+selection.
+%Many Internet applications can benefit from estimating end-to-end throughput.  This paper focuses on its application to initial video bitrate selection. 
+\name uses another illustration of persistent structures that HTTP throughput 
+depends on a subset of session-level features, which persist on long timescales.
+%throughput measured by different clients and servers to achieve accurate throughput prediction before a new session starts. 
+Evaluation based on two real-world datasets shows (i) \name predicts throughput more accurately than simple predictors and conventional machine learning algorithms, and (ii) with more accurate throughput prediction, a player can choose a higher-yet-sustainable bitrate (e.g., compared to initial bitrate without prediction, \name leads to $4\times$ higher average bitrate with less sessions using bitrate exceeding the throughput).
+
+
+
+

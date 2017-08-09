@@ -1,0 +1,87 @@
+\section{Discussion}
+\label{sec:cfa:discuss}
+
+\mypara{Relationship to existing ML techniques}
+\dda is a domain-specific prediction system that 
+outperforms some canonical ML algorithms 
+(Section~\ref{subsec:eval-accuracy}). 
+We put \dda in the context of three types of 
+ML algorithms.
+\begin{packeditemize}
+%\item Multi-armed bandit techniques attempt to identify the decision with the highest reward among multiple choices, and we believe they are complementary to \dda. The multi-armed bandit problem assumes that each decision has a fixed distribution of rewards, which is not true since video quality also depends on client-side features. In the meantime, one concern of \dda is that predictions based on quality measurements from clients may be biased by previous decisions. An interesting future work is to use multi-armed bandit techniques over the video client that share the same critical features.
+\item {\em Multi-armed bandit} algorithms~\cite{mab} 
+find the decision with the highest reward (i.e., best 
+CDN and bitrate) from multiple choices. 
+They assume each decision has a fixed distribution 
+of rewards, but the video quality of a CDN also 
+depends on client-side features.
+In contrast, contextual multi-armed bandit 
+algorithms~\cite{cmab} assume the best decision 
+depends on contextual information, but they require 
+appropriate modeling between the context and 
+decision space, to which critical features provide 
+one viable approach.
+\item {\em The feature selection} 
+problem~\cite{feature-selection} seems similar to 
+critical feature learning, but with a key difference: 
+critical features vary across video sessions. 
+Thus, techniques looking for features that are most 
+important for all sessions are not directly applicable.
+\item {\em Advanced ML} algorithms today can 
+handle highly complex models~\cite{deeplearning, svm} 
+efficiently, so in theory the critical features could be 
+automatically identified, albeit in an implicit manner. 
+\dda uses existing ML models (specifically, the ``variable 
+kernel conditional density estimation'' 
+method~\cite{terrell1992variable}) and may be less 
+accurate than advanced ML techniques, but \dda can 
+predict with more recent data since it tolerates stale 
+update on the critical features. Furthermore, \dda is 
+less opaque since it is based on domain-specific 
+insights about critical features (Section~\ref{sec:cfa:outline}). 
+%Though advanced ML techniques might be more accurate, we believe \dda is more scalable since it tolerates staled update on the critical features. 
+\end{packeditemize}
+
+\mypara{Prediction and selection bias}
+One concern of making predictions and decisions 
+based on quality measurements from clients is that 
+they may be biased by previous decisions. 
+For instance, if we move all video clients to the 
+current optimal decision, we would not be able to 
+predict quality on other decisions (i.e., a classical 
+exploration-exploitation tradeoff).
+A simple solution to address the issue is to make 
+random selection on a small portion (e.g., 10\%) 
+of clients.
+
+
+\mypara{Finer grain selection}
+Currently, \dda selects the resources at the CDN 
+granularity. This means \dda cannot do much if the 
+CDN redirects the client based on its location and 
+the servers the CDN redirects the client to are 
+congested. 
+However, if the client were able to specify the 
+server to stream from, we could avoid the 
+overloaded servers and improve the quality.
+	
+\mypara{Leveraging network and CDN information}
+\dda makes predictions and decisions based on  client 
+side information only. While clients provide accurate 
+information regarding QoE, this information is not 
+always optimal when making predictions and decisions. 
+Prediction can be much more accurate if \dda 
+were to leverage finer-grained information from other 
+entities in the ecosystem, including servers, caches 
+and network path.
+
+%\myparatight{Midstream selection}
+\mypara{Critical vs.\ minimal features} In general, 
+critical features are not intended to be the  {\em minimal} 
+set of features that determines the quality.  
+This makes critical  features slightly less useful for root 
+cause diagnosis. An interesting direction for  future work 
+is to incorporate notions of description length (MDL) 
+into the learning process~\cite{mdl}.
+
+

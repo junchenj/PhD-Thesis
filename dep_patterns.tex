@@ -1,0 +1,86 @@
+\chapter{Understanding QoE Problems in the Wild}
+\label{ch:measurement}
+
+The key role that QoE plays in impacting user engagement,
+and consequently providers' revenues, has motivated recent
+efforts, including this dissertation, in improving the QoE of 
+Internet applications like
+Internet video and Internet telephony.
+Before we embark on designing and deploying new 
+schemes to improve QoE, we need to first understand 
+the nature of QoE problems.
+To this end, this section uses large-scale datasets collected
+from real users to shed light on the structure of today's 
+QoE problems  in the wild.
+In particular, we observe that 
+(1) a substantial fraction of video and VoIP 
+sessions suffer from QoE problems; and
+(2) QoE problems exhibit patterns both 
+spatially (e.g., correlation to
+certain client-side features) and temporally
+(e.g., prevalent/persistent quality issues).
+
+This chapter is organized as follows.
+Section~\ref{sec:measurement:video} presents a 
+measurement study on video QoE.
+Using 300 million video sessions collected over a 
+two-week period, we show how severe today's
+QoE problems are, and  analyze the spatial
+and temporal properties of these QoE problems.
+Section~\ref{sec:measurement:voip} presents
+a similar measurement study on Internet telephony 
+QoE based on a dataset from one of the most 
+popular VoIP  service providers.
+Finally, Section~\ref{sec:measurement:summary} 
+summarizes the chapter with key findings 
+which motivate the ideas proposed in later 
+chapters.
+
+\input{patterns-video}
+
+\input{patterns-voip}
+
+
+
+
+
+\section{Summary}
+\label{sec:measurement:summary}
+
+In this chapter, we have used large-scale measurement
+from real users to quantify quantify quality problems of
+Internet video and Internet telephony in the wild.
+Our findings can be summarized as follows:
+
+\begin{itemize}
+
+\item {\em Quality today is not idea.} 
+Across multiple application providers, we observe 
+that a substantial fraction of sessions have bad quality. 
+For instance, 5\% video sessions have a
+buffering ratio larger than 10\%, and 15-17\% Skype
+calls have bad network performance in at least one
+of long latency, high packet loss, or high latency jitter.
+
+\item {\em Most quality problems can be attributed to 
+a relatively small amount of persistent patterns.}
+We observe that in both Internet video and Internet
+telephony, bad quality can be attributed to some
+session-level features (e.g., critical clusters in 
+Section~\ref{subsec:measurement:video:temporal}
+and AS pairs in 
+Section~\ref{subsec:measurement:voip:temporal}).
+These quality problems and features are more stable than 
+fluctuation of quality.
+
+\item {\em Metrics are correlated.} Finally, we observed that
+quality problems of different metrics are likely to be correlated
+suggesting that it is possible to improve multiple metrics 
+simultaneously.
+
+\end{itemize}
+
+
+
+
+

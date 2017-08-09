@@ -1,0 +1,17 @@
+\section{Discussion}
+\label{sec:via:discussion}
+
+\mypara{Cost of centralized control in \hybrid} Our pilot deployment and client modifications suggest a feasible path to a large-scale deployment from a software update and engineering perspective. One potential concern, however, is the scalability and responsiveness of the control platform. On the one hand, {\hybrid} introduces minimal per call overhead, since the client-controller communication need only consist of one measurement update and one control message exchange per call and can be further reduced if the clients cache the best relaying options. % On the one hand, it leads to additional measurement updates and control messages sent between clients and controller, but the overhead might be acceptable given that the update/control messages would only be one per call, and that can be further reduced if the clients can cache the best relaying options. 
+On the other hand, handling a large number of call connections at one logical controller presents a scalability challenge, though partitioning techniques provide a good starting point. Also, we conjecture that approaches similar to the split-control architecture employed in C3~\cite{c3} might offer a scalable realization, since the measurement and control exchange of the C3 controller (which directs clients to video CDNs) is similar to the measurement and control needed for a large-scale VOIP relay server. 
+
+
+\mypara{Hybrid reactive decentralized approaches} A natural alternative to relay selection is to simply have clients try a list of relay options sequentially or in parallel, and pick the best option. Such an approach may be good enough for long-lived calls. This would avoid the overhead of data collection and generating the network map. However, as we discussed earlier, this may not be feasible given the large search space of relaying options. An interesting hybrid approach is using the prediction-guided exploration observations as a means to {\em prioritize or prune} this approach. We intend to explore this approach going forward.
+
+\mypara{Active Measurements} While our current solution relied entirely on passive measurements from client calls, there is an opportunity to augment it with {\em active} measurements (by making mock calls between users or from users to relays), especially since the client software can be readily controlled to make them. Active measurements can be intelligently orchestrated to fill ``holes'' in the passively obtained measurements, thereby making our prediction-guided exploration (both its aspects---tomography as well as bandit solution) more effective. Doing so will require considering the additional load imposed on the clients due to the collection. 
+
+
+
+
+
+
+

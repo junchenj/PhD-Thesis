@@ -1,0 +1,155 @@
+\chapter{Structural Analysis of QoE Problems}
+\label{ch:measurement}
+
+We have seen that the limitations of prior approach have caused 
+pervasive QoE problems in the wild (Chapter~\ref{ch:related}),
+and this dissertation seeks to improve QoE by exploring a 
+new data-driven approach which leverages the QoE information 
+observed by millions of sessions in real time (Chapter~\ref{ch:overview}).
+The key insight to make such data-driven QoE optimization practical
+is the observation that there are {\em persistent structures in the 
+QoE-determining factors} (Section~\ref{sec:overview:unifying}).
+
+In this chapter, we provide more empirical evidence of these persistent
+structures using a large-scale structural analysis on the 
+QoE problems of Internet video and Internet telephony.
+In particular, we shed light on the spatial criticality and 
+temporal persistence of these structures of QoE-determining factors.
+To this end, our analysis focuses on the spatial and temporal patterns
+of QoE problems.
+\begin{itemize}
+
+\item {\em Temporal patterns:} 
+Is each QoE problem a transient for 
+a specific ISP, CDN, or provider (or combination of these) or are 
+these problems persistent over long periods?
+
+\item {\em Spatial patterns:} 
+Are the QoE problems uniformly spread through the 
+space of feature combinations or are there specific 
+combinations that have a higher concentration?
+
+\end{itemize}
+In addition, we also show there are substantial correlations
+among the QoE problems of different metrics, suggesting that
+it is possible to improve multiple QoE metrics simultaneously.
+
+This chapter is organized as follows. 
+Section~\ref{sec:measurement:video} presents the structural analysis
+on video QoE,
+Section~\ref{sec:measurement:voip} presents a similar analysis on 
+VoIP QoE, and Section~\ref{sec:measurement:summary} summarizes
+the chapter with key observations.
+
+
+%The key role that QoE plays in impacting user engagement,
+%and consequently providers' revenues, has motivated recent
+%efforts, including this dissertation, in improving the QoE of 
+%Internet applications like
+%Internet video and Internet telephony.
+%Before we embark on designing and deploying new 
+%schemes to improve QoE, we need to first understand 
+%the nature of QoE problems.
+%To this end, this section uses large-scale datasets collected
+%from real users to shed light on the structure of today's 
+%QoE problems  in the wild.
+%In particular, we observe that 
+%(1) a substantial fraction of video and VoIP 
+%sessions suffer from QoE problems; and
+%(2) QoE problems exhibit patterns both 
+%spatially (e.g., correlation to
+%certain client-side features) and temporally
+%(e.g., prevalent/persistent quality issues).
+%
+%This chapter is organized as follows.
+%Section~\ref{sec:measurement:video} presents a 
+%measurement study on video QoE.
+%Using 300 million video sessions collected over a 
+%two-week period, we show how severe today's
+%QoE problems are, and  analyze the spatial
+%and temporal properties of these QoE problems.
+%Section~\ref{sec:measurement:voip} presents
+%a similar measurement study on Internet telephony 
+%QoE based on a dataset from one of the most 
+%popular VoIP  service providers.
+%Finally, Section~\ref{sec:measurement:summary} 
+%summarizes the chapter with key findings 
+%which motivate the ideas proposed in later 
+%chapters.
+
+\input{patterns-video}
+
+\input{patterns-voip}
+
+
+
+
+\section{Summary}
+\label{sec:measurement:summary}
+
+In this chapter, we have presented 
+empirical studies based on large-scale datasets of video and VoIP QoE 
+to shed light on the structures of QoE problems in the wild.
+Our findings suggest that in Internet video and Internet telephony,
+there are persistent structures 
+in the factors that determine QoE.
+Our key observations can be summarized as follows:
+
+\begin{itemize}
+
+\item {\em QoE depends on critical spatial structures.}
+Most quality problems can be attributed to 
+a relatively small fraction of structures.
+We observe that in both Internet video and Internet
+telephony, bad quality can be attributed to smaller number
+of session-level features. For instance, we
+see that \criticalclusters of bad video quality only
+account for 2-3\% of all \problemclusters.
+Note, however, that VoIP quality problems are more 
+spatially spread out than video quality problems, because 
+VoIP quality depends
+on both sides of a call, while the server side of video sessions 
+in general has less heterogeneity than the client side.
+
+
+\item {\em Many quality problems tend to 
+persist on timescales of tens of minutes to hours.}
+We observe that a substantial fraction of problems
+last for multiple hours (even days).
+For instance, 60\% of the problem clusters have a median
+duration that last more than 2 hours.
+Note, however, that both video and VoIP quality problems 
+have highly skewed distributions in the prevalence 
+and persistence, where some problems are still transit.
+
+
+%\item {\em Quality today is not idea.} 
+%Across multiple application providers, we observe 
+%that a substantial fraction of sessions have bad quality. 
+%For instance, 5\% video sessions have a
+%buffering ratio larger than 10\%, and 15-17\% Skype
+%calls have bad network performance in at least one
+%of long latency, high packet loss, or high latency jitter.
+%
+%\item {\em Most quality problems can be attributed to 
+%a relatively small amount of persistent patterns.}
+%We observe that in both Internet video and Internet
+%telephony, bad quality can be attributed to some
+%session-level features (e.g., critical clusters in 
+%Section~\ref{subsec:measurement:video:temporal}
+%and AS pairs in 
+%Section~\ref{subsec:measurement:voip:temporal}).
+%These quality problems and features are more stable than 
+%fluctuation of quality.
+
+\item {\em Quality problems of different metrics are correlated.} Finally, we observed that
+quality problems of different metrics are likely to be correlated,
+suggesting that, instead of trading one metric for another,
+it is possible to improve multiple metrics simultaneously.
+
+\end{itemize}
+
+
+
+
+

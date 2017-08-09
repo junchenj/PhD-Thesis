@@ -1,0 +1,21 @@
+\section{Discussion}
+\label{sec:pytheas:discuss}
+
+\mypara{Handling flash crowds}
+Flash crowds happen when many sessions join at the same time and cause part of the resources (decisions) to be overloaded.
+While \name can handle load-induced QoE fluctuations that occur in individual groups, overloads caused by flash crowds are different, in that they could affect sessions in multiple groups. Therefore, those affected sessions need to be regrouped immediately, but \name does not support such real-time group learning. 
+To handle flash crowds, \name needs a mechanism to detect flash crowds and create groups for the affected sessions in real time.
+
+%\mypara{Use of active measurement}
+%While our system relies entirely on passive QoE measurements as input of data-driven optimization, we see a new opportunity to augment the system with active measurements by orchestrating vantage points and controlled clients (e.g., Skype~\cite{via}) to establish fake traffic.
+%These active measurement can be used to explore suboptimal decisions, thereby reducing the cost of \mab on real sessions. 
+%One also needs to take into consideration the additional load due to these active measurements.
+
+
+\mypara{Cost of switching decisions}
+The current design of \name assumes there is little cost to switch the decision during the course of a session. 
+While such assumption applies to today's DASH-based video streaming protocols~\cite{dash-standard}, other applications (e.g., VoIP) may have significant cost when switching decisions in the middle of a session, so the control logic should not too sensitive to QoE fluctuations.
+Moreover, a content provider pays CDNs by 95th percentile traffic, so \name must carefully take the traffic distribution into account as well.
+We intend to explore decision-making logic that is aware of these costs of switching decisions in the future.
+
+

@@ -1,0 +1,239 @@
+\section{Overview of CFA Ideas}
+\label{sec:cfa:outline}
+
+
+This section presents the domain-specific insights we use to 
+help address the expressiveness challenge 
+(Section~\ref{subsec:expressive}).  
+The first insight is that sessions matching on all features 
+have similar video quality.  
+However, this approach suffers from the curse of dimensionality.
+%it is challenging to translate this insight into an actionable approach because
+%it suffers from the classical curse of dimensionality -- hard to find
+%a sufficient number of identical sessions.  
+Fortunately,  we can leverage a second insight that 
+each video session has a subset of {\em critical features} 
+that ultimately determine its video quality. 
+ % and we can use  it to tackle the curse of dimensionality. 
+We conclude this section  by highlighting two outstanding 
+issues in translating these insights into  a practical 
+prediction system.
+
+
+
+\subsection{Baseline Prediction Algorithm}
+\label{subsec:cfa:outline:basic}
+
+Our  first insight is that 
+%there is some inherent
+%network/application structure because of which 
+sessions that have identical  feature values will 
+naturally have similar (if not identical) quality. 
+ For instance, we expect that all Verizon 
+ FiOS users  viewing a specific  HBO  video 
+using Level3 CDN in Pittsburgh at Fri 9 am should 
+have similar quality (modulo very user-specific  effects 
+such as local Wi-Fi interference inside the home).
+We can summarize the intuition as follows:
+
+\begin{insight}At a given time, video sessions having same value 
+on every feature have similar video quality.
+\label{insight:1}
+\end{insight}
+
+
+%\camera{\insightref{insight:1} is merely a motivation.}
+Inspired by \insightref{insight:1}, we can consider a 
+baseline algorithm (Algorithm~\ref{alg:baseline}).
+We predict a session's quality based on ``identical
+sessions'', i.e., those from recent history that match 
+values on {\em all} features with the session under 
+prediction. 
+Ideally, given infinite data, this 
+%simple domain-specific engineered 
+algorithm is accurate, because it can capture
+all possible combinations of factors affecting 
+video quality.
+
+
+\begin{algorithm}[t!]
+\begin{small}
+ \KwIn{Session under prediction \HSession, Previous sessions \HSessionSet}
+ \KwOut{Predicted quality $p$}
+ \tcc{\footnotesize{$S'$:identical sessions matching on all features with \HSession in recent history(\HTimeWindowEst)}}
+ $S'\leftarrow\HSimilarSessionSet{\HSession}{\HSessionSet}{AllFeatures}{\HTimeWindowEst}$\;
+ \tcc{\footnotesize{Summarize the quality (e.g.,median) of the identical sessions in $S'$.}}
+ $p\leftarrow\HEst{S'}$\;
+ \Return{$p$}\;
+\end{small}
+ \caption{{\bf {\em Baseline prediction that finds sessions matching on all features and uses their 
+ observed quality as the basis for prediction.  %Unfortunately, it suffers from the curse of dimensionality.
+ }}}
+\label{alg:baseline}
+\end{algorithm}
+
+ 
+
+%\begin{figure}[h!]
+%\centering
+%\includegraphics[width=0.4\textwidth]{eval-figs/batch-3/neighbor-count.pdf}
+%\vspace{-0.1cm}
+%\tightcaption{More than 90\% of sessions have at most one identical session within 5-min window.}
+%\vspace{-0.1cm}
+%\label{fig:infeasible-nn}
+%\end{figure}
+
+However, this algorithm is unreliable as it suffers from the 
+classical curse of 
+dimensionality~\cite{powell2007approximate}. 
+Specifically, given the number of combinations 
+of feature values (ASN, device, content providers, 
+CDN, just to name a few), it is hard to find enough identical 
+sessions needed to make a robust prediction. 
+In our dataset, more than 78\% of sessions have no 
+identical session (i.e., matching on all features)
+within the last 5 minutes.
+%more than 78\% of sessions within a 5-minute time window
+%have no identical session (i.e., matching on all features).
+%Thus, we do not have sufficient data to make reliable predictions.
+
+
+\subsection{Critical Features}
+\label{subsec:cfa:outline:critical}
+
+ In practice, we expect that some features are
+more likely to  ``explain'' the observed quality 
+of a specific video session than others.  
+For instance, if a specific peering point
+between Comcast and Netflix in New York is 
+congested, then we expect most of these users 
+will suffer poor quality, regardless of the speed of 
+their local connection. 
+%Similarly, we can roughly expect most 
+% fiber-to-the-home (e.g., FiOS) users to have high bitrates and people on 
+% cellular connections to have lower bitrates. We can formalize this as follows:
+
+\begin{insight}
+Each video session has a subset of {\em critical features} that ultimately determines its video quality.
+\end{insight}
+
+We already saw some real examples in 
+Section~\ref{subsec:expressive}:
+%To see some real-world examples of critical features, we 
+%consider two examples in \Section\ref{subsec:expressive}.
+in the example of high dimensionality, the critical features 
+of the sessions affected by the congested Level3 edge 
+servers are $\{\fASN, \fCDN, \fCity\}$;
+in the examples of diversity, the critical features are
+$\{\fConnectionType\}$ and $\{\fCDN,\fContentName\}$.
+Table~\ref{tab:bottleneck} gives more real examples 
+of critical features that we have observed in operational 
+settings and confirmed with domain experts.
+
+
+\begin{table}[t!]
+%\begin{small}
+    \begin{tabular}{p{2.in}|p{2in}}
+    {\bf Quality issue} & {\bf Set of critical features} \\ \hline\hline
+%    Software update on OS & \{OS\}  \\ \hline
+%    Player bitrate-adaptation logic & \{PlayerName\}  \\ \hline
+%    Device  on cellular signal  & \{Device,ConnectionType\}  \\ \hline
+%    Load of CDN1 server in city  & \{CDN,City\}      \\ \hline
+%    Link congestion between CDN1 server in city and ASN    & \{CDN,City,ASN\}    \\ \hline
+%    Bad Live feeds from one site to CDN1  & \{Site,LiveOrVod,CDN\} \\
+
+     Issue on one player of Vevo & $\{\fPlayer,\fSite\}$ \\ \hline
+     ESPN flipping between CDNs  & $\{\fCDN,\fSite,\fContentName\}$ \\ \hline
+     Bad Level3 servers for Comcast users in Maryland& $\{\fCDN,\fCity,\fASN\}$ \\
+    \end{tabular}
+\caption{Real-world examples of critical features confirmed 
+by analysts at a large video optimization vendor.}
+\label{tab:bottleneck}
+%\end{small}
+%\vspace{-0.2cm}
+\end{table}
+
+
+A natural implication of this insight is that it can help us 
+tackle  the curse of dimensionality.
+Unlike Algorithm~\ref{alg:baseline}, which fails to find a 
+sufficient number of sessions,
+%Instead of failing to find a sufficient number of identical sessions that match on all 
+%features (Algorithm~\ref{alg:baseline}), 
+we can estimate quality more reliably by aggregating 
+observations across a larger amount of ``similar sessions'' that 
+only need to match on these {\em critical features}. 
+Thus, critical features can provide expressiveness
+while avoiding curse of dimensionality.
+
+Algorithm~\ref{alg:critical-feature} presents a logical 
+view of this idea:
+%We use two logical steps to predict quality of session  $\HSession$.
+\begin{packedenumerate}
+\item {\bf Critical feature learning (line 1):} 
+First, find the critical features of each session $\HSession$, 
+denoted as $\HCriticalFeature{\HSession}$.
+\item {\bf Quality estimation (line 2, 3):}
+Then, find similar sessions that match values with 
+$\HSession$ on critical features 
+$\HCriticalFeature{\HSession}$ 
+within a recent history of length $\HTimeWindowEst$ 
+(by default, 5 minutes). 
+Finally, return some suitable estimate of the quality of 
+these similar sessions; 
+e.g., the median\footnote{We use median because it 
+is more robust to outliers.} 
+(for BufRatio, AvgBitrate, JoinTime) or the mean (for VSF).
+\end{packedenumerate}
+
+
+
+\begin{algorithm}[t!]
+\begin{small}
+ \KwIn{Session under prediction \HSession, Previous sessions \HSessionSet}
+ \KwOut{Predicted quality $p$}
+ \tcc{\footnotesize{$CF_{\HSession}$:Set of critical features of \HSession}}
+ $CF_{\HSession}\leftarrow\HCriticalFeature{\HSession}$\;
+ \tcc{\footnotesize{$S'$:Similar sessions matching values on 
+critical features $CF_{\HSession}$ with \HSession.}}
+ $S'\leftarrow\HSimilarSessionSet{\HSession}{\HSessionSet}{CF_{\HSession}}{\HTimeWindowEst}$\;
+ \tcc{\footnotesize{Summarize the quality of the similar sessions in $S'$.}}
+ $p\leftarrow\HEst{S'}$\;
+ \Return{$p$}\;
+\end{small}
+ \caption{{\bf {\em \dda prediction algorithm, where prediction is based on 
+similar sessions matching on critical features.}}}
+\label{alg:critical-feature}
+\end{algorithm}
+
+
+
+A practical benefit of Algorithm~\ref{alg:critical-feature} 
+is that it is interpretable~\cite{vellido2012making}, 
+unlike some machine learning algorithms (e.g., PCA or SVM).
+%quality predictions are interpretable.
+This allows domain experts to combine their knowledge 
+with \dda
+%(e.g., directly setting critical features of sessions) 
+and diagnose prediction errors or resolve incidents, 
+as we explore in Section~\ref{subsec:insight-value}. 
+
+At this time, it is useful to clarify what critical features 
+are and what they are not.
+In essence, critical features provide the explanatory 
+power of how a prediction is made.
+However, critical features are not a minimal set of 
+factors that determine the quality (i.e., root cause). 
+That is, they can include both features that reflect 
+the root cause as well as additional features.
+For example, if all HBO sessions use Level3, their 
+critical features may include both \fCDN and \fSite, 
+even if \fCDN is redundant, since including it does 
+not alter predictions. 
+The primary objective of \dda is accurate prediction; 
+root cause diagnosis may be an added benefit.
+
+
+
+
+

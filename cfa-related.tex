@@ -1,0 +1,79 @@
+\section{Related Work}
+\label{sec:cfa:related}
+
+
+\mypara{Internet video optimization} 
+There is a large literature on measuring video quality in the wild 
+(e.g., content popularity~\cite{plissonneau2012longitudinal,beijing-imc09}, 
+quality issues~\cite{jiang2013shedding} and server 
+selection~\cite{youtubecdn,su2006drafting}) and techniques to 
+improve user experience (e.g., bitrate adaptation 
+algorithms~\cite{yin2015control,festive,huang2014buffer}, CDN 
+optimization and federation~\cite{sigcomm12cdnmulti,
+peterson2013framework,balachandran2013analyzing,
+mukerjee2015practical} and cross-provider 
+cooperation~\cite{yu2012tradeoffs,frank2013pushing,eona}). 
+Our work builds on insight from the prior work (e.g., critical features 
+of Section~\ref{subsec:cfa:outline:critical} are inspired by quality ``bottleneck'' 
+in~\cite{jiang2013shedding}). 
+That said, the global optimization system in our work is an 
+enhancement of these approaches as it  uses the accurate prediction 
+of \dda to make predictive decisions. 
+While a case for similar vision is made in~\cite{sigcomm12}, our work 
+gives a systematic and practical algorithmic design.
+
+\mypara{Global coordination platform} 
+Decision making based on a global view is similar to other logically 
+centralized control systems (e.g.,~\cite{rcp,sigcomm12,c3,
+suresh2015c3}). They examined the architectural issues of 
+decoupling control plane from data plane, including scalability 
+(e.g.,~\cite{tootoonchian2012controller,dixit2013towards}), fault 
+tolerance (e.g.,~\cite{panda2013cap,yan2007tesseract}) and use of 
+big data systems (e.g.,~\cite{c3,spark}). 
+In contrast, our work offers concrete algorithmic techniques over 
+such control platform~\cite{c3} for video quality optimization. 
+%While \system is designed for optimization of video quality, we envision a broader application of similar techniques for network/application performance optimization.
+
+\myparatight{Large-scale data analytics in system design} 
+Many studies have applied data-driven and ``Big Data'' techniques 
+to system problems, such as performance monitoring and diagnosis 
+(e.g.,~\cite{stemm2000network,choffnes2010crowdsourcing,
+sambasivan2011diagnosing}), revenue debugging 
+(e.g.,~\cite{bhagwan2014adtributor}), TCP throughput prediction 
+(e.g.,~\cite{he2005predictability,mirza2007machine}), and tuning 
+TCP parameters (e.g.,~\cite{seshan1997spand,savage1999case}). 
+Recent studies also try to operate these techniques at 
+scale~\cite{velox-cidr}.
+While \dda shares the data-driven approach, we exploit video-specific 
+insights to achieve scalable and accurate prediction based on a global 
+view of quality measurements, and we are not aware of prior 
+publications on real-time predictive analytics at scale.
+%\jc{todo: hotnets review. some BWE papers}
+
+%<<<<<<< .mine
+\myparatight{Relationship of \dda to ML techniques} 
+\dda is a domain-specific prediction system that outperforms some 
+canonical ML algorithms. 
+%To put \dda in the context of existing ML algorithms is beyond the 
+%scope of this paper (reader may refer to~\cite{dda-report} for a 
+%formal analysis). 
+Due to space limitations, we only highlight some salient points. 
+In essence, \dda is an instance of a ``variable kernel conditional 
+density estimation'' method~\cite{terrell1992variable}. 
+It addresses the curse of dimensionality by contracting parts of 
+the feature space that are not critical for prediction or in which 
+there is too little available data.
+%=======
+%\myparatight{Relationship of \dda to ML techniques} \dda is a domain-specific learning algorithm that outperforms other algorithms. We have tried to explain it without referring to technical background on machine learning, but readers may refer to ~\cite{dda-report} for an in-depth analysis.  In brief, \dda is an example of a \emph{variable kernel conditional density estimation} method.  Like any learning algorithm, this class of methods suffers from the curse of dimensionality, and incorporating domain-specific knowledge is useful for effective learning in the face of this curse.  In our case this seems to be particularly critical.  \dda does this through its choice of kernel, through its method for adapting the kernel to data in its learning step, and by performing the learning step on a timescale appropriate to the problem.  These specializations to the video quality prediction problem are a novel contribution of the present work.
+%>>>>>>> .r277
+
+%We have tried to explain it without referring to technical background on machine learning, but readers may refer to ~\cite{dda-report} for an in-depth analysis.  In brief, \dda is an example of a \emph{variable kernel conditional density estimation} method.  Like any learning algorithm, this class of methods suffers from the curse of dimensionality, and incorporating domain-specific knowledge is useful for effective learning in the face of this curse.  In our case this seems to be particularly critical.  \dda does this through its choice of kernel, by adapting the kernel to data in its learning step, and by performing the learning step on a timescale appropriate to the problem.
+
+\myparatight{QoE models} 
+Prior work has shown correlations between various video quality 
+metrics and user engagement (e.g., users are sensitive to 
+BufRatio~\cite{sigcomm11}),
+and built various QoE model (e.g.,~\cite{akamai-imc12,qscore,
+sigcomm13athula,aggarwal2014prometheus}. 
+Our work focuses on improving QoE by predicting individual 
+quality metrics, and can be combined with these QoE models.
