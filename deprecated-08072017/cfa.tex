@@ -1,0 +1,121 @@
+\chapter{Predictive QoE Optimization By Critical Feature Analysis}
+\label{ch:cfa}
+
+\newcommand{\dda}{{CFA}\xspace}
+\newcommand{\system}{{\dda}\xspace}
+\newcommand{\ControlPlane}{{global optimization system}\xspace}
+
+In this chapter, we present the first illustration of how \ddn paradigm 
+improves video QoE by formulating \ddn as a prediction problem. The goal is 
+to predict video quality  for different choices (e.g., CDN 
+or bitrate) to make optimal decisions.
+As many prior efforts have suggested, such  {\em data-driven prediction} of 
+video quality can potentially lead to substantial video QoE improvement.
+%Many prior efforts have suggested that Internet video 
+%QoE  could be dramatically improved by using {\em data-driven 
+%prediction} of video quality  for different choices (e.g., CDN 
+%or bitrate) to make optimal decisions.
+However, building such a prediction system is challenging on two fronts. 
+First, the relationships between video quality and observed 
+session features can be quite complex. Second, video quality changes 
+dynamically. 
+Thus, we need a prediction model that is 
+(a) expressive enough to capture these complex relationships, 
+and (b) capable of updating quality predictions in near 
+real-time. 
+Unfortunately, several seemingly natural solutions (e.g., 
+simple machine learning approaches and simple network models) fail on 
+one or more fronts.
+%Thus, the potential benefits promised by these prior
+%efforts remain unrealized. 
+
+To address these challenges, we present {\em Critical 
+Feature Analytics (\dda)}, which is inspired by  persistent
+structures in QoE-determining factors. 
+In particular, video quality is typically determined by a small subset of 
+critical features whose criticality persists over several tens of minutes.
+This enables a scalable and accurate workflow where 
+we automatically learn critical features for different 
+sessions on coarse-grained timescales, while updating 
+quality predictions in  near real-time. 
+Using a  combination of a real-world pilot deployment 
+and trace-driven analysis, we demonstrate that \dda 
+leads to significant improvements in video quality; e.g., 32\% less 
+buffering time and 12\% higher bitrate than a random decision maker.
+
+This chapter is organized as follows.
+Section~\ref{sec:cfa:background} provides some background on
+the promise of video QoE prediction, and identifies key challenges
+ in building an accurate video QoE prediction
+system.
+Then Section~\ref{sec:cfa:outline}, Section~\ref{sec:cfa:design},
+and Section~\ref{sec:cfa:impl} outlines the key design ideas 
+behind CFA, the detailed design, and implementation of CFA, respectively.
+Section~\ref{sec:cfa:eval} presents real-world and trace-driven evaluation that 
+demonstrates substantial quality improvement by CFA.
+Section~\ref{sec:cfa:insight} uses critical features learned by 
+CFA to make interesting
+observations about video quality.
+Finally, Section~\ref{sec:cfa:discuss} discusses some open issues in 
+CFA, Section~\ref{sec:cfa:related} discusses the related work, and 
+Section~\ref{sec:cfa:summary} concludes the section.
+
+
+\input{cfa-background}
+
+\input{cfa-outline}
+
+\input{cfa-design}
+
+\input{cfa-impl}
+
+\input{cfa-eval}
+
+\input{cfa-discuss}
+
+\input{cfa-related}
+
+\section{Summary}
+\label{sec:cfa:summary}
+
+This chapter presents the first illustration of how \ddn can be used
+to improves video QoE. 
+In particular, we have formulated data-driven
+QoE optimization as  a prediction problem, which as shown by prior
+research efforts could lead to improved QoE. 
+However, prior efforts have failed to provide a prescriptive solution
+that (a) is expressive enough to tackle the complex
+feature-quality relationships observed in the wild and (b)
+can provide near real-time quality estimates. To this end,
+we developed CFA, a solution based on domain-specific
+insight of persistent structures (critical features) 
+that video quality is typically determined by a
+subset of critical features which tend to be persistent.
+CFA leverages these insights to engineer an accurate algorithm
+that outperforms off-the-shelf machine learning
+approaches and lends itself to a scalable implementation
+that retains model freshness. Using real deployments and
+trace-driven analyses, we showed that CFA achieves up
+to 30\% improvement in prediction accuracy and 12-32\%
+improvement in QoE over alternative approaches.
+%
+%Many prior research efforts posited that quality prediction
+%could lead to improved QoE.
+%However, these efforts failed to provide a prescriptive solution
+%that (a) is expressive enough to tackle the complex
+%feature-quality relationships observed in the wild and (b)
+%can provide near real-time quality estimates. To this end,
+%we developed CFA, a solution based on domain-specific
+%insights that video quality is typically determined by a
+%subset of critical features which tend to be persistent.
+CFA leverages these insights to engineer an accurate algorithm
+that outperforms off-the-shelf machine learning
+approaches and lends itself to a scalable implementation
+that retains model freshness. Using real deployments and
+trace-driven analyses, we showed that CFA achieves up
+to 30\% improvement in prediction accuracy and 12-32\%
+improvement in QoE over alternative approaches.
+
+
+
+

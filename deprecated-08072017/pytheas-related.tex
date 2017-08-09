@@ -1,0 +1,33 @@
+\section{Related Work}
+\label{sec:pytheas:related}
+
+
+\mypara{Data-driven QoE optimization}
+There is a large literature on using data-driven techniques to optimize QoE for a variety of applications,
+%While the focus has traditionally been how to adapt to changing network conditions and resource availability based on information observed by the same session, e.g., video bitrate adaptation~\cite{huang2014buffer}, research and industry is increasingly relying on data of multiple sessions to inform QoE optimization for many applications, 
+such as video streaming (e.g.,~\cite{c3,cfa}), web service (e.g.,~\cite{footprint,spand}), Internet telephony~\cite{rewan-hotnets2015,via}, cloud services (e.g.,~\cite{lacurts2014cicada}), and resource allocation (e.g.,~\cite{bao2015data}). 
+Some recent work also shows the possibility of using measurement traces to extrapolate the outcome of new system configurations~\cite{mwt}.
+%Its focus has traditionally been to infer and adapt to the changing network conditions based on information gathered from the same session~\cite{??} or same client~\cite{??}, such as adaptive bitrate algorithm in video~\cite{??} and cloud server selection~\cite{??}.
+%Though such local adaptation approach has served us well for decades, it has limitations (e.g., hard to adapt initial decisions~\cite{cfa}).
+%This motivates the recent, more data-driven approaches where application providers use client-side instrumentations and real-time telemetry to optimize individual session QoE with the visibility of many sessions, and we see adoption of this approach in many contexts, video streaming~\cite{??}, Internet telephony~\cite{??}, web service~\cite{??}, and cloud services~\cite{??}. 
+Unlike these prediction-based approaches, we formulate QoE optimization as an real-time \mab process, and show that by avoiding measurement bias and enabling real-time updates, this new formulation achieves better QoE than prediction-based approaches.
+
+% and in a variety of contexts, including network resource allocation~\cite{bao2016prediction,bao2015data}
+
+%\cameraremove{
+%\myparatight{Exploration and exploitation techniques}
+%}
+\mypara{Related machine learning techniques}
+\mab is closely related to reinforcement learning~\cite{mab}, where most techniques, including the per-group \mab logic used in \name, are variants of the UCB1 algorithm~\cite{ucb1}, though other approaches (e.g.,~\cite{agarwal2014taming}) have been studied as well. 
+%which has good empirical performance and enjoys theoretical guarantees, 
+Besides \mab, \name also shares the similar idea of clustering with linear mixed models~\cite{mcculloch2001generalized}, where a separate model is trained for each cluster of data points.
+%UCB variants that are particular relevant to this paper include those aims at contextual settings~\cite{cmab} and time varying rewards~\cite{besbes2014stochastic}.
+While we  borrow  techniques from this rich literature~\cite{discounteducb,regressogram-ucb}, our contribution is to shed light on the link between QoE optimization and the techniques of \mab and clustering, to highlight the practical challenges of adopting \mab in network applications, and to show \idea as a practical way to solve these challenges.
+Though there have been prior attempts to cast data-driven optimization as multi-armed bandit processes in specific applications (e.g.,~\cite{via}), they fall short of a practical system design.
+
+\mypara{Geo-distributed data analytics}
+%A key challenge of data-driven QoE optimization is 
+%Most work on large-scale data analytics (e.g.,~\cite{zaharia2012resilient,velox-cidr}) assumes that data are available in the same data center.
+Like \name, recent work~\cite{iris,jetstream,geode} also observes that for cost and legal considerations, many geo-distributed applications store client-generated data in globally distributed data centers. However, they focus on geo-distributed data analytics platforms that can handle general-purpose queries received by the centralized backend cluster.
+In contrast, \name targets a different workload: data-driven QoE optimization uses a specific type of logic (i.e., \mab), but has to handle requests from millions of geo-distributed sessions in real time.
+

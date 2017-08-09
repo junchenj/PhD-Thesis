@@ -1,0 +1,374 @@
+%for a more compact document, add the option openany to avoid
+%starting all chapters on odd numbered pages
+%\documentclass[12pt]{cmuthesis}
+\documentclass[12pt]{ZHU-cmuthesis}
+
+% This is a template for a CMU thesis.  It is 18 pages without any content :-)
+% The source for this is pulled from a variety of sources and people.
+% Here's a partial list of people who may or may have not contributed:
+%
+%        bnoble   = Brian Noble
+%        caruana  = Rich Caruana
+%        colohan  = Chris Colohan
+%        jab      = Justin Boyan
+%        josullvn = Joseph O'Sullivan
+%        jrs      = Jonathan Shewchuk
+%        kosak    = Corey Kosak
+%        mjz      = Matt Zekauskas (mattz@cs)
+%        pdinda   = Peter Dinda
+%        pfr      = Patrick Riley
+%        dkoes = David Koes (me)
+
+% My main contribution is putting everything into a single class files and small
+% template since I prefer this to some complicated sprawling directory tree with
+% makefiles.
+
+% some useful packages
+\usepackage{times}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[numbers,sort]{natbib}
+\usepackage[backref,pageanchor=true,plainpages=false, pdfpagelabels, bookmarks,bookmarksnumbered,
+%pdfborder=0 0 0,  %removes outlines around hyper links in online display
+]{hyperref}
+%\usepackage{subfigure}
+
+%\usepackage[font=bf]{caption}
+\usepackage{caption}
+\usepackage{quoting}
+\usepackage{csquotes}
+\SetBlockEnvironment{quoting}
+
+\usepackage{subfig}
+\usepackage{xspace}
+
+\usepackage{mathptmx}	
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{bbding}
+
+%\usepackage{epsfig} 
+%\usepackage{amsmath}
+%\usepackage[hyphens]{url}
+\usepackage{amsfonts} 
+
+\usepackage{tablefootnote}
+
+\usepackage[linesnumbered,noend,boxed]{algorithm2e}
+
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{graphicx}
+%\usepackage[table,xcdraw]{xcolor}
+
+\usepackage{pifont}
+
+\usepackage{soul}
+
+\newcommand{\mypara}[1]{\smallskip\noindent{\bf {#1}:}~}
+\newcommand{\myparatight}[1]{\vspace{0.03cm}\noindent{\bf {#1}:}~}
+
+\newcounter{packednmbr}
+
+\newenvironment{packedenumerate}{\begin{list}{\thepackednmbr.}{\usecounter{packednmbr}\setlength{\itemsep}{0.5pt}\addtolength{\labelwidth}{-4pt}\setlength{\leftmargin}{\labelwidth}\setlength{\listparindent}{\parindent}\setlength{\parsep}{1pt}\setlength{\topsep}{0pt}}}{\end{list}}
+
+\newenvironment{packeditemize}{\begin{list}{$\bullet$}{\setlength{\itemsep}{0.5pt}\addtolength{\labelwidth}{-4pt}\setlength{\leftmargin}{\labelwidth}\setlength{\listparindent}{\parindent}\setlength{\parsep}{1pt}\setlength{\topsep}{0pt}}}{\end{list}}
+
+\newenvironment{packedpackeditemize}{\begin{list}{$\bullet$}{\setlength{\itemsep}{0.5pt}\addtolength{\labelwidth}{-4pt}\setlength{\leftmargin}{\labelwidth}\setlength{\listparindent}{\parindent}\setlength{\parsep}{1pt}\setlength{\topsep}{0pt}}}{\end{list}}
+
+\newenvironment{packedtrivlist}{\begin{list}{\setlength{\itemsep}{0.2pt}\addtolength{\labelwidth}{-4pt}\setlength{\leftmargin}{\labelwidth}\setlength{\listparindent}{\parindent}\setlength{\parsep}{1pt}\setlength{\topsep}{0pt}}}{\end{list}}
+
+\newcommand{\fillme}{{\bf XXX}~}
+\newcommand{\jc}[1]{{\footnotesize\color{blue}{[JC: #1]}}}
+
+\newcommand{\ddn}{{DDN}\xspace}
+\usepackage{pifont}
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
+\input{cfa-macros}
+
+\newtheorem{theo}{Insight}
+\newenvironment{ftheo}
+  {\begin{mdframed}\begin{theo}}
+  {\end{theo}\end{mdframed}}
+
+%\newcommand{\insightref}[1]{\textbf{Insight}\ref{#1}}
+%\newcounter{insightlabel}
+%\renewcommand{\theinsightlabel}{\textbf{I}}
+%\newenvironment{insight}{
+%\begin{list}{\textbf{Insight}\theinsightlabel:~}{\usecounter{insightlabel}\setlength{\labelwidth}{0pt}\setlength{\labelsep}{0pt}\setlength{\leftmargin}{0in}\noindent\rule{\linewidth}{1pt}\vspace{-9pt}\item \bf \em}}{\\[-7pt]\end{list}\vspace{-11pt}\noindent\rule{\linewidth}{1pt}}
+
+%\newcommand{\insightref}[1]{\textbf{Insight }\ref{#1}}
+\newcommand{\insightref}[1]{{Insight }\ref{#1}}
+\newcounter{insightlabel}
+\newcounter{insightnmbr}
+%\renewcommand{\theinsightlabel}{\textbf{\theinsightnmbr}}
+\renewcommand{\theinsightlabel}{{\theinsightnmbr}}
+\newenvironment{insight}{
+\vspace{-0.0cm}
+\begin{list}{\textbf{Insight }\theinsightlabel:~}{\usecounter{insightlabel}\stepcounter{insightnmbr}\setlength{\labelwidth}{0pt}\setlength{\labelsep}{0pt}\setlength{\leftmargin}{0in}\noindent\rule{\linewidth}{1pt}\vspace{-10pt}\item \bf \em}}{\\[-7pt]\end{list}\vspace{-10pt}\noindent\rule{\linewidth}{1pt}}
+
+%\newcommand{\impref}[1]{\textbf{Corollary 3.}\ref{#1}}
+\newcommand{\impref}[1]{{Corollary 3.}\ref{#1}}
+\newcounter{implabel}
+\newcounter{impnmbr}
+%\renewcommand{\theimplabel}{\textbf{\theimpnmbr}}
+\renewcommand{\theimplabel}{{\theimpnmbr}}
+\newenvironment{imp}{
+\vspace{-0.0cm}
+\begin{list}{\textbf{Corollary 3.}\theimplabel:~}{\usecounter{implabel}\stepcounter{impnmbr}\setlength{\labelwidth}{0pt}\setlength{\labelsep}{0pt}\setlength{\leftmargin}{0in}\noindent\rule{\linewidth}{1pt}\vspace{-9pt}\item \bf \em}}{\\[-7pt]\end{list}\vspace{-11pt}\noindent\rule{\linewidth}{1pt}}
+
+
+%\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\SetKwProg{Fn}{Function}{}{}
+\let\oldnl\nl
+\newcommand{\nonl}{\renewcommand{\nl}{\let\nl\oldnl}}
+
+% Approximately 1" margins, more space on binding side
+%\usepackage[letterpaper,twoside,vscale=.8,hscale=.75,nomarginpar]{geometry}
+%for general printing (not binding)
+\usepackage[letterpaper,twoside,vscale=.8,hscale=.75,nomarginpar,hmarginratio=1:1]{geometry}
+
+
+% Provides a draft mark at the top of the document. 
+\draftstamp{\today}{DRAFT}
+
+\begin {document} 
+\frontmatter
+
+%initialize page style, so contents come out right (see bot) -mjz
+\pagestyle{empty}
+
+\title{ %% {\it \huge Thesis Proposal}\\
+{\bf Enabling Data-Driven Optimization of Quality of Experience in Internet Applications}}
+\author{Junchen Jiang}
+\date{August 2017}
+\Year{2017}
+\trnumber{}
+
+\committee{
+Hui Zhang, Chair \\
+Vyas Sekar, Chair \\
+Srinivasan Seshan \\
+Peter Steenkiste \\
+Ion Stoica, UC Berkeley
+}
+
+\support{}
+\disclaimer{}
+
+% copyright notice generated automatically from Year and author.
+% permission added if \permission{} given.
+
+\keywords{Internet applications, Quality of Experience, Data-Driven Networking, CFA, VIA, Pytheas}
+
+\maketitle
+
+\begin{dedication}
+
+\end{dedication}
+
+\pagestyle{plain} % for toc, was empty
+
+%% Obviously, it's probably a good idea to break the various sections of your thesis
+%% into different files and input them into this file...
+
+\begin{abstract}
+
+Today's Internet has become an eyeball economy dominated by 
+applications such as Internet video and Internet telephony. 
+With most applications relying on revenue models driven by 
+user engagement, ensuring high user-perceived Quality of 
+Experience (QoE) has become crucial to maintaining high user 
+engagement. For instance, even one short buffering interruption 
+can lead to much less video viewing time and cause
+significant revenue losses for the video site. Despite 
+the increasing expectations for high QoE, existing approaches have 
+fundamental limitations to achieve the QoE needed by today's 
+applications. They either require costly re-architecting of 
+the in-network devices, or rely on suboptimal endpoint-based 
+protocols to react to the dynamic Internet performance based on 
+limited knowledge of the network conditions.
+
+
+In contrast, this dissertation explores a new paradigm called {\em data-driven 
+networking}, inspired by the recent success of data-driven 
+techniques in other fields of computing. The core thesis is  
+that {\em QoE can be substantially improved by leveraging 
+QoE observed from many endpoints to maintain an up-to-date 
+global view of network conditions}.
+%In this thesis, I present a new approach, which is inspired by the recent success of data-driven approaches in many fields of computing. I will demonstrate that data-driven techniques can improve Internet QoE by utilizing a centralized real-time view of performance across millions of endpoints (clients). 
+This dissertation focuses on two fundamental challenges 
+of this data-driven approach: (1) the need for expressive models 
+to capture complex factors that affect QoE, and (2) the need 
+for scalable platforms to make real-time decisions with 
+fresh data from geo-distributed clients. Our techniques address 
+these challenges by integrating machine learning algorithms 
+and systems with several domain-specific insights in networked 
+applications. The key insight is that there are 
+{\em persistent structures} 
+in the relations between QoE and session-level features.
+Inspired by this insight, this dissertation has developed algorithms 
+and end-to-end systems, and used real-world deployment and 
+simulation driven by real datasets to show that our solutions 
+can yield substantial QoE improvement and consequently higher user 
+engagement for video streaming and Internet telephony 
+than today's techniques as well as many standard machine 
+learning solutions. 
+%We have developed end-to-end systems to address these challenges in practice by integrating machine learning algorithms and systems with several domain-specific insights in networked applications. A key insight is that there are persistent structures in the relations between session-level features, decisions, and QoE.
+%This thesis presents end-to-end systems that yield substantial QoE improvement and higher user engagement for video streaming and Internet telephony than today's techniques as well as many standard machine learning solutions. 
+%Two of my projects, CFA and VIA, have been used in industry by Conviva and Skype, companies that specialize in QoE optimization for video streaming and Internet telephony, respectively.
+
+At a high level, this dissertation revisits a key architectural question 
+in networking research: ``where should we implement the functionality 
+of application quality optimization''. 
+%Unlike prior work which largely 
+%focused on adding complexity to {\em in-network} devices or improving 
+%end-to-end adaptation at individual {\em endpoints}, 
+Prior work either focuses on adding complexity to {\em in-network} devices or 
+improves end-to-end adaptation at individual {\em endpoints}, 
+forcing make a hard trade-off between sufficient visibility to 
+user-perceived quality and sufficient visibility to network conditions.
+In contrast, this dissertation 
+demonstrates the feasibility of a different answer to the question--implementing 
+the quality optimization functionality in a logically centralized ``controller'' 
+that has the visibility and control over many endpoints. 
+In essence, this dissertation shows that {\em it is feasible to
+maintain an accurate view of network conditions based on the QoE information
+collected from many endpoints}.
+Although this dissertation focuses largely on Internet video and Internet 
+telephony, we posit that the insights and solutions presented in this dissertation 
+are not specific to these applications, and thus are indicative to the 
+potential of data-driven paradigm in other challenges in networking research.
+
+\end{abstract}
+
+\begin{acknowledgments}
+
+%\begin{itemize}
+
+%\item Vyas, Hui
+First and foremost, I am immensely grateful to my advisors, Hui Zhang and Vyas Sekar,
+both of whom have been tireless mentors, counselors, co-authors, and career advisors. 
+Vyas has been instrumental in helping me focus on the most critical aspects of any research project and teaching me how I should frame questions, formulate arguments, and crystallize thoughts. Most important of all, it was the through working in person with him for years and through his immense help that I learned how to approach research in a rigorous and efficient manner. 
+Hui has been an unlimited source of insightful guidance and vision. I was deeply indebted to him for inspiring and encouraging me to pursue the research of application quality and its confluence with data-driven paradigm. Throughout the years, he has always offered insightful advises at the right moments, and remarkably, every meeting I recall with him ended with high spirit.
+I cannot imagine any team of academic advisors with a better match of personality, research approach, and advising style than Vyas and Hui. I am extremely lucky to have had the benefit of their vision and wisdom. 
+
+%
+%\item Committee: Ion
+In completing this dissertation, I am also intellectually and personally indebted to Ion Stoica. He gave tremendous help in every project I worked with Conviva. His sharp questions and comments have always pushed me to dig deep into details and at the same time grasp the broad picture.
+I am thankful for his honest feedback that improved me as a researcher.
+
+%
+%\item Peter, Srini
+I am grateful to other members of my committee, Peter Steenkiste and Srinivasan Seshan, who have been an unlimited source of honest comments throughout my PhD years. 
+I will always cherish the Tuesday seminars and XIA meetings both skillfully over by Peter and Srini, from whom I received more honest comments than from any conferences or workshops. I am also thankful to them for letting me work as teaching assistant for their computer networks courses.
+Finally, my research would not be possible without the financial and intellectual support from the XIA project. 
+
+%
+%\item Conviva folks (Jibin, Henry, Xi, Rui, Yan, Saiguang, Dima), Bruce? Microsoft folks (Ganesh, Vanket, Phil, Yinliang, Yu, Rameer, Robert)
+Through out my PhD years, I have been greatly benefited from two fruitful collaborations with Conviva and Microsoft. 
+I would like to give my gratitude to colleagues at Conviva, Jibin Zhan, Aditya Ganjam, Davis Shepherd, Henry Milner, Faisal Siddiqui, Yan Li, Rui Zhang, Saiguang Che and Florin Dobrian, for patiently helping me understand the state of the art of Internet video industry, and allowing me to run experiments on their platforms. 
+I would like to thank colleagues at Microsoft Research, Ganesh Ananthanarayanan, Venkat Padmanabhan, Philip A. Chou, Rajdeep Das, Ranveer Chandra, Robert Grandl, Yinglian Xie, and Yu Fang, as well as colleagues at Microsoft Skype team, Esbjorn Dominique, Marcin Goliszewski, Dalibor Kukoleca, and Renat Vafin.
+This dissertation would not be possible without their earnest support.
+
+%
+%\item CMU folks (David, Matthew, Seyed, Raja, Tianlong, Soo-Jin), Visitors (Yi, Shijie), Assistants (Deb, Toni, Kathy)
+I am thankful to the many graduate students at CMU, David Naylor, Matthew Mukerjee, Raja Sambasivan, Seyed K. Fayaz, Tianlong Yu,  Soo-Jin Moon, Hyeontaek Lim, Dongsu Han, Yuchen Wu, Carlo Angiuli, Jay-Yoon Lee, Zhuo Chen, Jinliang Wei, Antonis Manousis, Yixin Luo, who had provided invaluable feedbacks to my early drafts and practice talks. I was also fortunate to work with two extremely talented visitors to CMU, Yi Sun from ICT China, and Shijie Sun from Tsinghua University. Finally, I want to thank Deborah Cavlovich, Toni Fox, and Kathy McNiff for their invaluable help on logistics.
+
+%
+%\item Undergraduate folks (Bin Liu, Yi Tang, Chengchen Xiaofei, Yan Chen, Mingui, Baichuan, Kai Chen
+I would also like to thank my undergraduate advisor in Tsinghua, Bin Liu, for accepting me to his research team and bringing me to networking research. During my undergraduate years, I was fortunate to work with Yi Tang, Chengchen Hu, Yi Wang, Yan Chen, Mingui Zhang, Beichuan Zhang, and Kai Chen. I learned something from each of them.
+
+%\end{itemize}
+
+I would like to express my earnest gratitude to my parents for their constant love and encouragement, without which any of my achievements would not have been possible. Thanks to them for always having faith in me and providing me with the best education possible.
+
+Last but not least, I would like to thank my beloved Xuezhi for her understanding and unreserved support throughout my PhD years.
+
+I am truly grateful to all those who helped me complete this dissertation. If I neglected to
+mention you, I apologize. Please know that I greatly appreciate your support.
+
+\end{acknowledgments}
+
+
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\mainmatter
+
+%% Double space document for easy review:
+%\renewcommand{\baselinestretch}{1.66}\normalsize
+
+% The other requirements Catherine has:
+%
+%  - avoid large margins.  She wants the thesis to use fewer pages, 
+%    especially if it requires colour printing.
+%
+%  - The thesis should be formatted for double-sided printing.  This
+%    means that all chapters, acknowledgements, table of contents, etc.
+%    should start on odd numbered (right facing) pages.
+%
+%  - You need to use the department standard tech report title page.  I
+%    have tried to ensure that the title page here conforms to this
+%    standard.
+%
+%  - Use a nice serif font, such as Times Roman.  Sans serif looks bad.
+%
+% Other than that, just make it look good...
+
+
+\input{intro}
+
+\input{related}
+
+\input{overview}
+
+\input{patterns}
+\input{cfa}
+\input{dda}
+\input{pytheas}
+\input{via}
+
+\input{conclusion}
+
+%\jc{
+%TODO:
+%\begin{itemize}
+%%\item clarify the use of client and session
+%\item mention deep learning
+%\item mention spand
+%%\item mention ml hyperparameter tuning
+%\end{itemize}
+%}
+
+%\input{intro}
+%
+%\input{related}
+%
+%\input{concl}
+
+%\appendix
+%\include{appendix}
+
+\backmatter
+
+%\renewcommand{\baselinestretch}{1.0}\normalsize
+
+% By default \bibsection is \chapter*, but we really want this to show
+% up in the table of contents and pdf bookmarks.
+\renewcommand{\bibsection}{\chapter{\bibname}}
+%\newcommand{\bibpreamble}{This text goes between the ``Bibliography''
+%  header and the actual list of references}
+\bibliographystyle{plainnat}
+%\bibliography{register} %your bib file
+\bibliography{adaptation,sigcomm2011,sigcomm2012,sigcomm2013,conext13,sigcomm2014,nsdi13,hotnet14,nsdi14,sigcomm2015,nsdi16,sigcomm2016,hotnet15,imc2015,hotnet16,nsdi17,thesis.bib}
+
+\end{document}

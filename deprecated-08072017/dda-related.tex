@@ -1,0 +1,107 @@
+\section{Related Work}
+\label{sec:dda:related}
+
+At a high-level, our work is related to prior work in measuring Internet path
+properties,   bandwidth measurements, and video-specific bitrate selection.
+With respect to prior measurement work, our key contribution is showing a
+practical data-driven approach for throughput prediction.  In terms of  video,
+our predictive approach offers a more systematic bitrate selection mechanism.
+
+
+\mypara{Measuring path properties} Studies on path properties have shown
+prevalence and persistence of network bottlenecks
+(e.g.,~\cite{hu2005measurement}), constancy of various network
+metrics~\cite{zhang2001constancy}, longitudinal patterns of cellular
+performance (e.g.,~\cite{nikravesh2014mobile}), and spatial similarity of
+network performance (e.g.,~\cite{balakrishnan1997analyzing}). While \name is
+inspired by these insights, it addresses a key gap because these efforts fall
+short of providing a prescriptive algorithm for throughout prediction.
+
+% the shown substantial throughput similarity, but as shown in
+%\Section\ref{sec:analysis}, achieving accurate prediction is hard because of
+%complex underlying interaction between sessions' throughput.
+
+%%Existing approaches to
+%prediction of bandwidth-related metrics (e.g., available bandwidth, throughput)
+%%generally fall into three categories. The most similar approach to ours is
+%shared prediction.
+
+\mypara{Bandwidth measurement}  Unlike prior ``path mapping'' efforts
+(e.g.,~\cite{madhyastha2006iplane, seshan1997spand,ramasubramanian2009treeness,
+dabek2004vivaldi}), \name uses a data-driven model based on available session
+features (e.g., ISP, device). Specifically,  video  measurements are taken
+within a constraint sandbox environment (e.g., browser) that do not offer interface for path
+information (e.g., traceroute).  Other approaches use  packet-level probing to
+estimate the end-to-end performance metrics (e.g.,~\cite{prasad2003bandwidth,
+hu2004locating, strauss2003measurement, jain2003end}).  Unlike \name, these
+require additional measurement and often need full client/server-side control which
+is often infeasible in the wild.  A third class of approaches leverages the
+history of the  same client-server pair (e.g.,~\cite{vazhkudai2001predicting,
+jain2005end, swany2002multivariate, mirza2007machine, he2005predictability}).
+However, they are less reliable when the available history of the same client
+and server is sparse. 
+
+%Third approach, which is the most similar to ours, is to predict the
+%performance between a host and server using the information between other
+%hosts and servers. However, they either rely on network topology to correlate
+%measurements (e.g., ~\cite{madhyastha2006iplane, seshan1997spand}), or fall
+%short of predicting throughput (e.g.,~\cite{ramasubramanian2009treeness,
+%dabek2004vivaldi}), while \name relies on only session features to
+%automatically discover sesssion with similar throughput and achieve accurate
+%prediction. 
+
+%Similar to
+%\name, predictive bitrate selection picks bitrate based on prediction of
+%throughput. However,
+
+\mypara{Bitrate selection} Choosing high and sustainable bitrate is
+critical to video quality of experience~\cite{sigcomm13athula}.  
+ Existing methods (e.g.,~\cite{miller2015low,festive})
+require either history measurement between the same client and server or the
+player to probe the server to predict the throughput. In contrast, \name is able to predict
+throughput before a session starts. 
+%In this perspective, video control plane
+%(e.g.,~\cite{sigcomm12conviva,c3}) is similar to \name, but it fails to provide
+%details on how they correlate sessions with similar quality and falls short of
+%predicting throughput directly.  
+ Other approaches include switching bitrate midstream (e.g.,~\cite{huang2014buffer,tian2012towards,yin2014toward})
+ but do not focus on the initial bitrate problem which is the focus of \name.
+
+% But the
+%buffer-based approach is not sufficient to simultaneously optimize for higher
+%bitrate and startup delay~\cite{yin2014toward}. 
+
+
+%\mypara{End-to-end property prediction}
+%\begin{packeditemize}
+%\item History-based predictor (\cite{vazhkudai2001predicting}, bandwidth variation range~\cite{jain2005end}, multivariate network weather service~\cite{swany2002multivariate}, \cite{mirza2007machine,he2005predictability})
+%\item Spatial similarity of throughput is studied in \cite{seshan1997spand} and \cite{balakrishnan1997analyzing}.
+%\item \cite{madhyastha2006iplane} periodically probes the network from vantage points.
+%\item{Measurement tools for bandwidth estimation} 
+%\begin{packeditemize}
+%\item \cite{prasad2003bandwidth} overview of tools for various bandwidth-related metrics.
+%\item \cite{hu2004locating} developes Pathneck for available bandwdith estimation
+%\item \cite{strauss2003measurement} developes Spruce for available bandwidth estimation 
+%\item \cite{jain2003end} develops Pathload
+%\item \cite{wang2014timing} middlebox-based bandwidth estimation
+%\end{packeditemize}
+%\end{packeditemize}
+%
+%
+%\mypara{Measurement studies on path properties}
+%\begin{packeditemize}
+%\item \cite{hu2005measurement} found bottleneck persistency, sharing of bottlenecks, 
+%\item various steadiness properties~\cite{zhang2001constancy}
+%\item \cite{nikravesh2014mobile} longtitudinal study on mobile end-to-end properties.
+%\item \cite{luckie2014challenges} studies inter-domain congestion link
+%\end{packeditemize}
+%
+%\mypara{Bitrate-adaptive streaming}
+%\begin{packeditemize}
+%\item \cite{miller2015low} studies short-term throughput fluctuation and presents a bitrate adaptation algorithm that maximizes QoE by throughput prediction.
+%\item \cite{zou2015can}: how much improvement can be brought by accurate throughput prediction.
+%\item \cite{yin2014toward}: accurate throughput prediction can enable QoE optimization
+%\end{packeditemize}
+%
+%
+%
