@@ -100,6 +100,7 @@ call's duration during which there may be transient spikes
 %\label{fig:intro:badqoe}
 %\end{figure}
 
+\mypara{Limitations of prior approaches} 
 To understand these QoE problems, we first shed light on
 the fundamental limitations of prior approaches. 
 These approaches can be broadly classified 
@@ -316,7 +317,7 @@ and CDNs~\cite{chen2015end,mukerjee2015practical}.
 %
 %\end{itemize}
 
-\section{Contributions}
+\section{Roadmap of This Dissertation}
 
 The main contribution of this dissertation lies in {\em the first suite of solutions to make \ddn 
 practical}--we have demonstrated that QoE can be substantially improved by
@@ -329,7 +330,7 @@ and use large-scale datasets and pilot
 deployments to demonstrate
 the QoE improvement in the real world.
 
-\mypara{Challenges}
+\subsection{Fundamental Challenges in Data-Driven Networking}
 While \ddn enjoys several advantages over 
 classic approaches, we observe two fundamental challenges 
 that are key to unleashing \ddn's full potential.
@@ -356,7 +357,7 @@ clients in real time with decisions based on fresh data from other clients.
 
 \end{enumerate}
 
-\mypara{Key insight}
+\subsection{Unifying Insight: Persistent Critical Structures}
 In this dissertation, we address these challenges in practice by integrating 
 several domain-specific insights in networked applications with 
 standard machine learning algorithms and systems. 
@@ -378,6 +379,61 @@ In this example,  the persistent correlation between these sessions'
 network path and their QoE is a manifestation of the underlying congestion.
 We will give a formal definition of persistent structures in
 Section~\ref{sec:overview:unifying}.
+
+
+%\section{Contributions}
+
+
+
+%\mypara{Challenges}
+%While \ddn enjoys several advantages over 
+%classic approaches, we observe two fundamental challenges 
+%that are key to unleashing \ddn's full potential.
+%%We focus on two fundamental challenges unique to \ddn:
+%
+%\begin{enumerate}
+%
+%\item 
+%%{\em The need for expressive models} to capture complex factors affecting QoE. 
+%First, \ddn needs to extract actionable insights from the QoE measurement data, 
+%such as which sessions can be used to inform the decision of a new session.
+%%such as a predictive model to predict QoE based on session-level features, from 
+%%the data stream of QoE measurements. 
+%In short, we need {\em expressive models} to capture the potentially complex 
+%factors affecting QoE. 
+%
+%\item 
+%%{\em The need for scalable platforms} to make real-time decisions with fresh data from geo-distributed clients.
+%Second, \ddn needs to turn the actionable insights into 
+%real-time control decisions to be performed by applications running in
+%geo-distributed clients. 
+%Therefore, we need {\em scalable platforms} that can respond to geo-distributed 
+%clients in real time with decisions based on fresh data from other clients.
+%
+%\end{enumerate}
+
+%\mypara{Key insight}
+%In this dissertation, we address these challenges in practice by integrating 
+%several domain-specific insights in networked applications with 
+%standard machine learning algorithms and systems. 
+%%As a result, our 
+%%solutions achieve better QoE 
+%%than using off-the-shelf machine learning solutions. 
+%The unifying theme underlying these domain-specific insights is 
+%that there are {\em persistent structures} in the relationship
+%between session-level features, decisions, and QoE.
+%These structures help identify network sessions with similar 
+%QoE-determining factors, and that such structures tend to be 
+%persistent on timescales of tens of minutes.
+%To see an intuitive example of these persistent structures, let us consider 
+%a group of video sessions bottlenecked by a congested link.
+%The throughput of these flows may vary over time, but the fact
+%that these video sessions are bottlenecked by this congested link remains true 
+%for the whole duration of the congestion event.
+%In this example,  the persistent correlation between these sessions' 
+%network path and their QoE is a manifestation of the underlying congestion.
+%We will give a formal definition of persistent structures in
+%Section~\ref{sec:overview:unifying}.
 
 
 
@@ -406,7 +462,9 @@ exhibit persistent structures.}
 \label{fig:intro-contribution}
 \end{figure}
 
-\mypara{Proposed solutions}
+
+\subsection{Proposed Solutions}
+%\mypara{Proposed solutions}
 %Table~\ref{tab:contributions} 
 As illustrated in Figure~\ref{fig:intro-contribution}, 
 the insight of persistent structures has inspired this dissertation's 
@@ -507,6 +565,7 @@ explores these relays using most calls in real time.
 
 %
 %\jc{add why internet video, voip, and how to generalize}
+\mypara{Generalizability of the proposed solutions}
 Finally, while this dissertation has mostly focused on 
 Internet video and Internet telephony, 
 we observe similar data-driven opportunities in other applications
@@ -524,10 +583,10 @@ networking and distributed systems.
 %{\em generalized} to other applications and potentially to solutions for
 %a broader set of challenges in networking and distributed systems.
 
-\section{Evaluation}
+%\subsection{Evaluation}
 %These improvements can lead to significant benefit for the application providers.
 
-\mypara{Methodology}
+\mypara{Evaluation methodology}
 %\mypara{Dataset}
 To demonstrate the benefit of our solutions in realistic settings, 
 our evaluation methodology combines real-world pilot deployment and 
@@ -545,8 +604,8 @@ was used on a random subset of clients) to evaluate
 the improvement of CFA over baseline random decision
 makers, which many video optimization services use
 by default (modulo business arrangement like price).
-
-\mypara{Metrics} 
+%
+%\mypara{Evaluation metrics} 
 In order to evaluate application QoE in a reliable 
 and scalable fashion, this dissertation does not rely subjective QoE 
 metrics (e.g., user-provided score), but focus on the metrics that can be
@@ -573,7 +632,7 @@ beyond the scope of this dissertation (e.g., content or personal preference).
 
 %\mypara{Deployment}
 
-\mypara{Summary of results}
+\subsection{Summary of results}
 %In order to evaluate the solutions proposed in this dissertation, 
 %I focus on answering the following questions. 
 In evaluating the solutions proposed in this dissertation, 
