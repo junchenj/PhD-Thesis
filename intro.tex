@@ -7,27 +7,27 @@ traffic  hit 70\% in 2015 and is forecasted to reach 82\% of consumer Internet t
 2020~\cite{cisco-forecast-2015}) and Internet telephony (e.g., Skype users spend over 
 2 billion minutes talking to each other every day~\cite{skype-2-billion-minutes}). 
 As most applications rely on user engagement to generate revenues, 
-it has become of paramount importance for the
-application providers to ensure high user-perceived 
+it has become of paramount importance that the
+application providers ensure high user-perceived 
 {\em Quality of Experience} ({\em QoE}) in order to maintain high user 
 engagement~\cite{sigcomm13athula}.
 For instance, recent research has shown that even one short video buffering 
 interruption can lead to 39\% less time spent watching videos and 
 cause substantial  revenue losses for ad-based video sites. 
-Suboptimal QoE is similarly damaging for subscription-based 
+Suboptimal QoE will negatively affect subscription-based 
 service providers as well; e.g., our study with Microsoft Skype 
 has shown that most Skype  users give low rating when experiencing over
 1.2\% packet loss rate~\cite{via}.
 
-Consequently, understanding and improving QoE of Internet applications 
-has recently become a focus of academic and industry efforts. 
-The trend is exemplified by the rapid growth in the number of recent
+Therefore, understanding and improving QoE of Internet applications 
+has recently become a focus of both academic and industry efforts. 
+This trend is illustrated by the rapid growth in the number of recent
 publications (e.g.,~\cite{sigcomm13athula,sigcomm12,
 wang2014speedy,sigcomm11,eona,krishnan2013video}), workshops 
 (e.g.,~\cite{workshop-wmust,workshop-fhmn,workshop-qoe}), 
-as well as industry efforts (e.g.,~\cite{conviva,artizanetworks}) focusing on QoE optimization 
-for a variety of applications such as video streaming, Internet telephony, mobile 
-apps and web services.
+as well as commercial offerings (e.g.,~\cite{conviva,artizanetworks}) for optimizing QoE 
+of a variety of applications such as video streaming, Internet telephony, mobile 
+apps, and web services.
 
 %\begin{itemize}
 %\item Overview of Internet applications: video streaming and internet telephony
@@ -37,10 +37,10 @@ apps and web services.
 
 %\section{Ensuring High QoE is Challenging}
 
-\section{QoE Problems Today}
+\section{QoE Problems and Limitations of Prior Approaches}
 
-While there has been intense research towards improving Internet 
-QoE over the past decades, existing approaches, however, have failed 
+While there has been intense research towards improving Internet QoE, 
+many recent measurement studies show that existing approaches have failed 
 to deliver the QoE needed by today's applications. 
 %Figure~\ref{fig:intro:badqoe} presents the QoE distribution and the 
 %prevalence of bad QoE in video streaming and Internet telephony, 
@@ -48,27 +48,25 @@ to deliver the QoE needed by today's applications.
 %Figure~\ref{subfig:intro-badqoe-video-buffering} shows that among 
 %over 300 million video sessions from 376 content 
 %providers, 
-For instance, our measurement study based on over 300 million 
+For instance, our study based on over 300 million 
 video sessions from 376 content providers showed that
-while most viewers did not experience noticeable re-buffering interruptions
-(video stalls), 12\% video sessions spent over 1\% of time in re-buffering,
+%while most viewers did not experience noticeable re-buffering interruptions,
+12\% video sessions spent over 1\% of time in re-buffering interruptions (video stalls),
 and 5\% sessions waste even 10\% of the view time in 
 re-buffering~\cite{jiang2013shedding}, which could cause a significant 
 fraction of viewers to quite watching the videos, especially for 
 live content~\cite{sigcomm11}. 
 %Similarly, Figure~\ref{subfig:intro-badqoe-skype-lossrate} shows that 
 %among 430 million Skype calls that were not relayed by an intermediate
-Similar pervasive QoE problems have been
-shown in other applications as well. 
-My study based on quality measurements from 430 million 
-Skype calls showed that 17\% calls had experienced over 
+Similar QoE problems are pervasive in other applications as well. 
+Our study based on quality measurements of 430 million 
+Skype calls showed that 17\% calls experienced over 
 1.2\% packet loss in the call's duration~\cite{via}, which 
-according to user studies of VoIP\footnote{We use Internet telephony 
-and VoIP interchangeably.} QoE~\cite{itu,cisco-voip} 
-can cause very frustrating user experience.
+can cause frustrating user experience, according to user studies~\cite{itu,cisco-voip}.
 Note that the packet loss rate is the average value over the
 call's duration during which there may be transient spikes
 (e.g., loss burst) resulting in even worse experience.
+We will elaborate on these quality problems in Chapter~\ref{ch:related}.
 
 
 %\begin{figure}[t!]
@@ -257,7 +255,10 @@ endpoint adaptation.
 %experience if it uses certain decision.
 \end{itemize}
 
-\mypara{Technology trends} Compared to its precursor (e.g.,~\cite{spand,seshan1997spand}),
+%\mypara{Technology trends} 
+\vspace{0.2cm}
+\noindent{\bf Why now?}
+Compared to its precursor (e.g.,~\cite{spand,seshan1997spand}),
 \ddn is fortuitously aligned with a confluence of recent  ``technology pulls''. 
 First, many application providers today have widely deployed client-side 
 instrumentations to collect massive real-time in-situ QoE data  (e.g.,~\cite{sigcomm11,via,imc12akamai,artizanetworks}). 
@@ -453,7 +454,7 @@ Section~\ref{sec:overview:unifying}.
 
 \begin{figure}[t!]
 \centering
-\includegraphics[width=0.7\textwidth]{figures/intro-contribution.pdf}
+\includegraphics[width=0.8\textwidth]{figures/intro-contribution.pdf}
 %\vspace{-0.3cm}
 \caption{To address the key challenges
 of \ddn, we have developed a suite of solutions by leveraging the domain-specific 
@@ -534,7 +535,8 @@ based on their fresh measurement data.
 (Chapter~\ref{ch:via}).
 The last project tackles a challenge of large decision spaces, which 
 is particularly relevant in Internet telephony.
-In the first large-scale study on VoIP quality, we found that 
+In the first large-scale study on VoIP\footnote{We use the terms Internet telephony 
+and VoIP interchangeably.} quality, we found that 
 %a substantial fraction of Skype calls suffer from poor network performance, 
 %and that 
 there is substantial room for improving Skype quality by routing each 
