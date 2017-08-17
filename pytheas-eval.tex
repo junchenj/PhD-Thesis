@@ -48,7 +48,7 @@ The frontend clusters run a simple decision-making algorithm -- for 90\% session
 it picks the decision that has the best predicted QoE, and for
 the rest sessions, it randomly assigns them to a CDN.
 
-We consider two widely used video QoE metrics~\cite{sigcomm11conviva,cfa}: join time (the start-up delay of a video session), and buffering ratio (the fraction of session duration spent on rebuffering).
+We consider two widely used video QoE metrics~\cite{sigcomm11,cfa}: join time (the start-up delay of a video session), and buffering ratio (the fraction of session duration spent on rebuffering).
  We define improvement of \name for a particular unit at $t$-th minute by
   $\mathit{Improve}_{\mathit{\name}}(t)=\frac{Q_{CFA}(t)-Q_{\mathit{\name}}(t)}{Q_{CFA}(t)}$, where $Q_{\mathit{\name}}(t)$ and $Q_{CFA}(t)$ are the average QoE of \name in $t$-th minute and that of the baseline, respectively. 
 Since we prefer smaller values on both metrics, a positive 
@@ -87,7 +87,7 @@ the mean improvement is 6\% for join time and 31\% for buffering ratio, and the
 90th percentile improvement is 24\% for join time and 78\% for buffering ratio.
 To put these numbers in context, prior studies 
 show a 1\% decrease in buffering can lead to more than a 3-minute increase 
-in expected viewing time~\cite{sigcomm11conviva}.
+in expected viewing time~\cite{sigcomm11}.
 Note that \name is not better than the baseline on every single 
 session, because the \mab process inherently uses a
 (dynamic) fraction of traffic to explore suboptimal decisions.
@@ -244,7 +244,7 @@ consumption of \name, as well as the benefits of various performance optimizatio
 \myparatight{Frontend}
 Figure~\ref{fig:eval-frontend-scalability} shows the maximum number of sessions that can be served in one second, while keeping the update interval of per-group logic to be one second. 
 Each session makes one control request and uploads QoE measurement once. Each group has the same amount of sessions.
-The size of control request message is 100B. We run Apache Benchmark~\cite{ab} for 20 times and report the average throughput.
+The size of control request message is 100B. We run Apache Benchmark~\cite{apache-benchmarking} for 20 times and report the average throughput.
 We can see that the throughput is almost horizontally scalable to more frontend server instances. 
 %Moreover, \name achieves almost the same throughput to a frontend cluster with the same resource that does not need to run the per-group control logic (e.g., a C3 frontend cluster).
  While  the number of groups does impact the performance of frontend cluster, it is only to a limited extent; throughput of handling 10K groups is about 10\% worse than that of handling one group.

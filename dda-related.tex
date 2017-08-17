@@ -27,7 +27,7 @@ short of providing a prescriptive algorithm for throughout prediction.
 %shared prediction.
 
 \mypara{Bandwidth measurement}  Unlike prior ``path mapping'' efforts
-(e.g.,~\cite{madhyastha2006iplane, seshan1997spand,ramasubramanian2009treeness,
+(e.g.,~\cite{iplaneosdi, seshan1997spand,ramasubramanian2009treeness,
 dabek2004vivaldi}), \name uses a data-driven model based on available session
 features (e.g., ISP, device). Specifically,  video  measurements are taken
 within a constraint sandbox environment (e.g., browser) that do not offer interface for path
@@ -61,7 +61,7 @@ require either history measurement between the same client and server or the
 player to probe the server to predict the throughput. In contrast, \name is able to predict
 throughput before a session starts. 
 %In this perspective, video control plane
-%(e.g.,~\cite{sigcomm12conviva,c3}) is similar to \name, but it fails to provide
+%(e.g.,~\cite{sigcomm12,c3}) is similar to \name, but it fails to provide
 %details on how they correlate sessions with similar quality and falls short of
 %predicting throughput directly.  
  Other approaches include switching bitrate midstream (e.g.,~\cite{huang2014buffer,tian2012towards,yin2014toward})

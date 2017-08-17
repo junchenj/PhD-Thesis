@@ -292,10 +292,14 @@ howpublished={\url{http://conferences.sigcomm.org/sigcomm/2016/qoe.php}}
 }
 
 @article{rsvp,
-  title={Resource reservation protocol (RSVP)--Version 1 functional specification},
-  author={Zhang, Lixia and Berson, Steve and Herzog, Shai and Jamin, Sugih},
-  journal={Resource},
-  year={1997}
+  title={RSVP: A new resource reservation protocol},
+  author={Zhang, Lixia and Deering, Steve and Estrin, Deborah and Shenker, Scott and Zappala, Daniel},
+  journal={IEEE network},
+  volume={7},
+  number={5},
+  pages={8--18},
+  year={1993},
+  publisher={IEEE}
 }
 
 @article{mbone,
@@ -426,13 +430,11 @@ howpublished={\url{http://conferences.sigcomm.org/sigcomm/2016/qoe.php}}
   year={2016}
 }
 
-@book{csfq,
+@inproceedings{csfq,
   title={Core-stateless fair queueing: Achieving approximately fair bandwidth allocations in high speed networks},
   author={Stoica, Ion and Shenker, Scott and Zhang, Hui},
-  volume={28},
-  number={4},
-  year={1998},
-  publisher={ACM}
+  booktitle = {SIGCOMM},
+  year = {1998}
 }
 
 @book{brakmo1994tcp,
@@ -486,19 +488,22 @@ howpublished={\url{http://conferences.sigcomm.org/sigcomm/2016/qoe.php}}
 @techreport{intserv,
   title={Integrated services in the internet architecture: an overview},
   author={Braden, Robert and Clark, David and Shenker, Scott},
-  year={1994}
+  year={1994},
+  institution={RFC 1633}
 }
 
 @techreport{diffserv,
   title={An architecture for differentiated services},
   author={Blake, Steven and Black, David and Carlson, Mark and Davies, Elwyn and Wang, Zheng and Weiss, Walter},
-  year={1998}
+  year={1998},
+  institution={RFC 2475}
 }
 
 @techreport{mpls,
   title={Multiprotocol label switching architecture},
   author={Rosen, Eric and Viswanathan, Arun and Callon, Ross},
-  year={2000}
+  year={2000},
+  institution={RFC 3031}
 }
 
 @book{keshav2012mathematical,
@@ -506,4 +511,11 @@ howpublished={\url{http://conferences.sigcomm.org/sigcomm/2016/qoe.php}}
   author={Keshav, Srinivasan},
   year={2012},
   publisher={Addison-Wesley}
+}
+
+@article{dda,
+  title={DDA: Cross-Session Throughput Prediction with Applications to Video Bitrate Selection},
+  author={Jiang, Junchen and Sekar, Vyas and Sun, Yi},
+  journal={arXiv preprint arXiv:1505.02056},
+  year={2015}
 }

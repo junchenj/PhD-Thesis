@@ -10,15 +10,16 @@
 %measurement data passively collected from millions of end users.
 
 In this chapter, we conclude the dissertation by 
-(1) summarizing its contributions, 
+(1) summarizing its key contributions (Section~\ref{sec:concl:contributions}), 
 (2) highlighting lessons learned from our implementation and 
-deployment of proposed solutions, 
-(3) exposing fundamental limitations of our solutions, and
+deployment of proposed solutions (Section~\ref{sec:concl:lessions}), 
+(3) discussing fundamental limitations of our solutions (Section~\ref{sec:concl:limitations}), and
 (4) identifying several key research topics and outlining a 
 research agenda to help the networking community recognize 
-and embrace the data-driven networking paradigm.
+and embrace the data-driven networking paradigm (Section~\ref{sec:concl:future}), .
 
 \section{Summary of Contributions}
+\label{sec:concl:contributions}
 %\jc{
 %\begin{itemize}
 %\item two basic approaches
@@ -138,6 +139,7 @@ a budget for relaying traffic through the managed overlay.
 
 
 \section{Lessons Learned}
+\label{sec:concl:lessions}
 %\jc{
 %\begin{itemize}
 %\item Importance of offline simulation
@@ -241,6 +243,7 @@ with known network incidents.
 
 
 \section{Limitations}
+\label{sec:concl:limitations}
 
 \mypara{Root cause diagnosis}
 While our algorithms provide the explanatory power of how a 
@@ -338,6 +341,7 @@ servers and improve quality.
 %}
 
 \section{Future Work}
+\label{sec:concl:future}
 
 Inspired by this dissertation, we believe there 
 will be tremendous opportunities for 
@@ -413,7 +417,7 @@ For instance, ESPN clients use HTTP-based bitrate-adaptation video players, whic
 Now, if Comcast shares with ESPN additional information that attributes bottlenecks to Comcast rather than Akamai, the players can react to ISP congestion by lowering the bitrate, rather than blindly switching between Akamai and Limelight. 
 Building on this intuition and my early work~\cite{eona}, I argue that the fundamental problem lies in the limited interfaces between service providers, and that a principled approach to re-architecting these interfaces with explicit QoE optimization in mind is needed.
 I envision an {\em Experience-Oriented Network Architecture} ({\em EONA}), where service providers share QoE information and key configuration changes in order to optimize user-perceived QoE in a coordinated way, while still keeping the federated structure.
-EONA can be realized without changing the data/control plane protocols; instead, it adds new interfaces between the ``controllers'' of service providers (e.g., an SDN controller, a cloud orchestrator, or a global video control plane~\cite{sigcomm12conviva}).
+EONA can be realized without changing the data/control plane protocols; instead, it adds new interfaces between the ``controllers'' of service providers (e.g., an SDN controller, a cloud orchestrator, or a global video control plane~\cite{sigcomm12}).
 Despite EONA's potential, there are many open-ended questions: 
 How to incentivize EONA to attract service providers?
 What is the minimal set of information that has to be shared? 

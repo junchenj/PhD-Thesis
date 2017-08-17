@@ -329,7 +329,7 @@ Relay options selected by the basic {\em exploration-exploitation} process assig
 As briefly mentioned earlier, standard exploratory approaches  are slow to converge (Section~\ref{subsec:strawmen}) and often fail to select the best decision (Section~\ref{subsec:design}). This is because exploring in presence of high variability requires a lot of samples, which is infeasible due to data sparseness and skew. %As Figure~\ref{fig:intuition} illustrates, without enough samples, basic exploratory selection suffers from non-convergence problem and has suboptimal performance.
 
 Algorithm~\ref{alg:explore} shows the pseudocode of our approach.
- Here, we choose  the UCB1 algorithm~\cite{UCB1} as our 
+ Here, we choose  the UCB1 algorithm~\cite{ucb1} as our 
  basic starting point. UCB1 is well-suited for our purpose because  
 %\vnp{It seems to be from the following 2002 paper --- http://homes.di.unimi.it/~cesabian/Pubblicazioni/ml-02.pdf} 
  it does not require explicitly specifying the fraction of samples for exploration. Instead, it transparently combines both exploration as well as its exploitation decisions. % and works well for dynamic distributions. \vnp{This point about UCB1 working for "dynamic distributions" seems to contradict the "static" assumption noted below. I think we should delete the "dynamic distributions" bit.} 

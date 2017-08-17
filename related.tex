@@ -79,7 +79,7 @@ button.
 While join time may not directly impact the view time of a 
 specific video,
 it does have long term effects as it reduces the likelihood 
-of repeated visits~\cite{sigcomm11,imc12akamai}.  
+of repeated visits~\cite{sigcomm11,akamai-imc12}.  
  
 
 \item \emph{Average bitrate:} 
@@ -541,7 +541,7 @@ by better CDN and bitrate configuration for
 each video session.
 For instance, Figure~\ref{fig:back-cross-cdn} shows that there is 
 significant spatial diversity and temporal dynamics of CDN 
-performance~\cite{sigcomm12conviva}.
+performance~\cite{sigcomm12}.
 Note that most video players today start with a statically configured 
 CDN or a random CDN. This suggests a 
 great opportunity of cross-CDN optimization:
@@ -570,7 +570,7 @@ to form a relay path for each Skype call~\cite{via}.
    \label{fig:back-cross-cdn-temporal}
  }
 \caption{Spatial diversity and temporal dynamics of CDN 
-performance~\cite{sigcomm12conviva}. 
+performance~\cite{sigcomm12}. 
 The figures suggest the opportunity of cross-CDN optimization:
 video buffering ratio can be significantly reduced by dynamically
 picking the best CDN for each location and at any point of time.}
@@ -935,7 +935,7 @@ in-network solutions for two reasons:
 (1) clients is in the best position to detect and respond to 
 QoE problems; and 
 (2) recent work suggests the need for cross-CDN 
-optimizations~\cite{sigcomm12conviva} and 
+optimizations~\cite{sigcomm12} and 
 flexible web object scheduling~\cite{butkiewicz2015klotski},
 which implies the need for keeping minimal state in the
 network or servers.
@@ -999,7 +999,7 @@ estimate end-to-end performance
 hu2004locating, strauss2003measurement, jain2003end}),
 (2) to build an ``Internet performance map''
 based on active probes from a selective set of 
-``vantage points'' (e.g.,~\cite{madhyastha2006iplane, seshan1997spand,ramasubramanian2009treeness,
+``vantage points'' (e.g.,~\cite{iplaneosdi, seshan1997spand,ramasubramanian2009treeness,
 dabek2004vivaldi}), and 
 (3) to leverage the
 history of the  same client-server pair 
@@ -1071,7 +1071,7 @@ to design a good QoE metric (e.g.,
 While recent work also suggests ISPs are inferring  user 
 experience from network-layer measurements and QoS metrics 
 (e.g.,~\cite{mobicom2014-qos,sigmetrics2014-correlation,
-hotmobile2014-prometheus,
+aggarwal2014prometheus,
 imc2012-firstbyte,sigcomm2010-mercury}), we argue that 
 application providers are in a better position than these 
 infrastructure providers to measure and adapt to QoE.
