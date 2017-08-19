@@ -1,0 +1,88 @@
+\begin{abstract}
+
+The Internet is an eyeball economy dominated by applications such as 
+Internet video and Internet telephony, whose revenue streams crucially 
+depend on user-perceived Quality of Experience (QoE).
+%For instance, even one short buffering interruption can lead to much less 
+%video viewing time and cause significant revenue losses for the video site. 
+Despite intense research towards better QoE, existing approaches
+have failed to achieve the QoE needed by today's  applications. 
+%Two classes of solutions have been proposed: in-network approach
+%which re-architects the in-network devices to improve network quality of service, 
+%and endpoint approach which uses local information of individual endpoints
+%to react to dynamic network conditions.
+Their limitations stem from the fundamental trade-off between 
+visibility to {\em user-perceived QoE} and visibility to {\em network conditions}, 
+both of which are crucial to ensuring high QoE;
+%while endpoints have direct access to user-perceived QoE, they have limited 
+%knowledge of the network conditions.
+they either seek to rearchitect the in-network devices which have little visibility to QoE, 
+or propose end-to-end protocols which have limited visibility to 
+network conditions.
+
+%{\em where they implement the 
+%functionality of QoE optimization}. 
+%they either require costly re-architecting of 
+%the in-network devices (i.e., little visibility to QoE), or rely on suboptimal endpoint-based 
+%protocols (i.e., limited knowledge of the network conditions).
+%
+%they have to sacrifice 
+%visibility to user-perceived QoE or visibility to network conditions, both of which are 
+%crucial to ensuring high QoE:
+%they either require costly re-architecting of 
+%the in-network devices (i.e., little visibility to QoE), or rely on suboptimal endpoint-based 
+%protocols (i.e., limited knowledge of the network conditions).
+
+The key contribution of this dissertation is to improve application QoE by bridging the 
+long-standing gap between the visibility to user-perceived QoE and the visibility to 
+network conditions. 
+%by demonstrating the 
+%feasibility of a new approach, called data-driven networking, 
+%inspired by the recent success of data-driven 
+%techniques in other fields of computing.
+The thesis is  that {\em one can substantially improve QoE by maintaining
+a global view of up-to-date network conditions based on the QoE information
+collected from many endpoints}.
+In essence, this thesis revisits the architectural question ``where to
+implement the functionality of QoE optimization''.
+Unlike prior work which optimizes QoE by in-network devices or 
+individual endpoints, our approach optimizes QoE by a logically centralized 
+controller that retains the visibility to QoE while attaining a global view
+of real-time network conditions by consolidating information from many endpoints.
+
+To prove the thesis, this dissertation provides a suite of solutions to address 
+two fundamental challenges:
+(1) the need for expressive models to capture complex relations among sessions
+who share similar QoE-determining factors, and 
+(2) the need for scalable platforms to make real-time decisions with fresh data 
+from geo-distributed clients. 
+Our key insight that there are {\em persistent critical structures} in the relations between 
+QoE and session-level features. 
+These structures allow us to build expressive models that can identify network
+sessions with similar QoE-determining factors, and their temporal persistence allows
+us to build scalable platforms by decoupling offline structure-learning
+processes and real-time decision making processes.
+By integrating standard machine-learning techniques with the insight of persistent
+critical structures, we have developed algorithms 
+and end-to-end systems, and used real-world deployment and 
+simulation driven by real datasets to show that our solutions 
+can yield substantial QoE improvement and consequently higher user 
+engagement for video streaming and Internet telephony 
+than existing solutions as well as many standard machine 
+learning solutions. 
+
+%Our techniques address 
+%these challenges by integrating machine learning algorithms 
+%and systems with several domain-specific insights in networked 
+%applications. The key insight is that there are 
+%{\em persistent structures} 
+%in the relations between QoE and session-level features.
+%Inspired by this insight, this dissertation has developed algorithms 
+%and end-to-end systems, and used real-world deployment and 
+%simulation driven by real datasets to show that our solutions 
+%can yield substantial QoE improvement and consequently higher user 
+%engagement for video streaming and Internet telephony 
+%than today's techniques as well as many standard machine 
+%learning solutions. 
+
+\end{abstract}

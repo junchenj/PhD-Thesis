@@ -2,45 +2,35 @@
 
 
 Today's Internet is an ``eyeball economy'' driven by applications, such 
-as video streaming (e.g., the share of video traffic of all consumer Internet 
+as Internet video streaming (e.g., the share of video traffic of all consumer Internet 
 traffic  hit 70\% in 2015 and is forecasted to reach 82\% of consumer Internet traffic by 
 2020~\cite{cisco-forecast-2015}) and Internet telephony (e.g., Skype users spend over 
 2 billion minutes talking to each other every day~\cite{skype-2-billion-minutes}). 
-As most applications rely on user engagement to generate revenues, 
+As these applications rely on user engagement to generate revenues, 
 it has become of paramount importance that the
 application providers ensure high user-perceived 
 {\em Quality of Experience} ({\em QoE}) in order to maintain high user 
 engagement~\cite{sigcomm13athula,akamai-imc12}.
-For instance, recent research has shown that even one short video buffering 
-interruption can lead to 39\% less time spent watching videos and 
+For instance, recent research shows that even one short video buffering 
+interruption can lead to 39\% less time spent watching online videos and 
 cause substantial  revenue losses for ad-based video sites. 
-Suboptimal QoE will negatively affect subscription-based 
+Suboptimal QoE can negatively affect subscription-based 
 service providers as well; e.g., our study with Microsoft Skype 
-has shown that most Skype  users give low rating when experiencing over
+shows that most Skype users give low rating to calls when experiencing more than
 1.2\% packet loss rate~\cite{via}.
 
-Therefore, understanding and improving QoE of Internet applications 
-has recently become a focus of both academic and industry efforts. 
-This trend is illustrated by the rapid growth in the number of recent
+Given the importance of QoE, understanding and improving the QoE of Internet applications 
+have gained increasing attention from both academic and industry efforts. 
+This trend is best illustrated by the recent growth in the number of 
 publications (e.g.,~\cite{sigcomm13athula,sigcomm12,
 wang2014speedy,sigcomm11,eona,akamai-imc12}), workshops 
 (e.g.,~\cite{workshop-wmust,workshop-fhmn,workshop-qoe}), 
-as well as commercial offerings (e.g.,~\cite{conviva,artizanetworks}) for optimizing QoE 
-of a variety of applications such as video streaming, Internet telephony, mobile 
+as well as commercial offerings (e.g.,~\cite{conviva,artizanetworks}) for optimizing the QoE 
+of Internet video streaming, Internet telephony, mobile 
 apps, and web services.
 
-%\begin{itemize}
-%\item Overview of Internet applications: video streaming and internet telephony
-%\item Re-architect the core -- high deployment cost
-%\item Per-edge adaptation -- too narrow view
-%\end{itemize}
-
-%\section{Ensuring High QoE is Challenging}
-
-\section{QoE Problems and Limitations of Prior Approaches}
-
-While there has been intense research towards improving Internet QoE, 
-many recent measurement studies show that existing approaches have failed 
+Despite the intense research towards better Internet QoE, 
+recent measurement studies have shown that existing approaches have failed 
 to deliver the QoE needed by today's applications. 
 %Figure~\ref{fig:intro:badqoe} presents the QoE distribution and the 
 %prevalence of bad QoE in video streaming and Internet telephony, 
@@ -53,20 +43,29 @@ video sessions from 376 content providers showed that
 %while most viewers did not experience noticeable re-buffering interruptions,
 12\% video sessions spent over 1\% of time in re-buffering interruptions (video stalls),
 and 5\% sessions waste even 10\% of the view time in 
-re-buffering~\cite{jiang2013shedding}, which could cause a significant 
-fraction of viewers to quite watching the videos, especially for 
-live content~\cite{sigcomm11}. 
+re-buffering~\cite{jiang2013shedding}, which could significantly reduce user engagement, 
+especially for live content~\cite{sigcomm11}. 
 %Similarly, Figure~\ref{subfig:intro-badqoe-skype-lossrate} shows that 
 %among 430 million Skype calls that were not relayed by an intermediate
 Similar QoE problems are pervasive in other applications as well. 
 Our study based on quality measurements of 430 million 
 Skype calls showed that 17\% calls experienced over 
 1.2\% packet loss in the call's duration~\cite{via}, which 
-can cause frustrating user experience, according to user studies~\cite{itu,cisco-voip}.
-Note that the packet loss rate is the average value over the
-call's duration during which there may be transient spikes
-(e.g., loss burst) resulting in even worse experience.
-We will elaborate on these quality problems in Chapter~\ref{ch:related}.
+can cause frustrating user experience~\cite{itu,cisco-voip}.
+%Note that the packet loss rate is the average value over the
+%call's duration during which there may be transient spikes
+%(e.g., loss burst) resulting in even worse experience.
+(We elaborate on these quality problems in Chapter~\ref{ch:related}.)
+
+%\begin{itemize}
+%\item Overview of Internet applications: video streaming and internet telephony
+%\item Re-architect the core -- high deployment cost
+%\item Per-edge adaptation -- too narrow view
+%\end{itemize}
+
+%\section{Ensuring High QoE is Challenging}
+
+\section{Fundamental Limitations of Prior Approaches}
 
 
 %\begin{figure}[t!]
@@ -98,10 +97,12 @@ We will elaborate on these quality problems in Chapter~\ref{ch:related}.
 %\label{fig:intro:badqoe}
 %\end{figure}
 
-\mypara{Limitations of prior approaches} 
-These QoE problems stem from fundamental limitations of prior approaches. 
-There are two broad categories of prior approaches, with the key difference 
-lying in ``{\em where to implement the functionality of QoE optimization}''.
+%\mypara{Limitations of prior approaches} 
+These QoE problems stem from the fundamental limitations of prior 
+approaches. To understand these limitations, it is helpful to view the 
+prior approaches in two broadly defined classes, 
+with the key difference lying in
+{\em where to implement the functionality of QoE optimization}.
 
 %To see why prior research has failed to deliver desirable 
 %QoE in a substantial fraction of cases, one has to understand
@@ -113,36 +114,48 @@ lying in ``{\em where to implement the functionality of QoE optimization}''.
 
 
 \begin{itemize}
-\item On one hand, the {\em in-network approach} seeks to improve the 
-quality of service of ISPs and middlebox services by better designs 
-for in-network devices such as routers, switches and middleboxes.
+\item First, the {\em in-network} approach seeks to improve QoE by improving
+the quality of service (QoS) of ISPs and in-network services through better designs 
+of in-network devices (e.g., routers, switches, and middleboxes) and routing schemes.
 %seeks to re-architect in-network devices such as routers, switches
 %and middleboxes, so that ISPs can provide better or even guaranteed 
 %quality of service. 
-Although the  in-network approach has inspired influential projects 
-(e.g.,~\cite{demers1989analysis,csfq,active-network}),
-in-network devices have {\em limited visibility to user-perceived QoE}
-as they have little access to the client-side applications.
+Although the  in-network approach has inspired influential projects and 
+enormous intellectual legacy (e.g.,~\cite{demers1989analysis,csfq,active-network,red,ecn,ccn}),
+it is fundamentally limited by in-network devices' lack of visibility to user-perceived QoE,
+and thus it cannot react to QoE problems that are not reflected by lower-level QoS metrics.
+%since they have little access to client-side applications.
 Moreover, it is difficult, and increasingly so, to make substantial changes 
-or add new services to the network core. 
+to the network core, despite recent efforts to facilitate it~\cite{feamster2014road}.
 
-\item On the other hand, the {\em endpoint approach} seeks to use
-intelligent logic running at individual endpoints to adapt to dynamic
-network conditions and fully utilize the existing network resources.
-This approach is pervasively used in application-level protocols (e.g., video 
-bitrate adaptation~\cite{dash}) and transport-level protocols (e.g., congestion 
-control~\cite{jacobson1988congestion}).
-While the endpoint approach has  direct insight to user-perceived QoE and is 
-arguably more readily deployable than the in-network approach, 
-it suffers from the key limitation that reacting to fluctuating network conditions based 
-only on {\em local information} observed by individual endpoints could be suboptimal.
-For instance, it takes a video player several seconds (sometimes, even tens of seconds)
-to converge to an optimal combination of CDN and 
-bitrate~\cite{dda}.
-Moreover, we observe a growing decision space of potential control decisions 
-to optimize application quality.
-Therefore, it is untenable to use trial-and-error strategies driven by 
-single-session feedback to find optimal decisions in the growing decision space. 
+\item Second, the {\em endpoint} approach seeks to improve QoE by using
+intelligent logic running at individual endpoints to react to changes in
+network conditions, in order to fully utilize the existing network resources.
+This approach is pervasively used in application-level protocols (
+e.g.,~\cite{dash,festive,butkiewicz2015klotski,diversifi,sprout})
+and transport-level protocols (e.g.,~\cite{jacobson1988congestion,cubic,remy,pcc}).
+Unlike the in-network approach, the endpoint approach has direct insight to user-perceived 
+QoE and is arguably more deployable.
+However, the endpoint approach is fundamentally limited by 
+individual endpoints' local visibility to network conditions.
+As a result, each endpoint reacts to the changes in network conditions and 
+resource availability only after they have affected the QoE,
+and when it reacts, it uses trial-and-error strategies driven by only local information.
+Both aspects lead to suboptimal QoE when network conditions change constantly 
+(e.g., flashcrowd) or when quality of the beginning of a session is critical (e.g., video streaming)
+%can only react to fluctuating network conditions based 
+%only on {\em local information} observed by individual endpoints could be suboptimal.
+%For instance, it takes a video player several seconds (sometimes, even tens of seconds)
+%to converge to an optimal combination of CDN and 
+%bitrate~\cite{dda}.
+%Moreover, it is untenable for such trial-and-error strategies driven by 
+%single-endpoint information to find optimal decisions from the growing decision spaces
+%in many applications. 
+%we observe a growing decision space of potential control decisions 
+%to optimize application quality.
+%Therefore, it is untenable to use trial-and-error strategies driven by 
+%single-session feedback to find optimal decisions in the growing decision space. 
+
 %Due to this limited knowledge of network conditions, it is difficult for 
 %the endpoint adaptation to cope with the {\em growing decision space} 
 %of potential control decisions to optimize application quality.
@@ -164,34 +177,40 @@ single-session feedback to find optimal decisions in the growing decision space.
 %better in different operating conditions~\cite{remy,googleinitwindow}.
 \end{itemize}
 
-In essence, prior approaches to the placement of QoE optimization have to 
-make trade-offs between
-{\em visibility of user-perceived QoE} as feedback and {\em visibility of network conditions}, 
-both of which, however, are critical to achieving desirable QoE in practice. 
-In contrast, this dissertation approaches the placement of QoE optimization with a radically
-different answer, and presents practical solutions to demonstrate that the new approach 
+In essence, both prior approaches have to compromise either
+{\em visibility to user-perceived QoE} or {\em visibility to network conditions}, 
+both of which are critical to achieving desirable QoE in practice. 
+In contrast, this dissertation approaches the question of where to implement 
+QoE optimization with a radically different answer, and demonstrates that the new approach 
 can get the best of both worlds.
 
 
-\section{Data-Driven Paradigm in Networking}
+\section{New Paradigm: Data-Driven Networking}
 
 This dissertation is inspired by a recent paradigm shift in networking research 
 towards {\em Data-Driven Networking} ({\em \ddn}) -- network protocols should 
 be driven not only by information available to one device, but by {\em real-time} 
-information gathered from {\em multiple} devices, in order to adapt to changes 
-in network conditions and resource availability.
-Recent work has shown early promise of this paradigm shift in improving QoE of 
-Internet applications (e.g.,~\cite{sigcomm12,footprint}).
-The basic idea is to use a centralized controller to maintain a global view of 
-network conditions based on QoE measured from many (typically, tens of 
-thousands or more) of application sessions\footnote{We use ``client'' to denote 
-where a ``session'' is actually run.} and use this real-time global view to make  
-optimal decisions regarding configurations or adaptations of individual sessions.
-A case in point is C3~\cite{c3}, where a video content provider 
-collects session-level QoE measurements (e.g., buffering events) from 
-the video players of its viewers, and predicts for any new session the best
-bitrate and CDN selection based on the QoE measurements of 
-history and concurrent video sessions.
+information gathered from {\em multiple} devices~\cite{ddn-comsnet}.
+Prior work has shown the potential of this paradigm shift in improving the 
+QoE of Internet applications (e.g.,~\cite{sigcomm12,footprint}).
+As illustrated in Figure~\ref{fig:intro:contrast}, 
+the basic idea is that QoE could be substantially improved, if 
+there is a centralized controller that maintains a global view of real-time 
+network conditions by gathering QoE measured from many (typically, tens of 
+thousands or more) application sessions\footnote{We use ``client'' to denote 
+where a ``session'' is actually run.} and uses this global view to make  
+optimal decisions regarding the adaptation of individual sessions.
+%maintain a global view of 
+%network conditions based on the QoE measured from many (typically, tens of 
+%thousands or more) of application sessions\footnote{We use ``client'' to denote 
+%where a ``session'' is actually run.} and use this real-time global view to make  
+%optimal decisions regarding configurations or adaptations of individual sessions.
+
+%A case in point is C3~\cite{c3}, where a video content provider 
+%collects session-level QoE measurements (e.g., buffering events) from 
+%the video players of its viewers, and predicts for any new session the best
+%bitrate and CDN selection based on the QoE measurements of 
+%history and concurrent video sessions.
 
 %we can improve QoE by accurately predicting network conditions
 %based on {\em a real-time, global view of QoE measured from millions of 
@@ -235,54 +254,73 @@ it in the controller that maintains a real-time global view of QoE of millions o
 \label{fig:intro:contrast}
 \end{figure}
 
+
+In essence, \ddn offers a different answer to the key architectural question 
+``where to implement the functionality of QoE optimization''.
+Unlike the prior approaches which 
+optimize QoE by in-network devices or individual endpoints, 
+\ddn envisions a logically centralized controller that optimizes QoE based on 
+a global view of real-time QoE of many endpoint.
+
+%As shown in Figure~\ref{fig:intro:contrast}, \ddn represents a new approach
+%to the architectural question: ``where to implement the functionality of QoE 
+%optimization''.
+%While the classic approaches implement QoE optimization in the network 
+%core or individual endpoints, \ddn implements it in the controller 
+%that maintains a real-time global view of QoE collected from
+%client-side applications running in millions of end users.
+
 \mypara{Advantages of \ddn} 
-The key advantage of \ddn over prior approaches is that 
-\ddn retains the ethos of the endpoint approach, 
-while addressing its lack of visibility to network condition by leveraging 
-an expended view across many endpoints, thus achieving 
+\ddn enjoys the benefits of both in-network and endpoint approaches, while avoiding
+their pitfalls.
+On one hand, \ddn retains the ethos of the endpoint approach that it can directly optimize
+for user-perceived QoE.
+On the other hand, moving the functionality of QoE optimization from endpoints to 
+the logically centralized controller addresses individual endpoints' lacking of visibility to network 
+conditions by gathering information from many endpoints, thus achieving 
 the best of both worlds of in-network and endpoint approaches.
-As shown in Figure~\ref{fig:intro:contrast}, \ddn represents a new approach
-to the architectural question: ``where to implement the functionality of QoE 
-optimization''.
-While the classic approaches implement QoE optimization in the network 
-core or individual endpoints, \ddn implements it in the controller 
-that maintains a real-time global view of QoE collected from
-client-side applications running in millions of end users.
-Moving the QoE optimization to the \ddn controller 
-enjoys two key architectural advantages:
-\begin{enumerate}
-\item Unlike the in-network approach, \ddn can monitor client-side applications
-and thus can directly optimize user-perceived QoE, rather than indirect metrics.
-%as it has access to client-side applications,
-Moreover, it is more readily deployable than the in-network approach.
-\item Unlike the endpoint approach, \ddn compensates the lack of 
-visibility of network conditions at one endpoint by a real-time, global view of QoE 
-observed from many endpoints, thus addressing the key limitation of 
-the endpoint adaptation. 
-%Instead of reacting to dynamic network conditions with 
-%a local view, \ddn can {\em predict}  the QoE that a session would 
-%experience if it uses certain decision.
-\end{enumerate}
+
+%%The key advantage of \ddn over prior approaches is that 
+%%\ddn retains the ethos of the endpoint approach that it can directly optimize
+%%for user-perceived QoE, while addressing its insufficient visibility to network 
+%%conditions by gathering information from many endpoints, thus achieving 
+%%the best of both worlds of in-network and endpoint approaches.
+%Moving the functionality of QoE optimization to the centralized \ddn controller 
+%%enjoys two key architectural advantages:
+%enjoys the benefits of both in-network and endpoint approaches, while avoiding
+%their pitfalls.
+%\begin{enumerate}
+%\item Unlike the in-network approach, \ddn can monitor client-side applications
+%and thus can directly optimize user-perceived QoE, rather than indirect metrics.
+%%as it has access to client-side applications,
+%Moreover, it is more readily deployable than the in-network approach.
+%\item Unlike the endpoint approach, \ddn compensates the lack of 
+%visibility of network conditions at one endpoint by a real-time, global view of QoE 
+%observed from many endpoints, thus addressing the key limitation of 
+%the endpoint adaptation. 
+%%Instead of reacting to dynamic network conditions with 
+%%a local view, \ddn can {\em predict}  the QoE that a session would 
+%%experience if it uses certain decision.
+%\end{enumerate}
 
 %\mypara{Technology trends} 
-\mypara{Technology push behind \ddn} 
+\mypara{``Technology pushes'' behind \ddn} 
 %\vspace{0.2cm}
 %\noindent{\bf Why now?}
-Compared to its precursors (e.g.,~\cite{spand,seshan1997spand}),
-\ddn is fortuitously aligned with several recent  ``technology pulls'':
+While optimizing application quality by information of multiple sessions is not 
+new, \ddn, unlike its precursors (e.g.,~\cite{spand}), is fortuitously aligned with several recent  technology pushes:
 \begin{enumerate}
 \item Many application providers today have widely deployed client-side 
-instrumentations to collect massive real-time in-situ QoE data  (e.g.,~\cite{sigcomm11,via,akamai-imc12,artizanetworks}). 
-\item The emergence of large-scale analytics systems provides the ability 
-to extract insights efficiently from large corpses 
-of data (e.g.,~\cite{spark}) and from streams of updates 
+instrumentations that can collect real-time in-situ QoE data 
+en masse from clients (e.g.,~\cite{sigcomm11,via,akamai-imc12,artizanetworks}). 
+\item The emergence of large-scale data analytics platforms and cloud infrastructure 
+provides the ability to extract insights efficiently from large corpses 
+of data (e.g.,~\cite{spark}) and streams of updates 
 (e.g.,~\cite{zaharia2013discretized}). 
 %Such ability enables optimal decision making based on
 %real-time data-driven predictions~\cite{velox-cidr}.
-\item Control plane infrastructures have been built in many 
-application providers (e.g., content providers~\cite{c3}, web services~\cite{footprint})
-and infrastructure providers
-(e.g., CDNs~\cite{chen2015end,mukerjee2015practical}).
+\item Logically centralized control platforms are commonly deployed by many 
+application providers (e.g., content providers~\cite{c3}, web services~\cite{footprint}) and CDN providers (e.g.,~\cite{chen2015end,mukerjee2015practical}).
 \end{enumerate}
 
 %\begin{itemize}
@@ -330,25 +368,25 @@ and infrastructure providers
 %
 %\end{itemize}
 
-\section{Roadmap of This Dissertation}
+\section{Making Data-Driven Networking Practical}
 
-While prior studies did extrapolate potential improvement of \ddn, it is not 
-clear how to fully realize its benefit in practice.
+While prior work has shown that \ddn can potentially improve QoE, it is not 
+clear how to fully realize this potential in practice.
 {\em The main contribution of this dissertation is the first suite of solutions 
-to make \ddn practical}. In particular, 
+to make \ddn practical for QoE optimization}. In particular, 
 %, and the demonstration that QoE of video streaming and Internet telephony can be 
 %substantially improved by the application of \ddn.
 %We demonstrate that QoE can be substantially improved by leveraging QoE 
 %observed from millions of endpoints to maintain an up-to-date
 %global view of network conditions.
 %To achieve this, 
-we identify key technical challenges of applying \ddn in to QoE optimization, 
-address these challenges by novel algorithm and system designs that 
-integrate machine-learning techniques with domain-specific  insights,
+we identify key algorithmic and architectural challenges to apply \ddn to 
+QoE optimization, address these challenges by novel algorithm and system 
+designs that integrate machine-learning techniques with domain-specific  insights,
 and use real-world deployment and large-scale 
 emulation to demonstrate that our solutions can substantially improve 
-QoE of video streaming and Internet telephony.
-We will elaborate them in more details in Chapter~\ref{ch:overview}.
+the QoE of video streaming and Internet telephony.
+%(We will elaborate them in more details in Chapter~\ref{ch:overview}.)
 
 \subsection{Fundamental Challenges in Data-Driven Networking}
 %While \ddn enjoys several advantages over 
@@ -363,49 +401,65 @@ two fundamental challenges emerge as key to unleashing \ddn's full potential.
 
 \item 
 %{\em The need for expressive models} to capture complex factors affecting QoE. 
-{\bf Expressive models:} \ddn needs to extract actionable insights from the QoE measurement data, 
-such as which sessions can be used to inform the decision of a new session.
+{\bf Expressive models:} 
+\ddn needs to turn QoE measurements of millions of 
+different application sessions into actionable insights.
+%e.g., which sessions can be used to inform the decision of a new session.
 %such as a predictive model to predict QoE based on session-level features, from 
 %the data stream of QoE measurements. 
-Thus, we need expressive models to capture the potentially complex 
-factors affecting QoE. 
+Thus, we need expressive models to capture the complex network-level and 
+application-level factors that affect QoE. 
 
 \item 
 %{\em The need for scalable platforms} to make real-time decisions with fresh data from geo-distributed clients.
 {\bf Scalable platforms:}
 \ddn needs to turn the actionable insights into 
-real-time control decisions to be performed by applications running in
+real-time control decisions to be performed by
 geo-distributed clients. 
-Therefore, we need that can respond to geo-distributed 
-clients in real time with decisions based on fresh data from other clients.
+Thus, we need scalable platforms that can respond to geo-distributed 
+clients in real time with decisions based on the most up-to-date insights 
+extracted from information of other sessions.
 
 \end{enumerate}
 
+
+\begin{figure}[t!]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/intro-contribution.pdf}
+%\vspace{-0.3cm}
+\caption{The main contribution of this dissertation is to present the first suite of 
+solutions (bottom) to address the key challenges of \ddn (top) by leveraging the 
+unifying insight (middle) that QoE-determining factors exhibit persistent structures.}
+\label{fig:intro-contribution}
+\end{figure}
+
+
 \subsection{Unifying Insight: Persistent Critical Structures}
-This dissertation addresses these challenges by integrating 
+We address these challenges by integrating 
 machine learning techniques with
 %As a result, our 
 %solutions achieve better QoE 
 %than using off-the-shelf machine learning solutions. 
-the unifying insight that there are {\em persistent structures} in the relationship
-between session-level features, decisions, and QoE.
+the unifying insight that there are {\em persistent critical structures} in the relationship
+between session-level features, decisions, and QoE 
+(as illustrated in Figure~\ref{fig:intro-contribution}).
 At a high level, these structures have two distinctive features:
 %(1) they help identify network sessions with similar 
 %QoE-determining factors, and (2) they tend to persist on timescales of tens of minutes.
 (1) they allow us to build expressive models that can identify network 
 sessions with similar QoE-determining factors, and 
-(2) because these structures are persistent, we can 
-build scalable systems by decoupling the offline structure-learning 
-process and the real-time decision making process.
-To see an intuitive example of these persistent structures, let us consider 
+(2) because these structures tend to be persistent, we can 
+build scalable platforms by decoupling offline structure-learning 
+processes and real-time decision making processes.
+To see an intuitive example of a persistent critical structure, let us consider 
 a group of video sessions bottlenecked by a congested link.
 The quality of these sessions may vary over time, but the fact
 that these video sessions are bottlenecked by the same congested link remains true 
 for the whole duration of the congestion event.
 In this example, the correlation among the quality of these sessions 
-is a persistent structure, which manifests the underlying congestion.
-We will give a formal definition of persistent structures in
-Section~\ref{sec:overview:unifying}.
+is a persistent critical structure, which manifests the underlying congestion.
+(We will give a formal definition of persistent structures in
+Section~\ref{sec:overview:unifying}.)
 
 
 %\section{Contributions}
@@ -478,25 +532,16 @@ Section~\ref{sec:overview:unifying}.
 %\label{tab:contributions}
 %\end{table}
 
-\begin{figure}[t!]
-\centering
-\includegraphics[width=0.8\textwidth]{figures/intro-contribution.pdf}
-%\vspace{-0.3cm}
-\caption{The main contribution of this dissertation is to present the first suite of 
-solutions (bottom) to address the key challenges of \ddn (top) by leveraging the 
-unifying insight (middle) that QoE-determining factors exhibit persistent structures.}
-\label{fig:intro-contribution}
-\end{figure}
 
 
 \subsection{Proposed Solutions}
 %\mypara{Proposed solutions}
 %Table~\ref{tab:contributions} 
-As illustrated in Figure~\ref{fig:intro-contribution}, 
-the insight of persistent structures inspires the three concrete solutions
+Inspired by the insight of persistent critical structures, this dissertation develops 
+three concrete solutions
 %of this dissertation.
 to address the two aforementioned challenges in the context
-of two popular Internet applications: Internet video and Internet telephony. 
+of Internet video and Internet telephony. 
 %Based on these ideas, this dissertation has developed novel algorithms 
 %and end-to-end systems, and deployed them in production settings to 
 %improve QoE for Internet video streaming
@@ -508,19 +553,19 @@ this dissertation.
 
 \begin{itemize}
 
-\item {\bf Improving video QoE via expressive prediction models} 
+\item {\bf Expressive QoE Prediction Using Critical Features} 
 (Chapter~\ref{ch:cfa} and~\ref{ch:dda}). 
 Prior work has shown a substantial room for improving video QoE by 
 dynamically selecting the optimal CDN and bitrate for individual video 
 sessions based on a real-time global view of network 
 conditions~\cite{sigcomm12}.
-To realize this promise, we have developed CFA~\cite{cfa}, a video QoE prediction 
+To realize this promise, we have developed CFA~\cite{cfa} (a video QoE prediction 
 system that can accurately predict the quality of a video client if it uses 
-a certain CDN and bitrate; and DDA~\cite{dda}, a throughput prediction system
+certain CDN and bitrate), and DDA~\cite{dda} (a throughput prediction system
 to accurately predict end-to-end throughput at the beginning of a 
- video session to help determine the highest-yet-sustainable initial bitrate.
-In particular, CFA is inspired by the domain-specific insight of 
-{\em persistent critical features}, an instantiation of persistent structures, that
+ video session to help determine the highest-yet-sustainable initial bitrate).
+Both techniques are inspired by the domain-specific insight of 
+{\em persistent critical features}, an instantiation of persistent critical structures, that
 each video session has a small set of critical features that ultimately 
 determines its video quality, and these critical features change much 
 more slowly than video quality, and thus can be practically 
@@ -528,29 +573,37 @@ learned from history data.
 %This insight enables us to learn complex prediction models from long-term historical data (thus expressing complex relations between video quality and session features), and update the models by short-term historical data in near real time (thus capturing quality fluctuation as well).
 %The insight of persistent critical features turns out to be more general than video streaming; e.g., I have also applied the same insight to accurate prediction of TCP throughput~\cite{cs2p}, which leads to 11\% higher video bitrate than state-of-the-art adaptive bitrate players (e.g., Netflix players) with no extra buffering.
 
-\item {\bf Improving video QoE via exploration and exploitation at scale} 
+\item {\bf Group-Based Exploration-Exploitation at Scale} 
 (Chapter~\ref{ch:pytheas}). 
 While CFA and DDA show promising QoE improvement by formulating the 
 data-driven QoE optimization as a prediction problem, this formulation is necessarily 
-incomplete, as it suffers from many known biases such as incomplete visibility, 
-and cannot respond to sudden changes such as flash crowds.
-Drawing a parallel from machine learning (e.g., ad recommendation), 
+incomplete, as it suffers from a biased visibility and cannot respond to sudden changes.
+Drawing on a parallel from machine learning, 
 we argue that data-driven QoE optimization should instead be 
-cast as a process of {\em real-time exploration and exploitation}. 
-To apply this new abstraction to network applications at scale, 
-we develop an end-to-end system, called Pytheas~\cite{pytheas}, based on 
-another illustration of persistent structures that 
-the sessions that exhibit similar QoE behavior will have similar network-level 
+cast as a process of {\em real-time exploration-exploitation}. 
+To scale the real-time exploration-exploitation process to millions of 
+application 
+sessions running in geo-distributed clients, we have developed 
+a control platform called Pytheas~\cite{pytheas}, which 
+%To apply this new abstraction to network applications at scale, 
+%we develop a control platform called Pytheas~\cite{pytheas}. To scale
+%to millions of application sessions running geo-distributed clients, Pytheas 
+relies on another illustration of persistent critical structures that 
+the sessions that exhibit similar QoE behaviors have similar network-level 
 features (e.g., IP prefix), and thus their fresh data could be collected 
 by the same geo-distributed front-end cluster close to the clients of
 these sessions. Inspired by this insight, Pytheas uses a scheme called 
-{\em group-based exploration and exploitation},  which decomposes the 
-global exploration and exploitation process into 
-subprocesses, each of which runs in a geo-distributed front-end cluster 
- and makes real-time decision for a group of similar sessions
-based on their fresh measurement data.
+{\em group-based exploration-exploitation},  which decomposes the 
+global exploration-exploitation process of all sessions into 
+subprocesses, each managing a group of similar sessions and running in
+the geo-distributed front-end cluster that has the fresh measurement data 
+of these sessions.
 
-\item {\bf Improving Internet telephony QoE in the face of large decision spaces} 
+%, each of which runs in a geo-distributed front-end cluster 
+% and makes real-time decision for a group of similar sessions
+%based on their fresh measurement data.
+
+\item {\bf Tackling Large Decision Spaces via Guided Exploration} 
 (Chapter~\ref{ch:via}).
 The last project tackles a challenge of large decision spaces, which 
 is particularly relevant in Internet telephony.
@@ -568,38 +621,43 @@ on timescales of minutes). Neither prediction-based methods (e.g.,
 CFA) nor those based on 
 exploration and exploitation (e.g., Pytheas) would suffice to handle such a 
 large decision space.
-Our key insight to address this challenge is that, for each pair of caller 
+Our key insight to address this challenge is another manifestation of the 
+persistent critical structures that, for each pair of caller 
 AS and callee AS, there is a {\em small and stable subset} of relays that 
-almost always contains the best relay path. These stable subsets of promising
-relays are another manifestation of the persistent structures.
+almost always contains the best relay path. 
 %This insight has two implications: 
 %(1) because this subset of relays is stable, it can be learned from history; and 
 %(2) because this subset has only a few relays (less than five), it can be explored efficiently even with limited data.
-Inspired by these intuitions, we developed {VIA}~\cite{via}, 
+We have developed {VIA}~\cite{via}, 
 a Skype relay selection system that achieves close-to-optimal quality 
 using the concept of {\em guided exploration},
-which learns a small set of promising relays for each 
+which, instead of exploring the whole decision space of all possible relay choices, 
+learns a small set of promising relays for each 
 AS pair based on long-term (e.g., daily) historical data, and 
-explores these relays using most calls in real time.
+explores these promising relays using most calls in near real time.
 
 \end{itemize}
 
 
 %
 %\jc{add why internet video, voip, and how to generalize}
-\mypara{Generalizability of the proposed solutions}
+\mypara{Generalizability beyond Internet video and telephony}
 Finally, while this dissertation has mostly focused on 
 Internet video and Internet telephony, 
 we observe similar data-driven opportunities in other applications
-where solutions proposed in this dissertation can be readily 
-deployable; e.g., CDN overlay routing~\cite{mukerjee2015practical}, 
-web services~\cite{footprint}.
+(e.g., CDN overlay routing~\cite{mukerjee2015practical}, 
+web proxy selection~\cite{footprint})
+where solutions proposed in this dissertation are applicable.
 %some of which I have personally involved as well.
 %We also observe parallel efforts that hint towards the potential
 %of using a similar data-driven approach in other applications, such
 %as web services~\cite{footprint}.
-This suggests the potential {\em generalizability} of our solution to enable
-data-driven QoE optimization in a broader set of challenges in 
+Besides application-layer quality, the insight of persistent structures may be applied 
+to optimize transport-layer performance.
+For instance, DDA demonstrates the feasibility of predicting end-to-end 
+throughput by using persistent structures to aggregate information of multiple network flows.
+These observations indicate the potential {\em generalizability} of our solution to enable
+unleash more data-driven opportunities in a broader set of scenarios in 
 networking and distributed systems.
 %for particular applications might be 
 %{\em generalized} to other applications and potentially to solutions for
@@ -614,7 +672,7 @@ networking and distributed systems.
 
 %\mypara{Deployment}
 
-\subsection{Summary of results}
+\section{Summary of Results}
 %In order to evaluate the solutions proposed in this dissertation, 
 %I focus on answering the following questions. 
 In evaluating the solutions proposed in this dissertation, 
@@ -624,7 +682,8 @@ we focus on answering two questions.
 
 \item {\em How much can QoE be improved by the proposed solutions?}
 The ultimate goal of \ddn is to improve QoE. 
-Rather than evaluating multiple solution together, we examine the 
+%Rather than evaluating multiple solution together, 
+We examine the 
 contribution of each solution by evaluating the incremental QoE 
 improvement of adding one component at a time. 
 For instance, by predicting the best CDN and bitrate selections based on 
@@ -639,10 +698,9 @@ than CFA and Pytheas
 by addressing the new challenge of large decision spaces in
 Internet telephony.
 Moreover, this dissertation also tries to identify the circumstances under which
-the proposed solutions achieve more (or less) QoE improvement.
-For instance, in Chapter~\ref{ch:via}, while 
-we observe significant improvement of 
-VIA on both international and domestic Skype calls, international calls
+the proposed solutions achieve more QoE improvement.
+For instance, in Chapter~\ref{ch:via}, we observe improvement of 
+VIA on both international and domestic Skype calls, but international calls
 have a higher magnitude of improvement than domestic ones.
 
 %Chapter~\ref{ch:cfa} shows that by predicting the best 
@@ -659,19 +717,19 @@ have a higher magnitude of improvement than domestic ones.
 %by reducing large decision spaces unique to Internet telephony.
 
 
-\item {\em Can the proposed solutions be deployed at a real scale?}
+\item {\em Can the proposed solutions be deployed at real scale?}
 Scalability is another critical metric to evaluate the proposed solutions. 
-Any proposed algorithm must run at the scale of a large application 
+Any proposed solution must operate at the scale of a large application 
 provider.
 %(e.g., YouTube has billions of video sessions per
 %day over the world~\cite{youtube-stats}).
-This means that the decisions must be made 
-based on history data at a magnitude of hundreds GB or more, and 
-these history data from geo-distributed 
-clients must be up-to-date to maintain an accurate view of network conditions.
-In Chapter~\ref{ch:cfa}, we show that CFA can update QoE 
+%This means that the decisions must be made 
+%based on history data at a magnitude of hundreds GB or more, and that
+%the history data from geo-distributed 
+%clients must be up-to-date to maintain an accurate view of network conditions.
+In Chapter~\ref{ch:cfa}, we show that CFA can update video QoE 
 prediction every tens of seconds with sub-second response 
-time to geo-distributed clients, 
+time to the scale of a large video content provider (i.e., 10 million sessions every day), 
 and in Chapter~\ref{ch:pytheas}, we show that Pytheas throughput 
 scales horizontally with more machines in the controller, and that 
 30 CloudLab instances can make decisions for the population of a site
@@ -699,13 +757,13 @@ was used on a random subset of clients) to evaluate
 the improvement of CFA over baseline random decision
 makers, which many video optimization services use 
 by default (modulo business arrangement like price).
+
 %
 %\mypara{Evaluation metrics} 
-In order to evaluate application QoE in a reliable 
-and scalable fashion, this dissertation does not rely subjective QoE 
-metrics (e.g., user-provided score), but focus on the metrics that can be
-objectively measured and 
-have been shown to have strong impact on user satisfaction 
+Finally, in order to evaluate application QoE in a reliable 
+and scalable fashion, this dissertation does not use subjective QoE 
+metrics (e.g., user-provided score), but focuses on the metrics that can be
+objectively measured and known to have great impact on user satisfaction 
 and engagement.
 For instance, video QoE is measured by buffering time, start-up delay,
 and average bitrate, each of which has been shown to have strong
@@ -714,10 +772,10 @@ studies~\cite{sigcomm11,akamai-imc12}.
 While subjective metrics can directly reflect user satisfaction, we
 choose to use these objectively measurable 
 metrics as a proxy for real user satisfaction for two reasons:
-(1) they can be passively collected on a large scale by instrumentation code 
-running in client devices without any user input, and (2) they usually
+(1) they can be passively collected en masse by instrumentation code 
+running in client devices without any user input, and (2) they
 are less noisy than subjective metrics which can be affected by factors
-beyond the scope of this dissertation (e.g., content or personal preference).
+(e.g., content or personal preference) beyond the scope of this dissertation.
 
 %The QoE metrics against which different systems are compared 
 %are objectively measurable metrics
@@ -730,9 +788,9 @@ The rest of this dissertation is organized as follows.
 Chapter~\ref{ch:related} begins with the background information of
 Internet video and Internet telephony, including their QoE problems
 today and current distribution infrastructures.
-It then discusses two research directions closely 
-relevant to this dissertation: 
-quality optimization of Internet applications and applying data-driven 
+It then discusses two recent research directions closely 
+related to this dissertation: 
+quality optimization of Internet applications and application of data-driven 
 techniques in networked systems.
 In particular, it introduces a taxonomy of prior work on quality 
 optimization, which emphasizes the trade-offs between 
@@ -741,31 +799,31 @@ conditions.
 
 Chapter~\ref{ch:overview} presents an overview of the main insight and 
 ideas of this dissertation.
-It begins with a formal description of the \ddn paradigm, some
+It begins with a formal description of the \ddn paradigm,
 concrete example applications that can benefit from \ddn, and a
 perspective on its advantages over prior approaches.
 It then elaborates the key technical challenges in making \ddn practical. 
 Finally, it describes our key insight of persistent structures in 
-QoE-determining factors, and how the insight inspires our ideas to 
-address \ddn's challenges.
+QoE-determining factors, and how the insight inspires our solutions to 
+address the \ddn's challenges.
 %It concludes with the contrast between the proposed solutions and classic 
 %approaches, in order to elaborate their advantages and limitations.
-
 Chapter~\ref{ch:measurement} presents a large-scale structural analysis
-on the QoE problems of Internet video and Internet telephony in the wild.
+on the video and VoIP QoE problems in the wild.
 It provides empirical evidence of the persistent structures in QoE-determining
 factors. 
 
 Chapters \ref{ch:cfa}, \ref{ch:dda}, \ref{ch:pytheas}, and \ref{ch:via} 
 describe four important components of this dissertation: 
-(1) CFA and DDA optimize video streaming quality by accurately predicting 
+(1) CFA and DDA optimize video streaming quality by predicting 
 video QoE and end-to-end throughput using a global and real-time view of 
 network conditions;
 (2) Pytheas optimizes quality of Internet-scale applications by re-casting
 the \ddn process as a real-time exploration-exploitation process 
 over millions of geo-distributed clients at scale; and
-(3) VIA optimizes network performance for Skype calls by selecting
-the optimal relay clusters in the Microsoft cloud service.
+(3) VIA addresses the challenge of large decision spaces, and uses 
+VoIP as a use-case where it optimizes network performance for VoIP calls 
+by selecting the optimal relay clusters.
 
 Chapter~\ref{ch:concl} summarizes the contributions of the dissertation, 
 discusses the limitations of the proposed solutions, and ends with future 

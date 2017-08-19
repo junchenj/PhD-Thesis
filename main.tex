@@ -178,75 +178,86 @@ Ion Stoica, UC Berkeley
 %% Obviously, it's probably a good idea to break the various sections of your thesis
 %% into different files and input them into this file...
 
-\begin{abstract}
+\input{abstract}
 
-Today's Internet has become an eyeball economy dominated by 
-applications such as Internet video and Internet telephony. 
-With most applications relying on revenue models driven by 
-user engagement, ensuring high user-perceived Quality of 
-Experience (QoE) has become crucial to maintaining high user 
-engagement. For instance, even one short buffering interruption 
-can lead to much less video viewing time and cause
-significant revenue losses for the video site. Despite 
-the increasing expectations for high QoE, existing approaches have 
-fundamental limitations to achieve the QoE needed by today's 
-applications. They either require costly re-architecting of 
-the in-network devices, or rely on suboptimal endpoint-based 
-protocols to react to the dynamic Internet performance based on 
-limited knowledge of the network conditions.
-
-
-In contrast, this dissertation explores a new paradigm called {\em data-driven 
-networking}, inspired by the recent success of data-driven 
-techniques in other fields of computing. The core thesis is  
-that {\em QoE can be substantially improved by leveraging 
-QoE observed from many endpoints to maintain an up-to-date 
-global view of network conditions}.
-%In this thesis, I present a new approach, which is inspired by the recent success of data-driven approaches in many fields of computing. I will demonstrate that data-driven techniques can improve Internet QoE by utilizing a centralized real-time view of performance across millions of endpoints (clients). 
-This dissertation focuses on two fundamental challenges 
-of this data-driven approach: (1) the need for expressive models 
-to capture complex factors that affect QoE, and (2) the need 
-for scalable platforms to make real-time decisions with 
-fresh data from geo-distributed clients. Our techniques address 
-these challenges by integrating machine learning algorithms 
-and systems with several domain-specific insights in networked 
-applications. The key insight is that there are 
-{\em persistent structures} 
-in the relations between QoE and session-level features.
-Inspired by this insight, this dissertation has developed algorithms 
-and end-to-end systems, and used real-world deployment and 
-simulation driven by real datasets to show that our solutions 
-can yield substantial QoE improvement and consequently higher user 
-engagement for video streaming and Internet telephony 
-than today's techniques as well as many standard machine 
-learning solutions. 
-%We have developed end-to-end systems to address these challenges in practice by integrating machine learning algorithms and systems with several domain-specific insights in networked applications. A key insight is that there are persistent structures in the relations between session-level features, decisions, and QoE.
-%This thesis presents end-to-end systems that yield substantial QoE improvement and higher user engagement for video streaming and Internet telephony than today's techniques as well as many standard machine learning solutions. 
-%Two of my projects, CFA and VIA, have been used in industry by Conviva and Skype, companies that specialize in QoE optimization for video streaming and Internet telephony, respectively.
-
-At a high level, this dissertation revisits a key architectural question 
-in networking research: ``where should we implement the functionality 
-of application quality optimization''. 
-%Unlike prior work which largely 
-%focused on adding complexity to {\em in-network} devices or improving 
-%end-to-end adaptation at individual {\em endpoints}, 
-Prior work either focuses on adding complexity to {\em in-network} devices or 
-improves end-to-end adaptation at individual {\em endpoints}, 
-forcing make a hard trade-off between sufficient visibility to 
-user-perceived quality and sufficient visibility to network conditions.
-In contrast, this dissertation 
-demonstrates the feasibility of a different answer to the question--implementing 
-the quality optimization functionality in a logically centralized ``controller'' 
-that has the visibility and control over many endpoints. 
-In essence, this dissertation shows that {\em it is feasible to
-maintain an accurate view of network conditions based on the QoE information
-collected from many endpoints}.
-Although this dissertation focuses largely on Internet video and Internet 
-telephony, we posit that the insights and solutions presented in this dissertation 
-are not specific to these applications, and thus are indicative to the 
-potential of data-driven paradigm in other challenges in networking research.
-
-\end{abstract}
+%\begin{abstract}
+%
+%The Internet is an eyeball economy dominated by 
+%applications such as Internet video and Internet telephony, whose
+%revenue streams crucially depend on user-perceived Quality of 
+%Experience (QoE).
+%%Today's Internet has become an eyeball economy dominated by 
+%%applications such as Internet video and Internet telephony. 
+%%With most applications relying on revenue models driven by 
+%%user engagement, ensuring high user-perceived Quality of 
+%%Experience (QoE) has become crucial to maintaining high user 
+%%engagement. 
+%For instance, even one short buffering interruption 
+%can lead to much less video viewing time and cause
+%significant revenue losses for the video site. Despite 
+%the increasing expectations for high QoE, existing approaches have 
+%fundamental limitations to achieve the QoE needed by today's 
+%applications. They either require costly re-architecting of 
+%the in-network devices, or rely on suboptimal endpoint-based 
+%protocols to react to the dynamic Internet performance based on 
+%limited knowledge of the network conditions.
+%
+%
+%%In contrast, this dissertation explores a new paradigm called {\em data-driven 
+%%networking}, inspired by the recent success of data-driven 
+%%techniques in other fields of computing. 
+%In contrast, this dissertation demonstrates the feasibility and advantage 
+%of a new approach inspired by the recent success of data-driven 
+%techniques in other fields of computing. 
+%The core thesis is  
+%that {\em QoE can be substantially improved by leveraging 
+%QoE observed from many endpoints to maintain an up-to-date 
+%global view of network conditions}.
+%%In this thesis, I present a new approach, which is inspired by the recent success of data-driven approaches in many fields of computing. I will demonstrate that data-driven techniques can improve Internet QoE by utilizing a centralized real-time view of performance across millions of endpoints (clients). 
+%This dissertation focuses on two fundamental challenges 
+%of this data-driven approach: (1) the need for expressive models 
+%to capture complex factors that affect QoE, and (2) the need 
+%for scalable platforms to make real-time decisions with 
+%fresh data from geo-distributed clients. Our techniques address 
+%these challenges by integrating machine learning algorithms 
+%and systems with several domain-specific insights in networked 
+%applications. The key insight is that there are 
+%{\em persistent structures} 
+%in the relations between QoE and session-level features.
+%Inspired by this insight, this dissertation has developed algorithms 
+%and end-to-end systems, and used real-world deployment and 
+%simulation driven by real datasets to show that our solutions 
+%can yield substantial QoE improvement and consequently higher user 
+%engagement for video streaming and Internet telephony 
+%than today's techniques as well as many standard machine 
+%learning solutions. 
+%%We have developed end-to-end systems to address these challenges in practice by integrating machine learning algorithms and systems with several domain-specific insights in networked applications. A key insight is that there are persistent structures in the relations between session-level features, decisions, and QoE.
+%%This thesis presents end-to-end systems that yield substantial QoE improvement and higher user engagement for video streaming and Internet telephony than today's techniques as well as many standard machine learning solutions. 
+%%Two of my projects, CFA and VIA, have been used in industry by Conviva and Skype, companies that specialize in QoE optimization for video streaming and Internet telephony, respectively.
+%
+%At a high level, this dissertation revisits a key architectural question 
+%in networking research: ``where should we implement the functionality 
+%of application quality optimization''. 
+%%Unlike prior work which largely 
+%%focused on adding complexity to {\em in-network} devices or improving 
+%%end-to-end adaptation at individual {\em endpoints}, 
+%Prior work either focuses on adding complexity to {\em in-network} devices or 
+%improves end-to-end adaptation at individual {\em endpoints}, 
+%forcing make a hard trade-off between sufficient visibility to 
+%user-perceived quality and sufficient visibility to network conditions.
+%In contrast, this dissertation 
+%demonstrates the feasibility of a different answer to the question--implementing 
+%the quality optimization functionality in a logically centralized ``controller'' 
+%that has the visibility and control over many endpoints. 
+%In essence, this dissertation shows that {\em it is feasible to
+%maintain an accurate view of network conditions based on the QoE information
+%collected from many endpoints}.
+%Although this dissertation focuses largely on Internet video and Internet 
+%telephony, we posit that the insights and solutions presented in this dissertation 
+%are not specific to these applications, and thus are indicative to the 
+%potential of data-driven paradigm in other challenges in networking research.
+%
+%\end{abstract}
 
 \begin{acknowledgments}
 
@@ -255,20 +266,21 @@ potential of data-driven paradigm in other challenges in networking research.
 %\item Vyas, Hui
 First and foremost, I am immensely grateful to my advisors, Hui Zhang and Vyas Sekar,
 both of whom have been tireless mentors, counselors, co-authors, and career advisors. 
-Vyas has been instrumental in helping me focus on the most critical aspects of any research project and teaching me how I should frame questions, formulate arguments, and crystallize thoughts. Most important of all, it was the through working in person with him for years and through his immense help that I learned how to approach research in a rigorous and efficient manner. 
+Vyas has been instrumental in teaching me how to focus on the critical aspects of any research project, and formulate my thoughts in the right context and in the right way. Most important of all, it was the through working in person with him for years and through his immense help that I learned how to approach research in a rigorous and efficient manner. 
 Hui has been an unlimited source of insightful guidance and vision. I was deeply indebted to him for inspiring and encouraging me to pursue the research of application quality and its confluence with data-driven paradigm. Throughout the years, he has always offered insightful advises at the right moments, and remarkably, every meeting I recall with him ended with high spirit.
 I cannot imagine any team of academic advisors with a better match of personality, research approach, and advising style than Vyas and Hui. I am extremely lucky to have had the benefit of their vision and wisdom. 
 
 %
 %\item Committee: Ion
-In completing this dissertation, I am also intellectually and personally indebted to Ion Stoica. He gave tremendous help in every project I worked with Conviva. His sharp questions and comments have always pushed me to dig deep into details and at the same time grasp the broad picture.
+In completing this dissertation, I am also intellectually and personally indebted to Ion Stoica. He gave tremendous help in every project I worked on with Conviva. 
+He was among the first to point out the difference between the prior approach and data-driven networking lies in that the former is driven by single-flow information, while the latter by multi-flow information.
+His sharp questions and comments have always pushed me to dig deep into details. 
 I am thankful for his honest feedback that improved me as a researcher.
 
 %
 %\item Peter, Srini
-I am grateful to other members of my committee, Peter Steenkiste and Srinivasan Seshan, who have been an unlimited source of honest comments throughout my PhD years. 
-I will always cherish the Tuesday seminars and XIA meetings both skillfully over by Peter and Srini, from whom I received more honest comments than from any conferences or workshops. I am also thankful to them for letting me work as teaching assistant for their computer networks courses.
-Finally, my research would not be possible without the financial and intellectual support from the XIA project. 
+I am grateful to other members of my committee, Peter Steenkiste and Srinivasan Seshan, who have been an unlimited source of honest and constructive comments. This dissertation is profoundly  influenced by the comments that Srini drew from the parallel between this dissertation and his prior work of SPAND and congestion manager in the transport layer, and many of Peter's constructive comments that brought more coherence among the solutions of different applications.
+I am also thankful to them for giving me the opportunity to be the teaching assistant for their computer networks courses.
 
 %
 %\item Conviva folks (Jibin, Henry, Xi, Rui, Yan, Saiguang, Dima), Bruce? Microsoft folks (Ganesh, Vanket, Phil, Yinliang, Yu, Rameer, Robert)
@@ -279,11 +291,14 @@ This dissertation would not be possible without their earnest support.
 
 %
 %\item CMU folks (David, Matthew, Seyed, Raja, Tianlong, Soo-Jin), Visitors (Yi, Shijie), Assistants (Deb, Toni, Kathy)
-I am thankful to the many graduate students at CMU, David Naylor, Matthew Mukerjee, Raja Sambasivan, Seyed K. Fayaz, Tianlong Yu,  Soo-Jin Moon, Hyeontaek Lim, Dongsu Han, Yuchen Wu, Carlo Angiuli, Jay-Yoon Lee, Zhuo Chen, Jinliang Wei, Antonis Manousis, Yixin Luo, who had provided invaluable feedbacks to my early drafts and practice talks. I was also fortunate to work with two extremely talented visitors to CMU, Yi Sun from ICT China, and Shijie Sun from Tsinghua University. Finally, I want to thank Deborah Cavlovich, Toni Fox, and Kathy McNiff for their invaluable help on logistics.
+I am thankful to the many graduate students at CMU, David Naylor, Matthew Mukerjee, Raja Sambasivan, Seyed K. Fayaz, Tianlong Yu,  Soo-Jin Moon, Hyeontaek Lim, Dongsu Han, Yuchen Wu, Carlo Angiuli, Jay-Yoon Lee, Zhuo Chen, Jinliang Wei, Antonis Manousis, Yixin Luo, who had provided invaluable feedbacks to my early drafts and practice talks. 
+I will always cherish the Tuesday seminars and XIA meetings, from which I received more honest comments than from any conferences or workshops. 
+I was also fortunate to work with two extremely talented visitors to CMU, Yi Sun from ICT China, and Shijie Sun from Tsinghua University. Finally, I want to thank Deborah Cavlovich, Toni Fox, and Kathy McNiff for their invaluable help on logistics.
+My research would not be possible without the financial and intellectual support from the XIA project. 
 
 %
 %\item Undergraduate folks (Bin Liu, Yi Tang, Chengchen Xiaofei, Yan Chen, Mingui, Baichuan, Kai Chen
-I would also like to thank my undergraduate advisor in Tsinghua, Bin Liu, for accepting me to his research team and bringing me to networking research. During my undergraduate years, I was fortunate to work with Yi Tang, Chengchen Hu, Yi Wang, Yan Chen, Mingui Zhang, Beichuan Zhang, and Kai Chen. I learned something from each of them.
+I would also like to thank my undergraduate advisor in Tsinghua, Bin Liu, for accepting me to his group and bringing me to networking research. During my undergraduate years, I was fortunate to work with Yi Tang, Chengchen Hu, Yi Wang, Yan Chen, Mingui Zhang, Beichuan Zhang, and Kai Chen. I learned something from each of them.
 
 %\end{itemize}
 
@@ -369,6 +384,8 @@ mention you, I apologize. Please know that I greatly appreciate your support.
 %  header and the actual list of references}
 \bibliographystyle{plainnat}
 %\bibliography{register} %your bib file
-\bibliography{adaptation,sigcomm2011,sigcomm2012,sigcomm2013,conext13,sigcomm2014,nsdi13,hotnet14,nsdi14,sigcomm2015,nsdi16,sigcomm2016,hotnet15,imc2015,hotnet16,nsdi17,thesis.bib}
+%\bibliography{adaptation,sigcomm2011,sigcomm2012,sigcomm2013,conext13,
+%sigcomm2014,nsdi13,hotnet14,nsdi14,sigcomm2015,nsdi16,sigcomm2016,hotnet15,imc2015,hotnet16,nsdi17,thesis.bib}
+\bibliography{thesis-clean.bib}
 
 \end{document}

@@ -1,39 +1,44 @@
 \chapter{Overview}
 \label{ch:overview}
 
-The main contribution of this dissertation is to provide {\em a suite of solutions
-that make data-driven QoE optimization practical}.
-In particular, we  demonstrate that one can achieve substantial QoE improvement
-by utilizing measurement data already available to today's application 
-providers and integrating domain-specific insights with machine learning 
-techniques to make better real-time adaptation for client-side applications.
+The main contribution of this dissertation is {\em a suite of solutions to make 
+data-driven QoE optimization practical} -- one can substantially improve QoE 
+by maintaining a global view of up-to-date network conditions based on the 
+QoE information collected from many endpoints.
+Our solutions achieve this through novel algorithm designs and system 
+implementation that integrate machine learning techniques with domain-specific
+insights.
+%We  demonstrate that one can achieve substantial QoE improvement
+%by utilizing measurement data already available to today's application 
+%providers and integrating domain-specific insights with machine learning 
+%techniques to make better real-time adaptation for client-side applications.
 %In this chapter, we give an overview of our solutions, the key insight
 %behind our solutions, and a perspective of how this solution compared 
 %to prior efforts of Internet quality optimization and applying data-driven
 %in the networking literature.
 
 This chapter is organized as follows.
-Section~\ref{sec:overview:arch} gives an overview of the envisioned 
+We begin with an overview of the envisioned 
 architecture of data-driven QoE optimization, 
-called {\em Data-Driven Networking} or {\em \ddn}.
+called {\em Data-Driven Networking} or {\em \ddn} (Section~\ref{sec:overview:arch}).
 %some illustrative examples of how different applications 
 %may benefit from \ddn, and perspective of how this solution compared 
 %to prior work.
-Section~\ref{sec:overview:challenges} discusses the key technical 
-challenges for \ddn to achieve non-trivial QoE improvement.
-Section~\ref{sec:overview:unifying} presents the key insight,
-and Section~\ref{sec:overview:solutions} 
-describes a suite of solutions inspired by the insight to address \ddn's
-challenges in the context of Internet video and Internet telephony.
+Then we discuss the algorithmic and architectural challenges of \ddn in 
+Section~\ref{sec:overview:challenges}, motivate the unifying insights behind
+our solutions in Section~\ref{sec:overview:unifying}, and finally describe
+the key ideas of our solutions in Section~\ref{sec:overview:solutions}.
+%describes a suite of solutions inspired by the insight to address \ddn's
+%challenges in the context of Internet video and Internet telephony.
 
 
 \section{Formalizing \ddn}
 \label{sec:overview:arch}
 
-In this section, we present a conceptual overview of the Data-Driven 
+We begin a conceptual overview of the Data-Driven 
 Networking (\ddn) paradigm (Section~\ref{subsec:overview:concept}),
 and some illustrative examples of how different applications   
-may benefit from \ddn (Section~\ref{subsec:overview:examples}).
+can benefit from \ddn (Section~\ref{subsec:overview:examples}).
 We end this section by contrasting it to prior
 approaches (Section~\ref{subsec:overview:contrast}).
 %We end this section by identifying key factors that can impact 
@@ -43,7 +48,7 @@ approaches (Section~\ref{subsec:overview:contrast}).
 \label{subsec:overview:concept}
 
 \ddn is a new paradigm for designing the adaptation logic of 
-end-to-end protocols. 
+end-to-end protocols (such as adaptive video streaming protocols). 
 Unlike prior endpoint approaches, 
 \ddn-based control loop is driven by real-time
 {\em multi-session} (not single-session) view of 
@@ -53,30 +58,42 @@ measurements or indirect metrics),
 and {\em automatically tuned actuation algorithms} based
 on data-driven insights (with little to no manual tuning).
 
-The workflow of \ddn consists of two components:
-(a) the {\em client-side instrumentation} integrates with the 
-client-side application%\footnote{We use ``client'' to denote where a session is actually run.} 
-to measure per-session client-perceived quality and apply 
-decisions made by \ddn; and (b) the {\em \ddn controller} 
-runs two loosely coupled steps:
+A \ddn-enabled protocol has two additional components:
+(a) the {\em client-side instrumentation} code which runs inside 
+client-side application to measure client-perceived quality of 
+each session and applies decisions made by \ddn; and 
+(b) the {\em \ddn controller} which runs two loosely coupled steps:
 \begin{enumerate}
 \item Aggregate quality measurement from client-side 
-instrumentation into {\em multi-session view} -- 
-some actionable insight which summarizes the performance of
-sessions with similar QoE-determining factors.
-\item Make control decisions based on the multi-session 
-views, and send them to client-side instrumentation for execution.
+instrumentation into a global view of up-to-date network conditions and 
+some actionable insights.
+\item Make control decisions based on the actionable insights, 
+and send them to client-side instrumentation for execution.
 \end{enumerate}
 
-Note that the \ddn paradigm is compatible to 
-the existing infrastructure operated by many application 
-providers. For instance, many application providers 
-have already deployed client-side instrumentation to
-monitor client-side information in real-time and collect
-measurement for offline analytics (e.g.,~\cite{sigcomm11}).
-Many application providers also maintain a global control
-platforms (e.g.,~\cite{c3,via,footprint,chen2015end}) 
-where the \ddn controller can be implemented.
+%Note that the \ddn paradigm is compatible to 
+%the existing infrastructure operated by application 
+%providers. For instance, many application providers 
+%have already deployed client-side instrumentation to
+%monitor client-side information in real-time and collect
+%measurement for offline analytics (e.g.,~\cite{sigcomm11}).
+%Many application providers also maintain a global control
+%platforms (e.g.,~\cite{c3,via,footprint,chen2015end}) 
+%where the \ddn controller can be implemented.
+
+\ddn is aligned with several favorable technology trends, and can be 
+readily deployed in the existing distribution infrastructures of Internet applications.
+(1) Many application providers today have widely deployed client-side 
+instrumentations that can collect real-time in-situ QoE data 
+en masse from clients (e.g.,~\cite{sigcomm11,via,akamai-imc12,artizanetworks}). 
+(2) Logically centralized control platforms are commonly deployed by many 
+application providers (e.g., content providers~\cite{c3}, web services~\cite{footprint}) and CDN providers (e.g.,~\cite{chen2015end,mukerjee2015practical}).
+(3) The emergence of large-scale data analytics platforms and cloud infrastructure 
+provides the ability to extract insights efficiently from large corpses 
+of data (e.g.,~\cite{spark}) and streams of updates 
+(e.g.,~\cite{zaharia2013discretized}). 
+%Such ability enables optimal decision making based on
+%real-time data-driven predictions~\cite{velox-cidr}.
 
 
 \begin{figure}[t!]
@@ -92,17 +109,22 @@ where the \ddn controller can be implemented.
 
 \subsubsection{Compared to Prior Work on Quality Optimization}
 
-In Section~\ref{sec:related:quality}, we have classified
-prior work on quality optimization along two dimensions:
-where in the network (in-network vs. endpoints), and
-which level in the protocol stack (application vs. lower layers).
-Using this taxonomy, \ddn should be classified as an 
-endpoint solution operating in the application layer.
+We now put the \ddn approach to QoE optimization in perspective
+using the taxonomy presented in Section~\ref{sec:related:quality}.
+There are two classes of prior solutions: in-network solutions that change 
+in-network devices, and endpoint solutions that rely on endpoint adaptations.
 
+%In Section~\ref{sec:related:quality}, we have classified
+%prior work on quality optimization along two dimensions:
+%where in the network (in-network vs. endpoints), and
+%which level in the protocol stack (application vs. lower layers).
+%Using this taxonomy, \ddn should be classified as an 
+%endpoint solution operating in the application layer.
 
-Compared to prior application-level endpoint solutions,
-decision making of \ddn is driven by information of multiple sessions, 
-rather than single session. 
+\begin{itemize}
+
+\item Unlike prior endpoint solutions which use only per-endpoint local 
+information, decision making in \ddn is driven by information of multiple sessions. 
 The core argument of \ddn is that {\em it is feasible to
 maintain an accurate view of network conditions based on the QoE information
 collected from many endpoints}.
@@ -114,16 +136,16 @@ as long as the decision has been used by
 some similar sessions.
 \ddn is in part inspired by seminal work such as SPAND~\cite{spand},
 and our contribution lies in providing end-to-end solutions to make \ddn
-practical in today's applications, by leveraging the recent advances
+practical by leveraging the recent advances
 in large-scale data analytics and domain-specific insights.
 In short, \ddn retains the ethos of the endpoint approach, 
 while addressing its lack of
 visibility to network condition by leveraging an expended view 
 across many endpoints.
 
-Compared to in-network solutions or endpoint solutions operating 
+\item Unlike in-network solutions or endpoint solutions operating 
 in lower layers, \ddn enjoys the advantage that it has  
-direct access to in-situ quality measurement.
+direct access to in-situ QoE measurement.
 In \ddn, what to be ``sensed'' is exactly what to be optimized, 
 i.e., quality perceived by all historical and ongoing sessions; 
 not indirect signals on quality (e.g., acks 
@@ -139,7 +161,7 @@ purposes as many application providers today already have
 a vested interest in measuring user-perceived quality for 
 various reasons~\cite{sigcomm-qoe-workshop}.
 
-
+\end{itemize}
 
 
 
@@ -227,13 +249,13 @@ complex relationship between session-level
 features and QoE.
 
 
-\subsection{Examples of Data-Driven Opportunities}
+\subsection{Illustrative Examples}
 \label{subsec:overview:examples}
 
 Several early applications of \ddn from prior work have shown 
 tremendous promise of this new paradigm.
-They showcase how \ddn can be adapted to various use cases 
-to exploit their potential benefits. %(depicted in Figure~\ref{fig:early-examples}).
+%how \ddn can be adapted to various use cases 
+%to exploit their potential benefits. %(depicted in Figure~\ref{fig:early-examples}).
 
 \mypara{CDN/bitrate selection for video}
 The first example shows how a global view of video quality 

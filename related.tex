@@ -19,41 +19,41 @@
 
 Before we embark on the solutions to improve QoE, it would be helpful
 to (1) motivate the need for improving QoE by shedding
-light on today's QoE problems in the wild, and (2) understand the limitations and
-trade-offs in classic approaches.
+light on today's QoE problems in the wild, and (2) understand the 
+fundamental trade-offs in prior approaches to QoE optimization.
 
 %as well as prior efforts towards improving application QoE.
 The first part of this chapter uses empirical measurement studies to 
-show that in both Internet video 
-and Internet telephony, there is a substantial fraction of sessions with bad QoE  
+show that there is a substantial fraction of sessions in both Internet 
+video and Internet telephony with bad QoE  
 (Section~\ref{sec:related:qoe}), and then discusses 
 some salient aspects of distribution infrastructures of these
 applications today (Section~\ref{sec:related:back}).
 %we begin with  some background information on
 %Internet video and Internet telephony (Section~\ref{sec:related:back}).
 
-The second part of this chapter discusses 
-prior efforts towards optimizing Internet 
-application quality 
-(Section~\ref{sec:related:quality}) and those 
-applying data-driven 
-paradigm and ML techniques in networked 
-systems (Section~\ref{sec:related:data}). 
-In particular, it presents a taxonomy that helps us put 
-these prior efforts into perspective, and
-will be used to crystallize the contrasts between
-prior work and this dissertation later (Section~\ref{subsec:overview:contrast}).
+The second part of this chapter discusses two research directions, 
+which are closely related to this dissertation:
+optimization of Internet applications quality and network performance
+(Section~\ref{sec:related:quality}) and application of data-driven 
+techniques to improve networked systems (Section~\ref{sec:related:data}). 
+In particular, it presents a taxonomy of prior approaches to QoE optimization, 
+which emphasizes the fundamental trade-off between visibility to 
+user-perceived QoE and visibility to network conditions.
+%these prior efforts into perspective, and
+The taxonomy also helps to crystallize the contrasts between
+prior work and this dissertation (Section~\ref{subsec:overview:contrast}).
 
 \section{How Good is QoE Today?}
 \label{sec:related:qoe}
 
-In this section, we use large-scale datasets of QoE observed by
-real users to shed light on the distribution of Internet video QoE
-(Section~\ref{subsec:related:video-qoe}) and Internet telephony QoE
+We begin with large-scale measurement studies based on QoE observed 
+by real users to shed light on the how good (or bad) QoE is today for 
+Internet video (Section~\ref{subsec:related:video-qoe}) and Internet telephony 
 (Section~\ref{subsec:related:voip-qoe}) in the wild. 
-For each application, we begin with introducing the QoE metrics and 
-the dataset, and finally the session-level 
-QoE distributions in the dataset.
+For each application, we first introduce the QoE metrics 
+and the dataset, and then present empirical session-level QoE distributions
+for different quality metric.
 
 \subsection{Video QoE}
 \label{subsec:related:video-qoe}
@@ -61,8 +61,7 @@ QoE distributions in the dataset.
 \mypara{Video QoE metrics}
 We focus on  four key video QoE metrics that are common across 
 different  content providers and have been shown to be
- critical for measuring quality as well as user
-  engagement~\cite{sigcomm11}: 
+ critical for measuring quality as well as user  engagement: 
 \begin{packedenumerate}
 
 \item \emph{Buffering ratio:}  Given a video session of 
@@ -78,7 +77,7 @@ to start playing  from the time the user clicks on the ``play''
 button. 
 While join time may not directly impact the view time of a 
 specific video,
-it does have long term effects as it reduces the likelihood 
+it does have long-term effects as it reduces the likelihood 
 of repeated visits~\cite{sigcomm11,akamai-imc12}.  
  
 
@@ -87,13 +86,13 @@ Many video players today support adaptive bitrate
 selection and midstream bitrate switching to adapt to 
 changing bandwidth availability. 
 The average bitrate of a session is the time-weighted
-average of the bitrates used in a given session. 
+average of the bitrates used in a given video session. 
 
 
 \item \emph{Join failures:}   Some sessions may not even 
 start playing the video; either the content is not available
  on the CDN server or the CDN is under overload or other 
-unknown reasons. We mark as a session as a join failure
+unknown reasons. We mark such a session as a join failure
 if no content was played during this session.
 
 \end{packedenumerate}
@@ -107,42 +106,12 @@ collected over 379 distinct content providers spanning diverse
 genres, both live and video-on-demand content, different 
 content delivery platforms, different types of  bitrate adaptation 
 algorithms, and device/browser platforms. 
-Though US viewers dominates the dataset ($\sim$55\%), 
+Though US viewers dominate the dataset ($\sim$55\%), 
 there are a fair number of European ($\sim$12\%) and 
 Chinese ($\sim$8\%) users in the dataset.
 This is especially relevant as it provides us with a panoramic 
 view   of state of  Internet video delivery today.
-
-\mypara{QoE distributions of different metrics}
-Figure~\ref{fig:overview:qualitycdf} shows the distributions of the 
-first three quality metrics over the 1-week dataset.  
-(Join failures are binary events; it is not meaningful to look at a 
-distribution.) 
-The result reconfirms prior observations that there are a non-trivial 
-number of sessions with less-than-ideal 
-quality~\cite{sigcomm11,sigcomm12}. 
-The key difference here is that  these past efforts only considered 
-a small set of 3--4 content providers. 
-In contrast,   we are considering the aggregate data from over 
-300 content providers, and our results suggest that the QoE 
-problems might be more pervasive than what we realized.
-For instance, more than 5\% of all sessions have a join time greater 
-than 10~seconds; i.e., users had to wait for 10 seconds before the 
-video even started playing! Similarly, more than 5\% of sessions 
-had a buffering ratio that was greater than 10\%.  
-This is particularly bad as past studies show that even a 1\% 
-increase in buffering ratio can lead to 3-4 minutes of lost 
-viewership~\cite{sigcomm11}.  
-Finally, we also see that more than 80\% of sessions observe 
-an average  bitrate less than 2~Mbps; 
-i.e., less than the lower end of today's ``HD'' content.   
-Note that the dataset from which these observations are made
-is dominated by  US-based content providers where viewers in general
-have good broadband penetrations, therefore, QoE could be worse in 
-other less developed regions.
-%less than the lower end of 
-%today's ``HD'' content.  
-
+More details on the datasets can be found in~\cite{jiang2013shedding}.
 
 \begin{figure*}[t]
 \centering
@@ -163,6 +132,38 @@ buffering ratio, average bitrate, and join time.
   than 10\%.  }
 \label{fig:overview:qualitycdf}
 \end{figure*}
+
+\mypara{QoE distributions of different metrics}
+Figure~\ref{fig:overview:qualitycdf} shows the distributions of the 
+first three quality metrics over the dataset.  
+(Join failures are binary events; it is not meaningful to look at a 
+distribution.) 
+The results reconfirm prior observations that there are a non-trivial 
+number of sessions with less-than-ideal 
+quality~\cite{sigcomm11,sigcomm12}. 
+The key difference here is that  these past efforts only considered 
+a small set of 3--4 content providers. 
+In contrast,   we are considering the aggregate data from over 
+300 content providers, and our results suggest that the QoE 
+problems might be more pervasive than what we realized.
+For instance, more than 5\% of all sessions have a join time greater 
+than 10~seconds; i.e., users had to wait for 10 seconds before the 
+video even started playing! Similarly, more than 5\% of sessions 
+had a buffering ratio that was greater than 10\%.  
+This is particularly bad as past studies show that even a 1\% 
+increase in buffering ratio can lead to 3-4 minutes of lost 
+viewership~\cite{sigcomm11}.  
+Finally, we also see that more than 80\% of sessions observe 
+an average  bitrate less than 2~Mbps; 
+i.e., less than the lower end of today's ``HD'' content.   
+Note that the dataset from which these observations are made
+is dominated by  US-based content providers where viewers in general
+have good broadband penetrations, so QoE could be even worse in 
+other less developed regions.
+%less than the lower end of 
+%today's ``HD'' content.  
+
+
 
 
 
@@ -195,25 +196,26 @@ buffering ratio, average bitrate, and join time.
 
 \begin{figure}[t!]
 \centering
-\subfloat[\small{PCR vs. RTT}]
+\subfloat[\small{PCR vs. RTT (0.97)}]
 {
         \includegraphics[width=0.3\textwidth]{figures/Via-Quality-vs-Pcr-RTT.pdf}
         \label{subfig:pcr-rtt}
 }
-\subfloat[\small{PCR vs. Loss}]
+\subfloat[\small{PCR vs. Loss (0.95)}]
 {
         \includegraphics[width=0.3\textwidth]{figures/Via-Quality-vs-Pcr-Loss.pdf}
         \label{subfig:pcr-loss}
 }
-\subfloat[\small{PCR vs. Jitter}]
+\subfloat[\small{PCR vs. Jitter (0.91)}]
 {
         \includegraphics[width=0.3\textwidth]{figures/Via-Quality-vs-Pcr-Jitter.pdf}
         \label{subfig:pcr-jitter}
 }
 \caption{Network performance metrics have considerable 
-impact on user experience (poor call rate or PCR); 
+impact on VoIP QoE (poor call rate or PCR); 
 y-axis normalized to the maximum PCR. Vertical gray lines 
-show the thresholds for poor network performance.}
+show the thresholds for poor network performance. Numbers in the
+brackets show the correlation coefficients.}
 \label{fig:pcr}
 \end{figure}
 
@@ -234,7 +236,7 @@ problems across a large number of users.
 Consistent with the operational practice in \skype, we deem 
 the calls with a rating of $1$ or $2$ as ``poor'', and use the 
 fraction of such calls, termed as the {\em Poor Call Rate (PCR)}, 
-as an empirical metric of user experience. 
+as an empirical metric of QoE. 
 Figure~\ref{fig:pcr} shows the impact of the three network 
 performance metrics (RTT, loss rate, jitter) on the (normalized)
 user-derived PCR\footnote{Besides PCR, 
@@ -248,7 +250,7 @@ network performance and show the PCR of the calls within
 each bin. 
 For statistical significance, each bin has at least $1000$ samples. 
 The figures show PCR significantly increases with all the three 
-network metrics (correlation coefficients of $0.97$, $0.95$, $0.91$) 
+network metrics (correlation coefficients of $0.97$, $0.95$, $0.91$), 
 confirming that user-perceived quality is indeed sensitive to 
 network performance.
 Interesting, PCR is sensitive to the {\em entire} spectrum of 
@@ -269,9 +271,10 @@ relay nodes distributed across datacenters in different
 locations. % (the remaining \cameraremove{$60\%$}\camera{$85\%$} of the calls). 
 %\vnp{We say "randomly sampled" and then also say "sampled set is chosen" (which appears to contradictory to "random") and furthermore give the 40-60 split (which, together with "random", leaks info on how much relaying happens). I would suggest striking off "randomly".} 
 Note that today such relaying is typically employed for 
-connectivity (e.g., firewall or NAT traversal) rather than 
-for performance optimization (which is our focus here).
-That is, the only instances of relaying in our passively 
+connectivity (e.g., firewall or NAT traversal);
+%rather than 
+%for performance optimization (which is our focus here).
+i.e., the only instances of relaying in our passively 
 collected dataset correspond to the caller and callee being 
 unable to establish a direct connection. 
 Despite this bias, the dataset offers a {\em panoramic} view 
@@ -325,17 +328,17 @@ countries.
 \centering
 \subfloat[\small{RTT}]
 {
-        \includegraphics[width=0.3\textwidth]{figures/Via-Quality-CDF-RTT.pdf}
+        \includegraphics[width=0.28\textwidth]{figures/Via-Quality-CDF-RTT.pdf}
         \label{subfig:}
 }
 \subfloat[\small{Loss}]
 {
-        \includegraphics[width=0.3\textwidth]{figures/Via-Quality-CDF-Loss.pdf}
+        \includegraphics[width=0.28\textwidth]{figures/Via-Quality-CDF-Loss.pdf}
         \label{subfig:}
 }
 \subfloat[\small{Jitter}]
 {
-        \includegraphics[width=0.3\textwidth]{figures/Via-Quality-CDF-Jitter.pdf}
+        \includegraphics[width=0.28\textwidth]{figures/Via-Quality-CDF-Jitter.pdf}
         \label{subfig:}
 }
 \caption{Distributions of observed network performance metrics of Skype calls -- 
@@ -346,14 +349,14 @@ for poor network performance.}
 
 \mypara{VoIP QoE distribution} 
 Figure~\ref{fig:perf-cdf} shows the distribution of network 
-performance experienced by calls   using default routes. 
-A significant fraction of calls (over $15\%$) occur on paths with 
+performance experienced by calls  using default routes (BGP-based routes). 
+The results show that a significant fraction of calls (over $15\%$) occur on paths with 
 RTT over $320$ms, or loss over $1.2\%$, or jitter more than 
 $12$ms, which we pick as our thresholds for 
 poor performance. % These values correspond to a PCR of $0.3$ (Figure~\ref{fig:pcr}). 
-Recall from Figure~\ref{fig:perf-cdf} that these thresholds 
-correspond to the user-specified poor call rate (PCR) of $0.3$.
-These values are in line with literature from industry 
+%Recall from Figure~\ref{fig:perf-cdf} that these thresholds 
+%correspond to the user-specified poor call rate (PCR) of $0.3$.
+These thresholds are in line with literature from industry 
 and standards bodies that recommend one-way end-to-end 
 delay of no more than $150$ ms and a packet loss rate of 
 no more than $1\%$ for good call quality~\cite{cisco-voip, itu}. 
@@ -364,25 +367,24 @@ be transient spikes (e.g., loss burst) in bad performance.
 
 
 
-\section{Background on Internet Applications}
+\section{Today's Application Distribution Infrastructures}
 \label{sec:related:back}
 
 %This section provides some necessary background information to 
 %understand the reminder of the dissertation. 
 
-In this section, we describe some salient aspects of today's  protocols 
-and distribution infrastructures of Internet video and 
-Internet telephony.\footnote{This section is not meant for a detailed documentation of 
+Next, we provide the necessary background on Internet video and telephony, 
+focusing on the salient aspects of today's  protocols 
+and distribution infrastructures.\footnote{This section is not meant for a detailed documentation of 
 their end-to-end delivery systems--readers may refer to 
 related work for a comprehensive 
 overview of these applications' infrastructures; 
 e.g.,~\cite{seufert2015survey}
 for Internet videos and~\cite{baset2004analysis} for Internet telephony.} 
-We focus on two questions:
-(1) What are the tunable ``knobs'' in these applications
+Specifically, we want to answer two questions:
+(1) what are the tunable ``knobs'' in these applications
 (Section~\ref{subsec:related:back:room} and~\ref{subsec:related:back:voip})? 
-And (2) are there
-significant rooms for improving QoE by optimally tuning these ``knobs''
+and (2) how much is the rooms for improving QoE by optimally tuning these ``knobs''
 (Section~\ref{subsec:related:back:room})? 
 %It is not necessary, nor practical, to describe all details. 
 %Instead, I will highlight their key components relevant to this dissertation.
@@ -398,7 +400,7 @@ which maintain a session  abstraction between the client and the server,
 and use (proprietary) stateful control protocols to manage the data delivery.  
 The new generation of Internet video technologies such as Microsoft
 SmoothStreaming~\cite{SmoothStreaming}, Apple's HLS~\cite{hls}, and Adobe's
-HDS~\cite{HDS}, however, are HTTP-based adaptive streaming protocols.
+HDS~\cite{hds}, however, are HTTP-based adaptive streaming protocols.
 
 %\mypara{HTTP-based adaptive protocols}
 In these HTTP-based protocols, each video is typically encoded at multiple 
@@ -414,7 +416,7 @@ fetched, as well as a list of available bitrates in which the content has been p
 Then the player fetches video chunks sequentially, and 
 can switch between bitrates and CDNs at the boundary of 
 any two chunks. Since each chunk is fetched with an independent HTTP GET, 
-the CDN and bitrate switchings have almost no cost.
+there is almost no cost to switch the CDN and bitrate.
 (Note that the fetches may reuse the same persistent connection 
 if they are from the same CDN.)
 A video is typically encoded in 3-8 bitrates, and is available from 
@@ -446,39 +448,39 @@ QoE.}
 
 %\mypara{Advantages of HTTP-based adaptive protocols} 
 Compared with connection-oriented protocols, HTTP-based adaptive streaming 
-protocols enjoy several key advantages~\cite{festive}: 
-(1) The reliance on HTTP provides more ubiquitous
-reach and support as this traffic can seamlessly traverse enterprise and home
+protocols enjoy several advantages~\cite{festive}.
+(1) The reliance on HTTP provides more ubiquitous reach and support 
+as this traffic can seamlessly traverse enterprise and home
 NATs and firewalls~\cite{httpwaist}.
-(2)  The  servers are Web servers or caches widely available from commercial
+(2)  The video servers are web servers and caches widely available from commercial
 CDNs with significantly lower cost than streaming content from dedicated 
-servers that support the connection-oriented video protocols.
+servers that support the early-generation connection-oriented video protocols.
 (3) Finally, the use of HTTP as the underlying transport protocols allows 
-video streaming to benefit from many techniques proposed recently to improve
-Web performance (e.g.,~\cite{wang2014speedy}).
+video streaming to benefit from many techniques proposed recently to enhance
+web performance and security (e.g.,~\cite{wang2014speedy}).
 These practical and performance benefits have been a key driver for rapid 
-growth of HTTP-based adaptive streaming protocols~\cite{c3}.
+growth of HTTP-based adaptive streaming protocols.
 
 
 
 \subsection{Internet Telephony}
 \label{subsec:related:back:voip}
 
-Like Internet video, Internet telephony has evolved through multiple 
-generations over the past decades.
-The early architecture of Internet telephony 
-(or audio-video conferencing services) relied on peer-to-peer (P2P)
+Like Internet video, Internet telephony (or audio-video conferencing services) 
+has evolved for more than a decade.
+The early architecture of Internet telephony relied on peer-to-peer (P2P)
 overlay systems. This key technology, called UDP hole punching, uses 
 well-connected peer-to-peer users with public IP addresses 
 as {\em supernodes} to enable connections between clients 
 who did not have public IP addresses or were behind firewall. 
-This technology has led to the early success and a dramatic
-growth of VoIP users.
+This technology led to the early success and a dramatic growth of VoIP 
+services.
 
 %\mypara{Managed overlays}
 Over the past decade, VoIP services such as Skype and Google Hangouts, 
 have been evolving from the traditional P2P-based overlay towards 
-using {\em managed overlays} which leverage more cloud resources. 
+using {\em managed overlays} which leverage well-connected and well-provisioned 
+cloud servers. 
 A case in point is Skype, which started off with a peer-to-peer approach to NAT 
 and firewall traversal~\cite{Skype-GI08}. 
 In the recent years, Skype has adopted managed 
@@ -497,9 +499,9 @@ to enable traffic to ``transit through'' the private backbone of
 the managed overlay network.
 
 %\mypara{Advantages of managed overlays}
-While both generations of Internet telephony technologies rely on
-the same technique of UDP hole punching for NAT and firewall traversal, 
-the managed overlay approach enjoys several practical benefits:
+While both generations of Internet telephony technologies are based on
+the same technology of UDP hole punching for NAT and firewall traversal, 
+the managed overlay approach enjoys several practical benefits.
 (1) Global-scale managed overlays use the cloud infrastructure
 which already exists and need not be built up from scratch, while 
 P2P overlays involved building up overlay networks from
@@ -512,7 +514,7 @@ while in P2P overlays, supernodes were regular clients,
 and they sometimes became performance 
 bottlenecks due to their limited last-mile bandwidth or computational capacity.
 (3) In managed overlays, communications between supernodes are
-through well-provisioned private networks, while in P2P overlays, all 
+through well-provisioned private backbone networks, while in P2P overlays, all 
 communications must compete bandwidth resources of public networks with
 other traffic.
 
@@ -520,18 +522,21 @@ other traffic.
 \subsection{Room for Improving QoE}
 \label{subsec:related:back:room}
 
-It seems that Internet video and Internet telephony services 
-have been evolving towards simpler protocols with fewer 
-tunable knobs than early generations, which indicate less
-room for improvement (e.g., the HTTP-based streaming protocol cannot 
+While Internet video and Internet telephony services have been 
+evolving towards protocols that have less tunable knobs
+(e.g., the HTTP-based streaming protocol cannot 
 change bitrate arbitrarily as in traditional protocols, and 
 managed overlays provide less overlay choices than 
-P2P-based ones).
-But surprisingly, prior research has shown
-that these protocols still provide a rich set of control 
-interfaces, and there is a substantial room for improving
-QoE by selecting the right configuration for each
-session.
+P2P-based ones)  for practical considerations, 
+these protocols still offer enough flexibility and recent research has
+shown a substantial room for improving QoE by optimally selecting 
+the best configuration for each application session.
+%necessarily diminish the room for 
+%improving QoE.
+%Prior research has shown that these protocols still provide a rich set of control 
+%interfaces, and there is a substantial room for improving
+%QoE by selecting the right configuration for each
+%session.
 
 \begin{itemize}
 
@@ -544,15 +549,16 @@ significant spatial diversity and temporal dynamics of CDN
 performance~\cite{sigcomm12}.
 Note that most video players today start with a statically configured 
 CDN or a random CDN. This suggests a 
-great opportunity of cross-CDN optimization:
+great opportunity of cross-CDN optimization, e.g.,
 video buffering ratio can be significantly reduced by dynamically
 picking the best CDN for each location and at any point of time.
 
 \item{\em Internet telephony:}
 Similarly, it has also been shown that the number of Skype 
 calls whose QoE is negatively affected by network performance
-can be reduced by over 50\% by judiciously selecting super-nodes
+can be reduced by over 50\% by judiciously selecting supernodes
 to form a relay path for each Skype call~\cite{via}.
+(We will elaborate on this in Section~\ref{sec:via:potential}.)
 
 
 \end{itemize}
@@ -561,12 +567,12 @@ to form a relay path for each Skype call~\cite{via}.
 \centering
 \captionsetup[subfigure]{justification=centering,farskip=-1pt,captionskip=5pt}
 \subfloat[Spatial diversity]{
-   \includegraphics[width=0.45\textwidth] {figures/back-cross-cdn-spatial.pdf}
+   \includegraphics[width=0.4\textwidth] {figures/back-cross-cdn-spatial.pdf}
    \label{fig:back-cross-cdn-spatial}
  }
 % \hspace{0.4cm}
 \subfloat[Temporal dynamics]{
-   \includegraphics[width=0.45\textwidth] {figures/back-cross-cdn-temporal.pdf}
+   \includegraphics[width=0.4\textwidth] {figures/back-cross-cdn-temporal.pdf}
    \label{fig:back-cross-cdn-temporal}
  }
 \caption{Spatial diversity and temporal dynamics of CDN 
@@ -586,17 +592,16 @@ configurations which are commonly found in today's
 implementations.
 
 
-\section{Prior Work on Internet Quality Optimization}
+\section{Prior Work on Quality Optimization}
 \label{sec:related:quality}
 
-The evolution of the Internet has been largely driven by the need
-to provide better quality for a variety of applications.
+The evolution of the Internet has been driven largely by the need for better 
+quality of a variety of applications.
 %While Internet applications have always been one of the driving 
 %forces behind the evolution of the Internet, 
-Around early 2000s, many application 
-providers started discovering monetization strategies for web services, 
-video streaming, VoIP, allowing them 
-to scale with reduced costs.
+Around early 2000s, many application providers of video streaming, 
+VoIP, and web services started discovering monetization strategies, allowing 
+them to scale with reduced costs. 
 Since this inflection point, Internet applications have been 
 growing and proliferating at an unprecedented pace.
 %Especially, over the past decade, we have witnessed a drastic growth and 
@@ -611,40 +616,39 @@ growing and proliferating at an unprecedented pace.
 %have become indispensable for daily life
 %(Skype users spend over 2 billion minutes 
 %talking to each other every day~\cite{skype-2-billion-minutes}).
-Not surprisingly, given the importance of Internet applications, 
-understanding and improving their quality has a long history of
-intense research efforts.
+Not surprisingly, given the importance of Internet applications, understanding 
+and improving their quality have a long history of intense research.
 %Take video streaming as an example. 
 %Early work in 1990s focused on providing QoS in the network, 
 %and then focuses have shifted in early 2000s towards more edge-based
 %and overlay-based solutions. In recent years, there is a trend to
 %revisit the core-network approach enabled the emergence of 
 %software-defined networks.
+This section introduces a taxonomy of these prior efforts that emphasizes on 
+on their inherent trade-offs.
+%In Chapter~\ref{ch:overview}, we will use the taxonomy to emphasize the 
+%contrast between this dissertation and prior approaches.
 
-To put these efforts in perspective, this section introduces a taxonomy 
-to categorize the prior approaches based on their design choices.
-In Chapter~\ref{ch:overview}, we will use the taxonomy to emphasize the 
-contrast between this dissertation and prior approaches.
-
-Before introducing the taxonomy, I would first like to clarify that we use
+Before introducing the taxonomy, I would like to clarify that we use
 the term ``Internet quality'' to include both quality of service (QoS) and 
 quality of experience (QoE).
-While QoS and QoE are known to have different natures, we believe both of
-them are closely relevant  to this dissertation for two reasons.
+While QoS is different to QoE, it is closely relevant to this dissertation 
+for two reasons.
 First, QoS has a strong (albeit non-linear) correlation with QoE.
 For instance, video buffering highly depends on packet loss, and 
 VoIP call experience is very sensitive to network latency.
 Second, though ultimately we care about QoE, 
 much influential work has focused on providing 
 QoS in the IP and transport layers.
-More discussions on the relationship between QoS and QoE can be 
-found towards the end of this section.
+Readers may refer to, for example~\cite{chen2015qos}, for more 
+discussions on the relationship between QoS and QoE.
+%can be found towards the end of this section.
 
 \mypara{Taxonomy} 
 The prior approaches to quality optimization can be categorized
 based on their answers to a key architectural question: {\em where should the
-functionality of quality optimization implemented}.
-The question can be answered along two dimensions:
+functionality of quality optimization be implemented?}
+There are two dimensions in the answers to the questions:
 \begin{itemize}
 
 \item {\em Where in the network?} 
@@ -658,6 +662,10 @@ devices (e.g., router-assist congestion control) fall into in-network solutions
 under such dichotomy,
 because they share similar advantages and disadvantages with other 
 in-network solutions.
+Note that although early in-network solutions only operate in or below the IP layer, 
+this has since changed as in-network devices move up in the protocol stack to 
+provide richer services (e.g., router-assist video 
+streaming~\cite{sdndash}).
 
 %There are two natural options: in-network and endpoints. 
 %The difference between the two categories used to be straightforward--in-network 
@@ -694,10 +702,10 @@ in-network solutions.
 \item {\em Which level in the protocol stack?}
 Because our ultimate objective is to improve application-level QoE, 
 it is natural that the solution should have access to the applications themselves,
-i.e., in application level.
+i.e., at the application level.
 That said, the layering nature of the protocol stack means that any improvement in 
 the lower-level protocols (e.g., TCP, routing, wireless adaptation) may benefit the 
-application-level service quality.
+application-level quality.
 %That said, in choosing the level in the protocol stack, there is a tradeoff between 
 %more visibility to QoE and more controllability.
 %On one hand, because our ultimate objective is to improve application-level QoE, 
@@ -708,10 +716,7 @@ application-level service quality.
 %run in a user-space sandbox (e.g., browsers).
 
 \end{itemize}
-Note that although early in-network solutions only operate in or below the IP layer, 
-this has since changed as in-network devices move up in the protocol stack to 
-provide richer services (e.g., router-assist video 
-streaming~\cite{sdndash}).
+
 
 
 
@@ -727,39 +732,48 @@ more visibility to QoE and more visibility to network conditions.}
 \end{figure}
 
 \mypara{Design trade-offs}
-The choices regarding these two dimensions--in-network vs. endpoint, 
-application level vs. lower levels--in fact involve a key architectural trade-off,
-as illustrated in Figure~\ref{fig:back-tradeoff}.
-On one hand, optimizing quality at endpoints and application layer 
-has the advantage of more direct and accurate information on user-perceived 
+The choices regarding these two dimensions involves a key architectural 
+trade-off, illustrated in Figure~\ref{fig:back-tradeoff}.
+\begin{itemize}
+
+\item {\em More visibility to user-perceived QoE:} 
+On one hand, optimizing quality at endpoints and the application layer has 
+the advantage of more direct and accurate information on user-perceived 
 QoE, which usually is available only to client-side applications.
-This allows their optimization logic to use the QoE to directly drive
-the adaptation.
-Implementing optimization functionality in endpoints at application layer
-also carries the practical advantage of more flexibility since 
-their software is upgraded
-more frequently than lower layer protocols.
-On the other hand, while in-network solutions at lower layers have to rely 
+This allows their optimization logic to be driven directly by the QoE as 
+feedback. Implementing optimization functionality in endpoints at the 
+application layer also carries the practical advantage of more flexibility since 
+their software is upgraded more frequently than in-network devices or 
+lower layer protocols.
+
+\item {\em More visibility to network conditions:}
+On the other hand, while in-network solutions in the lower layers have to rely 
 on indirect metrics to infer QoE from encrypted application-level 
 communications~\cite{mobicom2014-qos,
-hotmobile2014-prometheus,imc2012-firstbyte} 
-and arguably more difficult to deploy, 
-they enjoy the key advantage that they have more accurate and finer-grained 
-information on the network conditions (e.g., per-packet congestion loss), 
-which is invisible to applications typically running in a user-space sandbox 
-(e.g., browsers).
+aggarwal2014prometheus,imc2012-firstbyte}, 
+they enjoy the architectural advantage that they have more accurate and 
+finer-grained information on the network conditions (e.g., per-packet congestion 
+loss).
+%which is opaque to applications typically running in a user-space sandbox 
+%(e.g., browsers).
+Applications running in user-space sandboxes (e.g., browsers) are often 
+oblivious to changes in these low-level network conditions.
+
+\end{itemize}
+
+
 
 %Note that while these dimensions seem to dependent (e.g., in-network solutions
 %are traditionally believed to operate only in IP layer), as we will 
 %see next, they are indeed orthogonal, and there have been (or could be) 
 %valid design points given each combination of answers to these questions.
 
-Next, we use the taxonomy to classify prior work on quality optimization.
+Next, we use the taxonomy to put prior work in perspective.
 
 \subsection{In-Network Solutions}
-The in-network approach has been a
-focus of intense research efforts in the networking community 
-since its early days.
+The in-network approach has long been a focus of intense research. 
+In-network solutions can provide better services at multiple layers on
+the protocol stack.
 
 %\begin{itemize}
 %\item QoS
@@ -797,15 +811,12 @@ an increasingly ossified infrastructure.
 %Hence, the basic approaches such as DiffServ and IntSev seem 
 %fundamentally unfit to cope with these trends.
 These trends have inspired many new in-network solutions 
-over the past decade, including
-novel QoS architecture (e.g., 
-Core-Stateless Fair Queueing~\cite{csfq})
-and clean-slate solutions (e.g.,
-Active Networks~\cite{active-network}, 
-Network OS~\cite{nox}, and 
+over the past decade, including novel QoS service architecture (e.g., 
+Core-Stateless Fair Queueing~\cite{csfq}) and clean-slate solutions (e.g.,
+Active Networks~\cite{active-network}, Network OS~\cite{nox}, and 
 Content-Centric Networks~\cite{ccn}).
 While these efforts have enduring impact on the ensuing research,
-they impose  impose significant deployment cost to revamp the existing ISP
+they impose   significant deployment cost to revamp the existing ISP
 infrastructure.
 As a result, the Internet today still only provides best-effort
 service to most applications.
@@ -817,36 +828,34 @@ explicit router assistance, such as providing explicit or implicit
 feedback on network congestions 
 (e.g., ECN~\cite{ecn},
 XCP~\cite{xcp}, RCP~\cite{rcp}, VCP~\cite{vcp}),
-and Active Queue management (AQM) schemes like RED~\cite{red},
-AVQ~\cite{avq}, and CoDel~\cite{codel} fair queueing.
+and Active Queue management (AQM) schemes (e.g., RED~\cite{red},
+AVQ~\cite{avq}, and CoDel~\cite{codel}).
 In XCP and RCP, each router along an end-to-end path marks 
 special bits on the packet header to help the senders determine the 
 end-to-end available bandwidth. 
 AQM schemes in contrast aims to prevent persistent queue buildup
 in routers, by marking packets with ECN or dropping them before 
-the queue is full, such as in ~\cite{red}.
+the queue is full, such as in~\cite{red}.
 Similar to IP-layer support for QoS, 
 these methods also add significantly complexity to in-network
-devices and thus induce significantly deployment cost.
+devices and thus induce significant deployment cost.
 Moreover, most proposals require making changes 
 on all ISPs along the end-to-end paths, creating more
 barriers to deployment.
 A notable exception is in data centers, where 
 router-assist congestion control mechanisms are widely used, 
-because network devices and end hosts are under the same 
-administrative domain, and infrastructure is upgraded on a
-relatively regular basis.
+because network devices, and end hosts are under the same 
+administrative domain, and are upgraded on a regular basis.
 
 
-\mypara{SDN-based approaches}
+\mypara{SDN-based approach}
 SDN is a new network architecture 
 to greatly simplify network management~\cite{feamster2014road}
-by separating data plane running 
-on routers and switches from control plane that determines 
+by separating the data plane from the control plane that determines 
 the routing states~\cite{OpenFlow}, thus making the data plane 
 ``programmable''.
-It has  many open-source offerings
-(e.g.,~\cite{onos,floodlightopenflow}), and provides a viable path to
+The SDN-based solutions have  many open-source offerings
+(e.g.,~\cite{onos,floodlightopenflow}), and offer a viable path to
 the deployment of new routing 
 protocols, as routing table may be updated in near real-time without
 interrupting any ongoing traffic~\cite{rexford-sdn-update},
@@ -867,7 +876,7 @@ it remains unclear whether they have the incentives to coordinate
 to optimize end-to-end application quality.
 
 \subsection{Endpoint Solutions}
-Next, we discuss prior work that relies on endpoints to adapt to changes
+In contrast, the endpoint-based approach relies on endpoints to adapt to changes
 in network conditions and resource availability.
 
 \mypara{Overlay routing}
@@ -877,7 +886,7 @@ virtual private networks (VPNs) and multicast~\cite{esm,ALMI-USITS01,
 Multicast-Sigcomm02}. 
 Of interest to us here is work focused on overlay routing with a view to improving 
 routing QoS and robustness~\cite{Detour-Sigcomm99,RON-SOSP01}. 
-This work showed that performance in terms of network metrics such as 
+This work showed that network performance such as 
 delay, packet loss, and reliability, could be improved by using 
 an overlay path that traverses well-chosen waypoints. 
 Despite this promise,  overlay routing for performance gains has not seen 
@@ -913,13 +922,13 @@ as a blackbox~\cite{pcc}.
 Current congestion control schemes suffer from a key
 limitation that they only {\em react} based on the locally observed
 information; e.g., without assistance of routers, they will only
-react after congestion has caused packet loss.
+react after congestion has caused packet loss or latency inflation.
 A notably exception is congestion 
-manager~\cite{balakrishnan1999integrated,seshan1997spand}
+manager~\cite{balakrishnan1999integrated,spand},
 which aggregates information of multiple TCP connections to 
 predict network performance for a new connection, but these
 schemes involve changing the kernel or setting up management 
-server, and have not seen wide adoption.
+server, and thus did not see wide adoption.
 Moreover, state-of-the-art congestion control schemes may 
 mismatch with the goal of applications~\cite{usenix12_ghobadi},
 and even cause bad interaction with control loops in 
@@ -928,7 +937,7 @@ application-layer adaptation might be in a better position to meet
 the need of applications.
 
 \mypara{Application-level adaptation}
-To cope with the changing network conditions, 
+To cope with the dynamic network conditions, 
 most applications run custom client-side adaptation logics in
 the application layer, rather than relying on transport-level or 
 in-network solutions for two reasons:
@@ -960,11 +969,12 @@ strategies~\cite{youtubecdn,youtube-infra,sigcomm12,sigcomm12cdnmulti}.
 In Internet telephony, there has been work to improve 
 client-side rate adaptation through multi-path wireless~\cite{diversifi},
 network performance profiling~\cite{sprout,de2008skype}, and 
-better super-node selection~\cite{baset2004analysis,Skype-GI08}).
-A notably exception in this category is SPAND~\cite{spand}
-which proposed to improve endpoint adaptation
-by sharing passive measurement from multiple endpoints 
-at application layer.
+better supernode selection~\cite{baset2004analysis,Skype-GI08}).
+A shared feature of these schemes is that the adaptation is driven by
+local information observed by a single application session.
+A notably exception is SPAND~\cite{spand}, which proposed to improve 
+endpoint adaptation by sharing passive measurement from multiple 
+endpoints  at the application layer.
 This dissertation is in part inspired by SPAND and revisits
 its ideas in the light of the advances in large-scale data analytics
 and pervasive client-side instrumentations in today's Internet 
@@ -975,10 +985,10 @@ applications.
 The key issue of endpoint adaptation is that it can only rely 
 on limited, locally observed information to {\em react} to
 changes in network conditions.
-To overcome this, many studies tried to accurately 
+To overcome this limitation, many studies have attempted to 
 predicting network performance, such as latency and
 available bandwidth, by exploiting
-stability and predictability of network performance
+stability and stationarity of network performance
 (e.g.,~\cite{hu2005measurement}), constancy of various network
 metrics~\cite{zhang2001constancy,balakrishnan1997analyzing}, 
 and longitudinal patterns of cellular
@@ -999,7 +1009,7 @@ estimate end-to-end performance
 hu2004locating, strauss2003measurement, jain2003end}),
 (2) to build an ``Internet performance map''
 based on active probes from a selective set of 
-``vantage points'' (e.g.,~\cite{iplaneosdi, seshan1997spand,ramasubramanian2009treeness,
+``vantage points'' (e.g.,~\cite{iplaneosdi, spand,ramasubramanian2009treeness,
 dabek2004vivaldi}), and 
 (3) to leverage the
 history of the  same client-server pair 
@@ -1007,14 +1017,14 @@ history of the  same client-server pair
 jain2005end, swany2002multivariate,
 mirza2007machine, he2005predictability}).
 While this work has shown substantial benefit of accurate performance
-predictions, they have not seen wide adoption for practical 
+predictions, it has not seen wide adoption for practical 
 reasons: the packet-level probing requires 
 per-packet information which is invisible to applications,
 the Internet-map approach needs a dedicated 
 monitoring infrastructure, and the history-based approach requires
 enough history be accumulated before performance prediction is 
 feasible, but many application sessions, such as web, 
-consist of a few short-lived flows with different servers.
+consist of a few short-lived flows sent from different servers.
 
 
 
@@ -1076,7 +1086,7 @@ imc2012-firstbyte,sigcomm2010-mercury}), we argue that
 application providers are in a better position than these 
 infrastructure providers to measure and adapt to QoE.
 The goal of this dissertation is not to offer new QoE models, 
-but to improve metrics that are known to have high impact 
+but to improve  the metrics that are known to have high impact 
 on user experience.
 
 \mypara{Video measurements}
@@ -1086,26 +1096,27 @@ understanding video content popularity and access patterns
 flash crowds during highly popular events (e.g.,~\cite{beijing-imc09}), 
 and their implications for CDN and caching designs.  
 While these efforts help motive the techniques proposed in 
-this dissertation, my goal again is to understand the structure of 
-quality problems and further develop system to demonstrate 
-that QoE can be improved.
+this dissertation, our goal again is to understand the structure of 
+quality problems and further develop solutions to actually improve
+QoE.
 
 \vspace{0.5cm}
 While both in-network solutions and endpoint solutions have 
 to compromise on either visibility to QoE or visibility to network conditions,
-as we will see, the solutions proposed in this dissertation 
-strikes a better balance
-between these two by enabling an endpoint-based data-driven approach.
+the solutions proposed in this dissertation 
+strikes a better balance by taking advantage of the access of millions of 
+endpoints with a data-driven approach.
+%enabling an endpoint-based data-driven approach.
 
 
-\section{Prior Work on Data-Driven Optimizations in Networking}
+\section{Prior Work on Data-Driven Optimization in Networking}
 \label{sec:related:data}
 
 Another direction closely related to this 
-dissertation is applying data-driven techniques in improving 
-distributed and networked systems. 
-It again introduces a taxonomy of how data-driven paradigm
-can be used in networked systems.
+dissertation is the application of the data-driven paradigm to improving 
+networked systems. 
+We introduce a taxonomy of how networked systems can benefit from the 
+data-driven paradigm.
 We also use a concrete case study to show how data-driven ideas can
 be applied to improve TCP congestion control in different ways. 
 
@@ -1113,14 +1124,13 @@ While most systems already use data-driven techniques
 (e.g., TCP congestion control schemes react against congestion 
 signals such as packet loss and round-trip time),
 we argue that they could be substantially
-improved by borrowing systematic frameworks from data-driven
-literature and further more exploring data-driven opportunities by
+improved by borrowing systematic frameworks from data science
+literature and further exploring more data-driven opportunities by
 leveraging more available data.
 In particular, we observe two aspects of network systems along 
-which data-driven paradigm can help:
+which the data-driven paradigm can help:
 {\em better setting of parameters} within the existing adaptation logic,
-and {\em better run-time decision making} purely driven by all
-available measurement data.
+and {\em better run-time decision making logic} to replace the existing one.
 
 Since the way in which networking problems benefit from data-driven 
 techniques bears much resemblance to 
@@ -1131,32 +1141,28 @@ related work from a broad set of systems areas.
 \subsection{Type I: Better Settings of Parameters}
 
 The conventional wisdom has been that in most of network protocols, 
-the adaptation should use {\em hand-crafted} logic and parameters. 
-However, research has shown performance
+the adaptation should use {\em hand-picked} parameters, (e.g., TCP parameters 
+such as initial congestion window size and AIMD parameters).
+Recent research, however, has shown that performance
 can be improved by {\em automatically} tweaking these parameters 
-to achieve better performance in different operating conditions;
-e.g., TCP parameters such as initial congestion window and AIMD 
-parameters~\cite{remy,googleinitwindow}, 
-better configurations of routing algorithms 
-(e.g.,~\cite{sharma2017machine}),
-more accurate modeling workload in wireless 
-communications~\cite{alsheikh2014machine},
-and designs of AQM logic~\cite{shah2016sam,lin2015kemy}.
-In other areas, researchers also have shown
-similar data-driven opportunities in computer architecture
-(e.g., cache replacement policy~\cite{calvinlin-cache}),
-database (consistency management~\cite{aaron-cidr} and 
-rational database system management~\cite{andypavlo-rbsm}).
-While these efforts are in distinctively different areas,
-they have largely exploited the same inefficacy in traditional
+to achieve better performance in different operating conditions
+(e.g., better parameters of TCP congestion control~\cite{remy,googleinitwindow}, 
+AQM logic~\cite{shah2016sam,lin2015kemy}), configurations of routing algorithms 
+(e.g.,~\cite{sharma2017machine}, and workload modeling in wireless 
+networks~\cite{alsheikh2014machine}).
+Recent research has also shown similar data-driven opportunities 
+in other areas including CPU cache replacement policy~\cite{calvinlin-cache},
+database consistency management~\cite{aaron-cidr}, and 
+rational database system management~\cite{andypavlo-rbsm}.
+While these efforts are in entirely different areas, they have largely 
+exploited the same inefficacy in traditional
 control logic that the parameters are statically configured 
-based on assumptions unmatched with the dynamic workload 
-in runtime. 
+based on assumptions that are ill-matched with the dynamic workload 
+in runtime.  
 Such problem can be fixed by dynamically training
-these parameters based on recent measurements
-(such as in~\cite{calvinlin-cache}) or
-synthetically simulated data (such as in~\cite{remy}).
-It should also be noticed that learning the best configurations
+these parameters with recent measurements
+(e.g.,~\cite{calvinlin-cache}) or synthetically simulated data (e.g.,~\cite{remy}).
+The problem of learning the best configurations
 for a complex system is conceptually similar to the 
 hyper-parameter selection problem in machine learning~\cite{ml101}.
 
@@ -1171,16 +1177,15 @@ how a protocol can be improved by tuning the key parameters.
 %AIMD parameters and the timeout threshold using offline
 %simulation against traffic synthetically generated based on
 %the given network characteristics.
-Prior work on Remy~\cite{remy} showed that a machine 
-designed TCP that uses offline simulation driven by prior 
-knowledge of the network context (e.g., topology, degree of
-multiplexing) can learn the best values of some key 
-constants and achieve significant performance improvement 
-over today’s manually picked values; e.g., a simulated 15 
-Mbps fixed-rate link with eight senders contending and an 
-RTT of 150 ms, Remy control logic achieves 40+\% throughput
-speed up and 20+\% delay reduction over many specially 
-engineered TCP variants.
+Prior work on Remy~\cite{remy} showed that a machine-designed 
+TCP that uses offline simulation driven by prior  knowledge of the 
+network context (e.g., topology, degree of multiplexing) can learn 
+the best values of some key constants and achieve significant 
+performance improvement over today's manually picked values; 
+e.g., a simulated 15 Mbps fixed-rate link with eight senders 
+contending and an RTT of 150 ms, Remy-generated control logic achieves 
+40+\% throughput speed up and 20+\% delay reduction over many 
+specially engineered TCP variants.
 
 
 %\begin{itemize}
@@ -1192,49 +1197,50 @@ engineered TCP variants.
 \subsection{Type II: Better Run-Time Decisions}
 
 While finding better parameters of the existing control logics
-can improve performance, it is arguably incomplete.
-Fundamentally, the handcrafted control logics are 
-designed with certain analytical model
-associating the feedback signals with internal states of the 
-underlying system. While this approach served us well for 
-many decades, it has become unfit to today's
-application delivery systems, which have grown too complex
-to be modeled analytically. Therefore, it is insufficient to 
-merely tuning the parameters for the existing control logics.
-In contrast, a more ``data-driven'' approach 
-is to model the network as a blackbox and use measurement data 
-to directly drive the adaptation.
+can improve performance, it is arguably incomplete, since it still uses 
+handcrafted control logics based on analytical model that models the 
+relationship between the feedback signals (e.g., RTT) with internal states of the 
+underlying system (e.g., router queue occupancy). 
+While this approach served us well for decades, it is fundamentally inefficient 
+to characterize today's application delivery systems, which have grown too 
+complex to model analytically. Rather than merely tuning the parameters for 
+the existing control logic, recent research has made a case for a 
+more direct approach in which the logic models the network as a 
+blackbox and use measurement data to drive the decision making.
+In other word, rather than inferring the underlying network states and finding
+best decisions analytically, it builds a model that directly associate quality
+feedback with decisions (configurations).
 Research has shown that this more direct data-driven 
-approach can improve performance for routing~\cite{schapira2010putting},
+approach can improve the performance of routing~\cite{schapira2010putting},
 TCP throughput~\cite{pcc}, server selection in web 
 performance~\cite{footprint}, as well as bitrate adaptation in 
 video streaming~\cite{neural-streaming}.
 Besides networking problems, this approach also found its
 application in improving resource scheduling in 
 cloud services~\cite{cherrypick}.
-The basic idea of this type of data-driven approach is
-build a blackbox model to describe the relationship between 
-action (decisions) and performance feedback, 
-and use exploration-exploitation strategies (also
-known as multi-armed techniques~\cite{mab}), or 
-Bayesian approaches~\cite{bayesian-optimization} to discover 
-the best decision.
+%The basic idea of this type of data-driven approach is
+%build a blackbox model to describe the relationship between 
+%action (decisions) and performance feedback, 
+The techniques commonly used in these solutions are largely based on 
+exploration-exploitation strategies (multi-armed techniques~\cite{mab}), or 
+Bayesian optimization~\cite{bayesian-optimization}), in which feedback of 
+network performance is used to explore the decision spaces.
 Compared to the first type, the main advantage of the 
-second type is that it may converge to a better decision
+second type is that it could converge to a better decision
 faster by making minimal assumption about the 
-underlying  system. 
-A major drawback, however, is that it has less interpretability
+underlying  systems. 
+A primary drawback, however, is that it has less interpretability
 as the underlying system is modeled as a blackbox.
 
 
-\noindent\underline{\smash{Case study: Data-driven congestion control:}}
+\noindent\underline{\smash{Case study: Blackbox-based congestion control:}}
 Again, we use TCP congestion control as a case study to show
 how a protocol can be transformed to a simpler logic driven
 completely by measurement data, while making less
 assumptions on the underlying network system.
 PCC~\cite{pcc} attempts to simplified TCP congestion 
 control algorithm by using locally observed performance 
-to directly drive the setting of cwnd. 
+to directly drive the setting of congestion window size. 
 Specifically, it continuously maintains a model between 
 observed performance (e.g., throughput and latency) 
 and cwnd. This approach greatly simplifies TCP congestion
@@ -1277,34 +1283,29 @@ throughput of TCP CUBIC on global commercial Internet.
 
 In the first part of this chapter, we have used empirical studies 
 to show that QoE problems are pervasive in Internet video and Internet 
-telephony. Then we have introduced 
-related background knowledge on key components of today's 
+telephony. Then we have introduced related background on today's 
 Internet video and Internet telephony services.
 
-In the second part of this chapter, we have used a taxonomy
-to discuss the two directions of prior efforts in improving 
-Internet quality--in-network solutions and endpoint solutions.
-In particular, we have focused on the architectural trade-offs
-in their placement of the functionality of quality optimization.
-On one hand, in-network solutions have more direct and 
-accurate visibility to network conditions, and 
-on the other hand, endpoint solutions can measure metrics
-more related to user-perceived QoE, and they are 
-usually more deployable.
-While prior work has to compromise on at least one front,
-as we will see, our solution strikes a better balance
-between these two by enabling a data-driven approach
-to endpoint adaptations.
+In the second part of this chapter, we have introduced a taxonomy
+to highlight the inherent trade-offs in prior work to improve Internet 
+application quality. %--in-network solutions and endpoint solutions.
+%In particular, we have focused on the architectural trade-offs
+%in their placement of the functionality of quality optimization.
+In-network solutions have more direct and accurate visibility to 
+network conditions, while endpoint solutions can measure metrics
+more directly related to user-perceived QoE, and are  usually more deployable.
+%While prior work has to compromise on at least one front,
+As we will see, our solution strikes a better balance
+between the visibility to user-perceived QoE and the visibility to 
+network conditions through taking a more data-driven approach to 
+endpoint solutions.
 
-In the last section, we have discussed various ways
-data-driven paradigm has been (or could be) used 
-in the context of network systems. In particular, we observe
-two types of data-driven opportunities: improving setting
-of parameters, and improving real-time decision making.
-While our solution follows the second type, as we will
-see, it unleashes more data-driven benefit by 
-taking advantage of more data of real-time measurements 
-collected from millions of endpoints.
+In the last section, we have discussed two approaches to using the
+data-driven paradigm to improve network systems: improving setting
+of parameters, and improving real-time decision-making logic.
+While our solution follows the second type, it unleashes more 
+data-driven benefit by taking advantage of more data of real-time 
+measurements collected from millions of endpoints.
 
 
 
