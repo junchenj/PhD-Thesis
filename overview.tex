@@ -35,12 +35,12 @@ the key ideas of our solutions in Section~\ref{sec:overview:solutions}.
 \section{Formalizing \ddn}
 \label{sec:overview:arch}
 
-We begin a conceptual overview of the Data-Driven 
+We begin with a conceptual overview of the Data-Driven 
 Networking (\ddn) paradigm (Section~\ref{subsec:overview:concept}),
-and some illustrative examples of how different applications   
+and then put the \ddn approach in perspective of prior work 
+(Section~\ref{subsec:overview:contrast}). We end with 
+some illustrative examples of how different applications   
 can benefit from \ddn (Section~\ref{subsec:overview:examples}).
-We end this section by contrasting it to prior
-approaches (Section~\ref{subsec:overview:contrast}).
 %We end this section by identifying key factors that can impact 
 %the potential benefits of \ddn.
 
@@ -107,11 +107,13 @@ of data (e.g.,~\cite{spark}) and streams of updates
 \subsection{Contrast to Prior Work}
 \label{subsec:overview:contrast}
 
-\subsubsection{Compared to Prior Work on Quality Optimization}
+The design choices of \ddn bear distinctive features compared to both prior work on quality
+optimization and other applications of data-driven techniques in networking.
 
-We now put the \ddn approach to QoE optimization in perspective
-using the taxonomy presented in Section~\ref{sec:related:quality}.
-There are two classes of prior solutions: in-network solutions that change 
+\mypara{Compared to prior work on quality optimization}
+We use the taxonomy described in Section~\ref{sec:related:quality} to 
+contrast the \ddn approach to QoE optimization with prior work.
+Remember that there are two classes of prior solutions: in-network solutions that change 
 in-network devices, and endpoint solutions that rely on endpoint adaptations.
 
 %In Section~\ref{sec:related:quality}, we have classified
@@ -123,38 +125,38 @@ in-network devices, and endpoint solutions that rely on endpoint adaptations.
 
 \begin{itemize}
 
-\item Unlike prior endpoint solutions which use only per-endpoint local 
-information, decision making in \ddn is driven by information of multiple sessions. 
-The core argument of \ddn is that {\em it is feasible to
-maintain an accurate view of network conditions based on the QoE information
-collected from many endpoints}.
+\item Unlike prior endpoint solutions which use only single-endpoint 
+information, decision making in \ddn is driven by QoE information of multiple endpoints. 
+%The core argument of \ddn is that {\em it is feasible to
+%maintain an accurate view of network conditions based on the QoE information
+%collected from many endpoints}.
 %Traditional end-to-end adaptation protocols (e.g., TCP/DASH) 
 %is driven by what is observed by a single session. In contrast, 
-By extending the spatial scope of QoE measurement, 
-\ddn can predict the quality of a session if it uses certain decision, 
-as long as the decision has been used by 
-some similar sessions.
-\ddn is in part inspired by seminal work such as SPAND~\cite{spand},
-and our contribution lies in providing end-to-end solutions to make \ddn
-practical by leveraging the recent advances
-in large-scale data analytics and domain-specific insights.
-In short, \ddn retains the ethos of the endpoint approach, 
-while addressing its lack of
-visibility to network condition by leveraging an expended view 
-across many endpoints.
+By expanding the spatial scope of input information from the QoE of one 
+single endpoint to that of multiple endpoints, 
+\ddn addressing the endpoint approach's lacking of visibility to network conditions, 
+while retaining its ethos that the decision is driven by user-perceived QoE at 
+the application level.
+%\ddn can predict the quality of a session if it uses certain decision, 
+%as long as the decision has been used by some similar sessions.
+\ddn is in spirit similar to seminal work from a decade agao (e.g., SPAND~\cite{spand}),
+and our contribution lies in providing end-to-end solutions that combine 
+the recent advances in large-scale data analytics and domain-specific insights
+to make \ddn practical for today's applications.
+%In short, \ddn retains the ethos of the endpoint approach, 
+%while addressing its lack of
+%visibility to network condition by leveraging an expended view 
+%across many endpoints.
 
-\item Unlike in-network solutions or endpoint solutions operating 
-in lower layers, \ddn enjoys the advantage that it has  
-direct access to in-situ QoE measurement.
-In \ddn, what to be ``sensed'' is exactly what to be optimized, 
-i.e., quality perceived by all historical and ongoing sessions; 
-not indirect signals on quality (e.g., acks 
+\item Unlike in-network solutions which rely on indirect signals on quality (e.g., acks 
 or bandwidth), or active probes from a handful 
-of vantage points (e.g., iPlane~\cite{iplaneosdi}). 
+of vantage points (e.g., iPlane~\cite{iplaneosdi}), \ddn relies on in-situ QoE 
+measurement to drive the adaptation; that is, what to be sensed matches
+what to be optimized.
 While in-situ quality data may compromise on the fidelity of 
 individual measurement, they are far more efficient than 
 alternatives in obtaining a panoramic and representative
- view of client-perceived quality from growingly diverse platforms~\cite{insitu}.
+ view of client-perceived quality from the growingly diverse platforms~\cite{insitu}.
 %and the lack of fidelity can be compensated by harnessing the ``unreasonable effectiveness of data''~\cite{google-data}.
 Relying solely on in-situ quality data also serves pragmatic 
 purposes as many application providers today already have 
@@ -225,28 +227,27 @@ various reasons~\cite{sigcomm-qoe-workshop}.
 %\end{table}
 
 %\subsection{Contrast to Prior Work on Data-Driven Optimization}
-\subsubsection{Compared to Prior Work on Data-Driven Optimization}
-
-In Section~\ref{sec:related:data}, we have described two types
-of data-driven optimization in networked systems:
-better parameter setting, and better run-time decision making.
-Under this taxonomy, \ddn belongs to the second type, but with a 
-key difference--in \ddn, decisions are driven by real-time data from 
-many different
-users or sessions, rather than a single user. 
-This difference has two profound implications.
+\mypara{Compared to prior work on data-driven optimization in networking}
+In the taxonomy of Section~\ref{sec:related:data}, \ddn belongs to the type 
+(Section~\ref{subsec:related:data:type2}) in which decisions are driven by 
+directly modeling their impact on the metric of interest (i.e., QoE).
+%though \ddn can be applied to the first type (Section~\ref{subsec:related:data:type1}) 
+%to find better configurations of existing logic.
+%we have described two types
+%of data-driven optimization in networked systems:
+%better parameter setting, and better run-time decision making.
+%Under this taxonomy, \ddn belongs to the second type, but with a 
+The key distinction of \ddn is that the decisions are driven by real-time data 
+from many different application sessions, rather than a single session as in
+prior work. This difference has two profound implications.
 %, from the perspective of data-driven paradigm.
-On one hand, the input data of \ddn is much larger both in scale 
-and scope, allowing \ddn to learn a more accurately model
-of the network conditions and make more informed decisions.
-On the other hand, the input data of \ddn is collected from both
-concurrent and history sessions with different client-side and
-server-side characteristics, so the \ddn controller
-cannot treat the data from different sessions identically when
-using it to make decisions for a particular session; rather
-it must take into account the potentially 
-complex relationship between session-level 
-features and QoE.
+(1) The input data of \ddn is much larger both in scale and scope, allowing 
+\ddn to learn a more accurately model of the network conditions and make 
+more informed decisions.
+(2) The input data of \ddn is collected from concurrent and history sessions 
+that have different session-level features (client-side, network-level, and server-side), 
+so the \ddn decision logic must take into account the potentially complex 
+relationship between these session-level features and QoE.
 
 
 \subsection{Illustrative Examples}
@@ -343,100 +344,107 @@ potentially improve the QoE for these applications.
 %\end{figure}
 
 
-\section{Challenges}
+
+\section{Challenges of \ddn}
 \label{sec:overview:challenges}
 
-While \ddn is promising,
-it poses technical challenges on both 
-algorithmic and architectural fronts, which have to be 
-addressed before we can unleash its full potential.
+Despite its promise, \ddn has fundamental challenges on both
+algorithmic and architectural fronts, which have to be addressed 
+before we can unleash its full potential.
 %This section describes two fundamental challenges 
 %of \ddn and how they manifest themselves in various
 %applications.
 
+
+
 \subsection{Need for Expressive Models}
 \label{subsec:overview:challenge1}
 
-Algorithmically, the objective of \ddn is to identify 
-the best decision for each application sessions;
-essentially, a mapping between the feature space
-of application sessions and the decision space.
-This is, however, by no means trivial even for 
-standard machine learning techniques,
-because the mapping is in a 
-{\em high-dimensional} space.
-Therefore, the key algorithmic challenge is 
-how to build an expressive model to reduce
-the dimensionality of both session-level 
-feature space and decision space.
-To make it more concrete, we discuss two
-manifestations of the challenge of an expressive
-model.
+The algorithmic objective of \ddn is to build a model that maps each 
+session in the session-level feature space to the optimal decision in 
+the decision space. 
+%This is challenging for standard machine learning techniques,
+%because such mapping is in a {\em high-dimensional} space.
+At a high level, the challenges to build such a model stem from the fact
+that such {\em high-dimensional} relationships between session-level 
+features, decisions, and QoE.
+To address the challenge, we need an {\em expressive model} to reduce
+the dimensionality of both session-level feature space and decision space. 
+We have seen two manifestations of the challenge of an expressive model.
 
 \begin{itemize}
 
 \item {\em Complex QoE-determining factors:} 
-The first example shows that the relation between
-session-level features and video QoE is complex
-both spatially and temporally.
-Prior work has shown that there is a substantial room for 
-improving video QoE by dynamically selecting the 
-optimal CDN and bitrate based on a real-time global 
-view of network conditions.
-The key to realizing this promise is a prediction 
-model that can accurately predict the quality of any 
-video session based on QoE of similar sessions,
-if it were to use any CDN and bitrate.
-One challenge to practically build such prediction 
-model is that video QoE has complex relationship to 
-session-level features.
-In particular, we observe a combinational effect
-where QoE is affect by a specific combination 
-of feature values, but does not appear to be 
-correlated with any individual feature.
-We also observe that QoE of different sessions 
-may be affected with different feature combinations.
-In addition to these spatial patterns, these 
-QoE-determining factors, as well as QoE itself may
-over time on timescales of several minutes.
-Therefore a prediction model must be expressive
-enough to capture all these spatial and temporal
-complexities.
+The first illustration is the need to handle the complex relationship, both spatially 
+and temporally, between video QoE and session-level features (Chapter~\ref{ch:cfa}).
+This complex relationship has made it challenging to build an accurate video 
+QoE prediction system, which could help to significantly improve video QoE.
+%For instance, video 
+%QoE can be substantially improved by dynamically selecting the optimal 
+%CDN and bitrate using 
+%based on a real-time global 
+%view of network conditions.
+%The key to realizing this promise is 
+%a prediction model that can accurately predict the quality of any video session 
+%based on QoE of similar sessions, if it were to use any CDN and bitrate.
+%One challenge to practically build such prediction 
+%model is that video QoE has complex relationship to 
+%session-level features.
+In particular, we observe a combinational effect where video QoE is affect by 
+a specific combination of feature values, but does not appear to be correlated 
+with any individual feature. We also observe that QoE of different sessions 
+may be affected with different feature combinations. In addition to these spatial 
+patterns, these QoE-determining factors (as well as QoE itself) may change
+over time on timescales of several minutes. Therefore, an accurate QoE 
+prediction model must be expressive enough to capture all these spatial and 
+temporal complexities.
 
 \item {\em Large decision spaces:}
-The second example shows the problem of 
-large decision spaces in Internet telephony.
-Prior work has shown that there is much room 
-for improving Skype quality by routing each 
-call through the optimal relay clusters in 
-the cloud.
+The second illustration is the need to handle large decision spaces, especially in 
+Internet telephony, where one needs to find a good relay path for each VoIP call
+in a set of hundreds of relay points.
+In addition, the performance of these relay paths could change on timescales 
+of minutes.
+%Prior work has shown that there is much room 
+%for improving Skype quality by routing each 
+%call through the optimal relay clusters in 
+%the cloud.
 %challenge
-However, identifying a close-to-optimal relay 
-in practice is very challenging, due to the sheer 
-number of possible relay paths (in hundreds) and 
-their dynamic performance (which could change 
-on timescales of minutes). 
-In addition, the number of calls different AS pairs
-follows a highly skewed distribution, so that
-in many AS pairs, the number of calls in each 
-hour is even less than the number of possible 
-relays.
-Straightforward methods are not 
-efficient to reduce the decision space.
-For instance, focusing only on relays with 
-the lowest geo-distance to end users
-does not necessarily guarantee low latency, 
-low packet loss rate which have been shown
-to have weak, if any, correlation with the geo-distance.
-Moreover, the best choice of relays depends 
-on locations of both caller and callee.
-All these evidences suggest a strong need
-to reduce the size of the mapping between
-the client space and the decision space in 
-the context of today's VoIP architecture.
+%However, identifying a close-to-optimal relay 
+%in practice is very challenging, due to the sheer 
+%number of possible relay paths (in hundreds) and 
+%their dynamic performance (which could change 
+%on timescales of minutes). 
+%In addition, the number of calls different AS pairs
+%follows a highly skewed distribution, so that
+%in many AS pairs, the number of calls in each 
+%hour is even less than the number of possible 
+%relays.
+Simply using geo-distance to reduce the decision spaces is suboptimal because 
+low geo-distance to end users do not necessarily mean low latency and low packet 
+loss rate which  have weak if any correlation with the geo-distance. Moreover, the 
+best choice of relays depends  on locations of both caller and callee.
+All these suggest a need to reduce the size of the mapping between
+the client space and the decision space.
 
 \end{itemize}
 
+
+
+\begin{figure}[t!]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/overview-roadmap.pdf}
+%\vspace{-0.3cm}
+\caption{
+The technical roadmap of this dissertation towards making \ddn practical. We present three 
+ideas to address the four manifestations of the high-level challenges of expressive prediction
+models and scalable control platforms. The key enabling insight behinds our ideas is the 
+persistent critical structures of QoE-determining factors. 
+%The insight of persistent critical features inspires our three key ideas to 
+%address four manifestations of \ddn's key algorithmic and architectural challenge.
+}
+\label{fig:overview-roadmap}
+\end{figure}
 
 
 %\begin{itemize}
@@ -453,54 +461,64 @@ the \ddn controller has to make control decisions
 in near real time based on fresh data from many
 other geo-distributed clients, and serve the decisions 
 to clients within low response time.
-The key architectural challenge, therefore,
-is how to strike a balance between three seemingly
-conflicting objectives: 
+The key architectural challenge is how to strike a balance between 
+three seemingly conflicting objectives: 
 (1) {\em data freshness}, 
 (2) {\em responsiveness to geo-distributed clients},
 and (3) {\em global view}.
-To make it more concrete, we again discuss two 
-manifestations of the challenge of a scalable platform.
+We have seen two manifestations of the challenge of a scalable platform.
+%To make it more concrete, we again discuss two 
+%manifestations of the challenge of a scalable platform.
 
 \begin{itemize}
-\item {\em Geo-distributed analytics with global view:} 
-The first example shows why it is challenging to 
-make decision with a fresh, global view of QoE of 
-many geo-distributed clients.
-Although in theory, the \ddn controller can be 
-integrated to the existing logically centralized control 
-platforms deployed by many application providers,
-there is a practical challenge: these control platforms 
-are built up to serve two functions--
-real-time per-session monitoring and 
-offline analytics, neither of which requires a fresh 
-and global data collected all clients, so it would be 
-impractical to assume the decision-making algorithm 
-can run in a cluster which has a fresh, global view 
-of measurement data from all clients. 
-Besides, it is costly to gather all data into one cluster,
-because it requires to change the existing 
-data gathering procedure and to significantly increase 
-the communication overhead.
-Therefore, one challenge is to 
-perform geo-distributed analytics by striking a 
-balance between global view and data freshness.
+\item {\em Global view vs. data freshness:} 
+%make decision with a fresh, global view of QoE of 
+%many geo-distributed clients.
+A practical issue of running the \ddn controller in the existing control platforms of 
+application providers is that it is not clear how to maintain a fresh, global view of
+measurement data from all sessions. 
+These control platforms  typically consist of multiple geo-distributed frontend clusters 
+and a centralized backend cluster. Each  session uploads its quality measurement 
+to a nearby frontend, which  then updates the backend every tens of minutes 
+to hours. While this design makes much sense for real-time per-session quality 
+monitoring and offline analytics, none of which requires fresh, global data of all 
+sessions, it is ill-suited to run the \ddn control logic in either the geo-distributed 
+frontends (without global view) or the centralized backend (without fresh data).
+
+%these control platforms  are not designed to collect
+%fresh data from all sessions to the same physical data center, so that decisions can 
+%be made based on a fresh, global view. Instead, each session uploads its
+%quality measurement to a nearby geo-distributed frontend cluster, which 
+%then syncs-up with the centralized backend cluster every tens of minutes
+%to hours, because they are built for real-time 
+%per-session quality monitoring and offline analytics, neither of which requires 
+%a fresh and global data collected all clients, and it is costly to gather all data 
+%into one cluster in real time.
+%In this context, it seems not suitable to run the \ddn control logic in either 
+%the geo-distributed frontends (without global view) or the centralized 
+%backend (without fresh data).
+%, so it would be 
+%impractical to assume the decision-making algorithm 
+%can run in a cluster which has a fresh, global view 
+%of measurement data from all clients. 
+%Besides, it is costly to gather all data into one cluster,
+%because it requires to change the existing 
+%data gathering procedure and to significantly increase 
+%the communication overhead.
+%Therefore, one challenge is to 
+%perform geo-distributed analytics by striking a 
+%balance between global view and data freshness.
 
 \item {\em Near real-time predictive analytics:}
-Even if we can gather real-time data to the same data 
-center, it is still very challenging to run real-time 
-analytics to predict the optimal decision in near 
+Even if we can gather real-time data to the same data center, it is still very 
+challenging to run real-time analytics to predict the optimal decision in near 
 real time, e.g., on a timescale of tens of seconds.
-As mentioned in 
-Section~\ref{subsec:overview:challenge1},
-to update quality prediction, we need a large amount 
-of data to build a high-dimensional model between 
-session-level feature space and QoE.
-Our evaluation based on standard large-scale
-analytics platforms has shown that it would take
-tens of minutes, a magnitude longer than needed,
-to update the model, given the sheer volume of
-measurement data.
+As mentioned in Section~\ref{subsec:overview:challenge1}, we need a large 
+amount of data to update a high-dimensional model between session-level 
+feature space and video QoE in near real-time (on timescales of tens of seconds). 
+Our evaluation based on standard large-scale analytics platforms show that 
+given the sheer volume of measurement data, it would take tens of minutes, 
+a magnitude longer than needed, to update the model.
 
 \end{itemize}
 
@@ -511,7 +529,7 @@ measurement data.
 %\end{itemize}
 
 
-\section{Persistent Structures in QoE-Determining Factors}
+\section{Key Insight: Persistent Critical Structures of QoE-Determining Factors}
 \label{sec:overview:unifying}
 
 %\jc{add a formal definition and illustrative figures of persistent structures}
@@ -526,56 +544,48 @@ systems with a key domain specific insight that Internet
 %independent ideas is to integrate 
 %standard machine learning algorithms and 
 %systems with the domain-specific insight that Internet 
-applications have {\em persistent structures
-(e.g., performance bottlenecks) that help identify 
-network sessions with 
-similar QoE-determining factors, and that such 
+applications have {\em persistent critical structures that help identify 
+network sessions with similar QoE-determining factors, and that such 
 structure tends to be persistent on timescales of 
 at least tens of minutes}.
-In Chapter~\ref{ch:measurement}, we will show evidence of these persistent
-structures through an empirical structural analysis on  QoE
-problems based on real datasets.
-For now, we will give an overview of persistent structures 
-and how intuitively they help address \ddn's challenges.
+We now give the formal definition of persistent critical structures 
+and how they intuitively help address \ddn's challenges.
+
 
 \mypara{Formal definition}
-To formally describe the insight of persistent structures, 
-let us formally describe \ddn as follows. In essence, \ddn is as 
-a decision-making function
+Let us first formally describe \ddn as follows. 
+In essence, \ddn is as a decision-making function 
 $F:2^\mathbb{S}\times2^\mathbb{D}\times\mathbb{S}\times\mathbb{R}
-\mapsto\mathbb{D}$ which takes as input a set of historical 
+\mapsto\mathbb{D}$, which takes as input a set of historical 
 sessions $S\in2^\mathbb{S}$ whose 
 QoE is already measured, a set of available decisions 
 $D\in2^\mathbb{D}$, a new session $s\in\mathbb{S}$, and $s$'s timestamp
 $t\in\mathbb{R}$,
 and outputs a decision $d\in\mathbb{D}$ for session $s$.
-Then we formally define a {\em structure} as
-a function 
+Now, a {\em structure} is formally defined as a function 
 $P:2^\mathbb{S}\times2^\mathbb{D}\times\mathbb{S}\times\mathbb{R}
 \mapsto2^\mathbb{S}\times2^\mathbb{D}$,
-which takes as input a pair of a set of historical 
-sessions $S\in2^\mathbb{S}$ and a set of decisions $D\in2^\mathbb{D}$,
-and a session $s\in\mathbb{S}$, and the timestamp
-$t\in\mathbb{R}$, and outputs a pair of  subset of history sessions
-$S'\subset{S}$ and a  subset of available decisions $D'\subset{D}$.
-
+which takes as input a set of historical  sessions $S\in2^\mathbb{S}$, 
+a set of decisions $D\in2^\mathbb{D}$, and a session $s\in\mathbb{S}$, 
+and the timestamp $t\in\mathbb{R}$, and outputs a pair of  subset of history sessions
+$S'\subset{S}$ and a  subset of decisions $D'\subset{D}$.
 
 
 \mypara{Key properties}
-Persistent structures have two key properties:
+Persistent critical structures are a type of structures that have two following 
+properties:
 
 \begin{itemize}
 
-\item {\em Criticality:} Spatially, these structures identify (often small) 
-subsets of history
+\item {\em Criticality:} These structures identify (often small) subsets of history
 sessions and decisions which are more critical than others history sessions 
 or decisions in determining QoE; i.e.,
 $F(S,D,s,t)=F(S',D',s,t)$, where $(S',D')=P(S,D,s,t)$. This essentially
-means the \ddn control logic can make almost the same decisions by
-focusing on a subspace of relevant history sessions and decisions.
+means the \ddn control logic can make the same decisions by
+only looking at the subset of relevant history sessions and decisions.
 
-\item {\em Persistence:} Temporally, these structures tend to persist
-on timescales of tens of minutes. This means in a time window $\Delta$ 
+\item {\em Persistence:} These structures tend to persist on timescales of 
+tens of minutes. This means in a time window $\Delta$ 
 of  tens of minutes, the function $P$ is likely 
 to find the same relevant history sessions and decisions,
 i.e., $P(S,D,s,t)=P(S,D,s,t+\Delta)$.
@@ -583,8 +593,8 @@ i.e., $P(S,D,s,t)=P(S,D,s,t+\Delta)$.
 \end{itemize}
 
 
-\mypara{An example}
-These persistent structures of QoE-determining factors can 
+\mypara{Illustrative examples}
+These persistent critical structures of QoE-determining factors can 
 manifest themselves in many forms.
 For instance, if the QoE of a video session depends on
 the server load (i.e., some decision-specific properties)
@@ -596,8 +606,8 @@ at history sessions having in the same AS
 (instead of all history sessions), and only consider server with 
 low load (instead of all possible decisions).
 
-\mypara{Intuition behind persistent structures}
-The intuitive explanation of these persistent structures 
+\mypara{Intuition behind persistent critical structures}
+The intuitive explanation of these persistent critical structures 
 is that in networked systems and application delivery  systems, performance
 bottlenecks are often persistent, and the persistent structures
 can be viewed as ``manifestations'' of these bottlenecks in the space of 
@@ -609,8 +619,11 @@ video streaming~\cite{cfa},
 web service~\cite{footprint}, end-to-end
 network performance~\cite{zhang2001constancy}.
 They can also be viewed as a generalization of the persistent 
-network congestions, which can be mathematically explained based on queueing theory
+network congestions, which can be mathematically explained using queueing theory
 (Chapter 6 of \cite{keshav2012mathematical}).
+In Chapter~\ref{ch:measurement}, we will show evidence of these persistent
+structures through an empirical structural analysis on  QoE
+problems based on real datasets.
 
 % For instance, video
 %sessions with similar QoE from the same CDN/server tend to match on 
@@ -640,34 +653,29 @@ network congestions, which can be mathematically explained based on queueing the
 %persistent structure, where the structure
 %is the subspace of the large decision space.
 
-\mypara{Why they are helpful}
-Persistent structures are the key
-enabler for our design of expressive models and scalable
-systems for \ddn.
+\mypara{Why persistent critical structures are helpful}
+Persistent critical structures are the key enabler behind our design of 
+expressive models and scalable systems for \ddn.
 \begin{itemize}
 
-\item First, the locality property of these domain-specific structures 
+\item First, the criticality property of these domain-specific structures 
 means they are in relatively low dimensional space.
 %(e.g., in Section~\ref{subsec:overview:cfa}, 
 %critical features are a small subset of all
 %session-level features). 
-Therefore, we can build models that focus on these 
-domain-specific structures, so that 
-they are expressive enough to capture the complex relations 
-between session-level features
-and decisions with limited available data, 
-while avoiding using unnecessarily high-dimensional models.
-This idea in spirit is similar how ``locality''
-is used in many machine learning techniques 
-to tackle curse of dimensionality~\cite{ml101}.
+This allows us to build models that focus on these  domain-specific structures, 
+which are expressive enough to capture the complex relations between 
+session-level features and decisions with limited available data.
+%while avoiding using unnecessarily high-dimensional models.
+The idea resembles the ML techniques that leverage the ``locality'' in 
+data to tackle curse of dimensionality~\cite{ml101}.
 
 \item Second, in the context network applications,
 these structures often correlate with network locality (e.g., clients 
 in the same IP prefix). Therefore, they enable an effective spatial 
-decomposition of the global 
-data-driven process into smaller-scale 
-subprocesses, each controlling a subset of 
-sessions who share network locality.
+decomposition of the global data-driven process into smaller-scale 
+subprocesses, each controlling a subset of sessions who are in the same
+persistent critical structure and also share the network locality.
 % (i.e., can be mapped
 %to the same subspace of relevant history sessions and decisions.
 %(as in group-based exploration-exploitation of 
@@ -676,10 +684,8 @@ sessions who share network locality.
 %exploration of 
 %Section~\ref{subsec:overview:guided}).
 
-\item Third, since these structures tend to
-persist on longer timescales than QoE itself 
-does, we can learn these structures from
-more history data 
+\item Third, since these structures tend to persist on longer timescales than 
+QoE itself does, we can learn these structures from more history data 
 %(as in critical feature analysis of
 %Section~\ref{subsec:overview:cfa} 
 %and guided exploration of 
@@ -694,7 +700,7 @@ decision making.
 \end{itemize}
 
 
-\section{Key Ideas}
+\section{Making \ddn Practical by Persistent Critical Structures}
 \label{sec:overview:solutions}
 
 This section briefly describes three key ideas inspired by 
@@ -717,17 +723,6 @@ the mapping between the challenges and the ideas.
 %context.
 %Next, we will briefly describe how the persistent
 %structures 
-
-\begin{figure}[t!]
-\centering
-\includegraphics[width=0.95\textwidth]{figures/overview-roadmap.pdf}
-%\vspace{-0.3cm}
-\caption{Roadmap of the dissertation.
-The figure shows that the unifying insight inspires 
-our three key ideas to address four manifestations of
-\ddn's key algorithmic and architectural challenge.}
-\label{fig:overview-roadmap}
-\end{figure}
 
 \subsection{Critical Features Analysis}
 \label{subsec:overview:cfa}
