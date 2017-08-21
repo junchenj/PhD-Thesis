@@ -9,33 +9,30 @@
 \providecommand{\idea}{{group-based \mab}\xspace}
 \providecommand{\Idea}{{Group-based \mab}\xspace}
 
-In the previous two chapters,
-we have formulated the \ddn process as a
+The previous two chapters have formulated the \ddn process as a
 %Content providers are increasingly using data-driven
 %mechanisms to optimize quality of experience (QoE).
 %Many existing approaches formulate this process as a
-prediction problem of learning optimal decisions (e.g.,
-server, bitrate, relay) based on observed QoE of recent
-sessions. While prediction-based mechanisms have
-shown promising QoE improvements, they are necessarily
-incomplete as they: (1) suffer from many known biases
+prediction problem, where we use observed QoE of recent
+sessions to build a QoE prediction system to inform the optimal
+selection of key configurations (e.g., server, bitrate, relay). 
+While such prediction-based formulation has shown promising QoE 
+improvements, it is necessarily incomplete as it: (1) suffers from many known biases
 (e.g., incomplete visibility) and (2) cannot respond
-to sudden changes (e.g., load changes). Drawing a parallel
+to sudden changes (e.g., load changes). Drawing on a parallel
 from machine learning, we argue that data-driven
 QoE optimization should instead be cast as a real-time
 exploration and exploitation (E2) process rather than as
-a prediction problem. Adopting E2 in network applications,
-however, introduces key architectural (e.g., how
+a prediction problem. However, applying E2 in network applications,
+introduces architectural (e.g., how
 to update decisions in real time with fresh data) and algorithmic
 (e.g., capturing complex interactions between
 session features vs. QoE) challenges. 
 
-In this chapter, we present Pytheas,
-a framework which addresses these challenges using
-a group-based E2 mechanism. 
-Inspired by the insight of persistent structures, we
-observe that application
-sessions sharing the same features (e.g., IP prefix, 
+In this chapter, we present {\em Pytheas}, a control platform which addresses 
+these challenges using a group-based E2 mechanism. 
+Inspired by the insight of persistent critical structures, we
+observe that application sessions sharing the same features (e.g., IP prefix, 
 location) can be grouped so that we can run E2 algorithms
 at a per-group granularity. This naturally captures
 the complex interactions and is amenable to realtime
@@ -49,10 +46,15 @@ per-session QoE.
 This chapter is organized as follows.
 We begin with the limitation of prediction-based workflow (Section~\ref{sec:pytheas:limitations}) 
 and why real-time \mab is a better abstraction
-for \ddn (Section~\ref{sec:pytheas:casting}),
-and then articulate key technical challenges for real-time \mab and outline the design rationale behind \name (Section~\ref{sec:pytheas:overview}).
-We then present \name in more details from both algorithmic perspective (Section~\ref{sec:pytheas:algo}), and architectural (Section~\ref{sec:pytheas:system}) and an implementation perspective (Section~\ref{sec:pytheas:impl}).
-Finally, we evaluate the performance of \name in Section~\ref{sec:pytheas:eval}, discuss related work in Section~\ref{sec:pytheas:related}, and summarize the section in Section~\ref{sec:pytheas:summary}.
+for \ddn (Section~\ref{sec:pytheas:casting}). Then we articulate key technical challenges 
+for real-time \mab, and outline the design rationale behind \name 
+(Section~\ref{sec:pytheas:overview}) to address the challenges.
+We then present more details of \name on its algorithm design 
+(Section~\ref{sec:pytheas:algo}), system design (Section~\ref{sec:pytheas:system}), 
+and implementation issues (Section~\ref{sec:pytheas:impl}).
+Finally, we evaluate the performance of \name in Section~\ref{sec:pytheas:eval}, 
+discuss related work in Section~\ref{sec:pytheas:related}, and summarize the 
+chapter in Section~\ref{sec:pytheas:summary}.
 
 \input{pytheas-limitations}
 
@@ -78,17 +80,17 @@ Finally, we evaluate the performance of \name in Section~\ref{sec:pytheas:eval},
 %With increasing demands of user QoE and diverse operating
 %conditions, application providers are on an inevitable
 %trajectory to adopt data-driven techniques. 
-While previous two chapters
-have achieved impressive QoE improvement by formulating \ddn as a 
-prediction process, they have key limitations
+While previous two chapters have shown impressive QoE 
+improvement by formulating \ddn as a prediction process, 
+they have key limitations 
 %However, existing prediction-based approaches have key limitations
 that curtail the potential of data-driven optimization.
 Drawing on a parallel from machine learning, we
 argue that real-time exploration and exploitation is a better
-abstraction for this domain. In designing Pytheas, we
+abstraction for this domain. In designing Pytheas, we have
 addressed key practical challenges in applying real-time
-E2 to network applications. Our key insight is a {\em group-based
-E2} mechanism, inspired by the insight of persistent structures in
+E2 to network applications. Our key idea is a {\em group-based
+E2} mechanism, inspired by the insight of persistent critical structures in
 QoE-determining factors. We observe that application sessions sharing
 the same features can be grouped so that we can run
 E2 at a coarser per-group granularity. Using an end-to-end

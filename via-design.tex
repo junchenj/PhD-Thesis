@@ -94,7 +94,7 @@ The skew and the variability make prediction inaccurate and exploration ineffect
 \centering
 %\includegraphics[width=0.4\textwidth]{ppt-figs/Overview.png}
 %\includegraphics[width=0.5\textwidth]{ppt-figs/Overview-new.pdf}
-\includegraphics[width=0.5\textwidth]{figures/Via-Overview-new-ethan.pdf}
+\includegraphics[width=0.7\textwidth]{figures/Via-Overview-new-ethan.pdf}
 %\vspace{-0.5cm}
 \caption{Overview of \hybrid relay selection based on prediction-guided exploration.}
 \label{fig:intuition}
@@ -206,12 +206,6 @@ As there is skew in call distribution, there might be ``holes'', i.e., no call h
 Can we learn about the performance of these network paths? 
 %Can we learn about the performance of network paths that are {\em not} contained in the history, e.g., one containing a relay not used before by a caller-callee pair? 
 
-\begin{figure}[t!]
-\centering
-\includegraphics[width=0.4\textwidth]{figures/Via-Tomography.png}
-\caption{Path stitching in \hybrid to estimate performance through relay RN. Solid lines represent historical call samples that we use to predict performance between AS$3$ and AS$4$ (dotted line). RTT$_{\text{AS3}\leftrightarrow\text{AS4}}$ $=$ RTT$_{\text{AS1}\leftrightarrow\text{AS4}}$ $+$ RTT$_{\text{AS2}\leftrightarrow\text{AS3}}$ $-$ RTT$_{\text{AS1}\leftrightarrow\text{AS2}}$.}
-\label{fig:tomography}
-\end{figure}
 
 If we knew the performance of the individual network segments (e.g., client to relay) that comprise an end-to-end path, we could compose these to estimate the performance of the path. In principle, measurements of the individual network segments could be made by the relays themselves. However, the relays in \skype were only designed to forward traffic and we were not in a position to add new functionality to these relay nodes (and potentially impose additional overheads). 
 %Nevertheless, how to leverage direct measurements between clients and relays, when they are available, is an area for future exploration.
@@ -219,6 +213,14 @@ If we knew the performance of the individual network segments (e.g., client to r
 
  
 Network tomography provides an alternative. By combining end-to-end measurements across several, partially-overlapping paths, network tomography can help estimate the performance of each network segment. Then, by stitching together the estimates for the individual segments, we can estimate the performance of a path not seen before.
+
+
+\begin{figure}[t!]
+\centering
+\includegraphics[width=0.35\textwidth]{figures/Via-Tomography.png}
+\caption{Path stitching in \hybrid to estimate performance through relay RN. Solid lines represent historical call samples that we use to predict performance between AS$3$ and AS$4$ (dotted line). RTT$_{\text{AS3}\leftrightarrow\text{AS4}}$ $=$ RTT$_{\text{AS1}\leftrightarrow\text{AS4}}$ $+$ RTT$_{\text{AS2}\leftrightarrow\text{AS3}}$ $-$ RTT$_{\text{AS1}\leftrightarrow\text{AS2}}$.}
+\label{fig:tomography}
+\end{figure}
 
 Figure~\ref{fig:tomography} shows a simple example of how network tomography expands coverage. We use linear tomography, and apply it to individual 
 %\cameraremove{which can be applied to }metrics that compose linearly (e.g., RTT) or can be linearized (e.g., jitter and packet loss rate, under the assumption of independence across network segments~\cite{Tomography-StatSci04}). 

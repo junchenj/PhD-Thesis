@@ -22,8 +22,8 @@
 \providecommand{\options}{{relaying options}\xspace}
 
 
-The previous chapters have largely focused on addressing 
-system and algorithmic challenges resulting from a complex relationship between 
+The previous chapters have so far focused on addressing system and 
+algorithmic challenges resulting from a complex relationship between 
 session-level features and QoE.
 In this chapter, we examine another
 challenge caused by {\em large decision spaces}.
@@ -32,22 +32,27 @@ As we will see, this challenge is especially salient in Internet telephony.
 %In this chapter, we demonstrate the opportunities of \ddn paradigm in 
 %another application--Internet telephony. 
 
-In this chapter, to alleviate call quality problems shown in Section~\ref{sec:measurement:voip},
-we present an architecture called \hybrid, which revisits the use of 
-classical overlay techniques to relay calls with the emerging architecture of
-managed overlay network. 
-Trace-driven analysis shows that an oracle-based managed overlay can
-{\em potentially} improve up to $53\%$ of calls whose quality 
-is impacted by poor network performance. 
-It is tempting to realize this potential improvement by using a \ddn-based
-solution similar to Pytheas, but there is a unique practical challenge 
-in the face of  a large number of relaying choices. 
+To alleviate call quality problems shown in Section~\ref{sec:measurement:voip},
+we present in this chapter an architecture called {\em \hybrid}, which revisits the 
+use of traditional overlay techniques to relay calls using the emerging architecture 
+of {\em managed overlay networks}, which use the well-connected cloud servers
+and private backbone network as VoIP relay points (supernodes) and network paths. 
+Our trace-driven analysis shows that the number of calls whose quality is impacted 
+by poor network performance can be reduce by 53\% by optimally selecting the 
+relay path in Microsoft's managed overlay network.
+%Trace-driven analysis shows that an oracle-based managed overlay can
+%{\em potentially} improve up to $53\%$ of calls whose quality 
+%is impacted by poor network performance. 
 
-To address the new challenge, we develop a practical relay selection system
-that intelligently combines prediction-based filtering with an online 
-exploration-exploitation strategy. 
-The key insight is that the decision space
-can be reduced by leveraging the persistent structures that 
+While it is tempting to realize this potential improvement by using a \ddn-based
+solution similar to Pytheas, it is challenging to discover best relay paths due to 
+the sheer number of possible relay paths (in hundreds) and their dynamic 
+performance (which could change on timescales of minutes).
+To address the challenge of large decision spaces, we develop a practical relay 
+selection system for \hybrid that intelligently combines prediction-based filtering with 
+an online  exploration-exploitation strategy. 
+The key insight of \hybrid relay selection is that the decision space
+can be reduced by leveraging the persistent critical structures: 
 for each pair of caller AS and callee AS, there is a small 
 and stable subset of promising relays that contains the best one.
 %We develop a practical relay selection approach that  
@@ -82,7 +87,7 @@ Then in Section~\ref{sec:via:design}, we then highlight the challenges in achiev
 a practical relay selection algorithm
 that delivers close-to-optimal performance.
 Section~\ref{sec:via:eval} uses simulation driven by real-traffic measurement and shows 
-that VIA can significantly improve
+that \hybrid can significantly improve
 Skype performance on network metrics.
 Finally, we discuss related work in Section~\ref{sec:via:related}, and 
 summarize the section in Section~\ref{sec:via:summary}.
@@ -102,20 +107,19 @@ summarize the section in Section~\ref{sec:via:summary}.
 \section{Summary}
 \label{sec:via:summary}
 
-By some estimates, the call volume of Internet telephony surpasses that 
+By some estimates, the call volume of Internet telephony has surpassed that 
 of traditional telephony. Given its importance, in this chapter, we 
 have applied \ddn paradigm to improve VoIP QoE.
-To mitigate calls with poor quality, we revisit the classical overlay network 
-techniques with the emerging managed networks of large cloud providers. 
+To mitigate calls with poor network performance, we revisit the classical overlay network 
+techniques with the emerging managed overlay networks operated by large cloud providers.
 Calls between users with poor network conditions can be {\em selectively relayed}
-via the managed network.
-
-To leverage such a managed overlay infrastructure, we have presented the 
-design of  \hybrid, a system that dynamically select a close-to-optimal relay
+via the managed overlay network.
+To fully realize the benefit of a managed overlay infrastructure, we have presented the 
+design of  \hybrid, a system that dynamically selects a close-to-optimal relay
 path in the managed overlay for each call.
-\hybrid addresses a key limitation faced by previous \ddn-based solutions 
-(e.g., CFA or Pytheas) in Internet telephony--data sparsity caused by a large
-decision space.
+
+In doing so, \hybrid addresses a missing piece in previous \ddn-based solutions 
+(e.g., CFA or Pytheas): data sparsity caused by a large decision space.
 The key insight of \hybrid to address this challenge is that, for each pair of caller 
 ISP and callee ISP, there is a {\em small and stable subset} of relays that 
 almost always contains the best relay.
@@ -125,7 +129,8 @@ Inspired by the insight, \hybrid uses a guided
  the clients, while dealing with variances in real-world estimates and keeping 
  the volume of relayed calls within a budget. 
  Data-driven evaluation shows that \hybrid improves call quality by 
- $45\%$ which closely matches the potential benefits indicated by an oracle. 
+ $45\%$, which closely matches the potential benefits indicated by an oracle 
+relay selection strategy that has hindsight information. 
 
 %By some estimates, the call volume of Internet telephony surpasses that of traditional telephony. 
 %Given its importance, we take the first step towards quantifying the impact of network performance on call quality using traces from \skype, one of the largest VoIP services. Our sampled dataset consists of $430$ million calls over seven months. To mitigate calls with poor quality, we revisit the classical overlay network techniques but using the {\em managed} networks of large cloud providers. Calls between users with poor network conditions can be {\em selectively relayed} via the managed network. Such managed overlays do not suffer from the drawbacks of traditional overlays. 

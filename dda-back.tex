@@ -17,11 +17,16 @@ adaptation may not reach the desired bitrate before the video finishes (e.g., Ve
 
 \begin{table}[t!]
 %\begin{footnotesize}
-    \begin{tabular}{p{3cm}|p{3.cm}|p{3.2cm}|p{4.cm}}
-    {\bf Streaming protocol}   & {\bf Examples} & {\bf Limitations} & {\bf How throughput prediction helps} \\ \hline\hline
-    Fixed bitrate & NFL,Lynda, NYTimes        & Too low bitrate, a few chunks are & Higher bitrate with no re-buffering or \\ \cline{1-2}
-    Adaptive bitrate & ESPN,Vevo, Netflix      &  wasted to probe throughput & long startup time
-    \end{tabular}
+%    \begin{tabular}{p{3.5cm}|p{3.5cm}|p{3.6cm}|p{4.cm}}
+%    {\bf Streaming protocol}   & {\bf Examples} & {\bf Limitations} & {\bf How throughput prediction helps} \\ \hline\hline
+%    Fixed bitrate & NFL,Lynda        & Too low bitrate, a few & Higher bitrate with no \\ \cline{1-2}
+%    Adaptive bitrate & ESPN, Vevo, Netflix      &  chunks are wasted to probe throughput & re-buffering or long startup time
+%    \end{tabular}
+\begin{tabular}{l|l|l|l}
+{\bf Bitrate selection}  & {\bf Examples}                              & {\bf Limitations}         & {\bf How throughput prediction helps} \\ \hline\hline
+Fixed bitrate      & NFL, Lynda                                                     & Too low bitrates                                                                       & \multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}Higher bitrate with less re-buffering\\ and lower start-up time\end{tabular}} \\ \cline{1-3}
+Adaptative bitrate & \begin{tabular}[c]{@{}l@{}}ESPN, Vevo, \\ Netflix\end{tabular} & \begin{tabular}[c]{@{}l@{}}Initial chunks are used \\ to probe throughput\end{tabular} &                                                                                                                         
+\end{tabular}
 %\end{footnotesize}
 \caption{Limitations of today's video players and how they benefit from throughput prediction.
 www.lynda.com  uses fixed bitrate of 520Kbps (360p) by default.  Netflix (www.netflix.com/WiMovie/70136810?tr kid=439131) takes roughly 25 seconds to adapt from the initial bitrate (560Kbps) to the highest sustainable bitrate (3Mbps).}

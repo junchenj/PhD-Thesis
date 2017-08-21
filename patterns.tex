@@ -10,26 +10,28 @@
 %is the observation that there are {\em persistent structures in the 
 %QoE-determining factors} (Section~\ref{sec:overview:unifying}).
 
-We have shown that the \ddn is a promising approach to over the fundamental 
-limitations in prior work, and our key insight to address \ddn's practical challenges
+We have seen that \ddn is a promising alternative to overcoming the fundamental 
+limitations in prior work of QoE optimization, and the key insight to make \ddn practical
 is the {\em persistent critical structures in the QoE-determining factors}.
-In this chapter, we present empirical evidence of these persistent critical
-structures using a large-scale structural analysis on the video and VoIP QoE in the wild.
+In this chapter, we present empirical evidence of these persistent critical structures by 
+using a large-scale structural analysis on the video and VoIP QoE.
 In particular, we shed light on the {\em temporal persistence} and {\em spatial criticality}
-of these structures of QoE-determining factors.
+of these structures of QoE-determining factors in the wild.
 %To this end, our analysis focuses on the spatial and temporal patterns
 %of QoE problems.
 \begin{itemize}
+
+
+\item {Spatial patterns:} 
+Are the QoE problems uniformly spread through the 
+space of feature combinations or are there specific 
+combinations that have a higher concentration?
 
 \item {Temporal patterns:} 
 Is each QoE problem a transient for 
 a specific ISP, CDN, or provider (or combination of these) or are 
 these problems persistent over long periods?
 
-\item {Spatial patterns:} 
-Are the QoE problems uniformly spread through the 
-space of feature combinations or are there specific 
-combinations that have a higher concentration?
 
 \end{itemize}
 We also show that there are substantial correlations
@@ -89,29 +91,21 @@ the chapter with key observations.
 \section{Summary}
 \label{sec:measurement:summary}
 
-In this chapter, we have presented 
-empirical studies based on large-scale datasets of video and VoIP QoE 
-to shed light on the structures of QoE problems in the wild.
-Our findings suggest that in Internet video and Internet telephony,
-there are persistent structures 
-in the factors that determine QoE.
-Our key observations can be summarized as follows:
+In this chapter, we have used empirical studies based on real large-scale datasets 
+of video and VoIP QoE to shed light on the structures of QoE problems in the wild.
+Our findings suggest that there are persistent critical structures in the factors that 
+determine video and VoIP QoE. Our key observations can be summarized as follows:
 
 \begin{itemize}
 
 \item {\em QoE depends on critical spatial structures.}
-Most quality problems can be attributed to 
-a relatively small fraction of structures.
-We observe that in both Internet video and Internet
-telephony, bad quality can be attributed to smaller number
-of session-level features. For instance, we
-see that \criticalclusters of bad video quality only
-account for 2-3\% of all \problemclusters.
-Note, however, that VoIP quality problems are more 
-spatially spread out than video quality problems, because 
-VoIP quality depends
-on both sides of a call, while the server side of video sessions 
-in general has less heterogeneity than the client side.
+Most quality problems can be attributed to a relatively small number of feature value
+combinations. We observe that in both Internet video and Internet telephony, bad 
+quality can be attributed to smaller number of session-level features. For instance,
+we see that \criticalclusters of bad video quality only account for 2-3\% of all 
+\problemclusters. Note that VoIP quality problems are relatively more spatially spread 
+out than video quality problems, because VoIP quality depends on both sides of a call, 
+while the video quality more often is determined by the client-side performance.
 
 
 \item {\em Many quality problems tend to 
@@ -120,7 +114,7 @@ We observe that a substantial fraction of problems
 last for multiple hours (even days).
 For instance, 60\% of the problem clusters have a median
 duration that last more than 2 hours.
-Note, however, that both video and VoIP quality problems 
+At the same time, we note that both video and VoIP quality problems 
 have highly skewed distributions in the prevalence 
 and persistence, where some problems are still transit.
 
@@ -144,10 +138,10 @@ and persistence, where some problems are still transit.
 %These quality problems and features are more stable than 
 %fluctuation of quality.
 
-\item {\em Quality problems of different metrics are correlated.} Finally, we observed that
-quality problems of different metrics are likely to be correlated,
-suggesting that, instead of trading one metric for another,
-it is possible to improve multiple metrics simultaneously.
+\item {\em Quality problems of different metrics are correlated.} 
+Finally, we observed that the quality problems of different metrics are likely 
+to be correlated, suggesting that, instead of having to trading one metric for 
+another, it is possible to improve multiple metrics simultaneously.
 
 \end{itemize}
 

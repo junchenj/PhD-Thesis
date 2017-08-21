@@ -29,100 +29,157 @@ and embrace the data-driven networking paradigm (Section~\ref{sec:concl:future})
 %\end{itemize}
 %}
 
-Over the past decades, intense efforts have been made towards
-ensuring high quality of Internet applications by following two 
-traditional approach: the {\em in-network} approach and 
-the {\em endpoint} approach.
-Ideally, to optimize QoE by adapting to the dynamic network conditions,
-we need to accurately measure both {\em real-time network 
-conditions} and {\em user-perceived QoE}, but both approaches fail
-on at least one front, and are thus ill-suited to meet the 
-requirements of today's applications. 
-On one hand, the in-network approach does not have accurate 
-information on user-perceived QoE and requires costly 
-re-architecting ISPs' infrastructure.
-On the other hand, the endpoint approach has to infer network
-conditions from limited and often noisy information available locally
-to individual end users.
-As a result, we have seen that a substantial fraction of video 
-viewers and VoIP users suffer from suboptimal quality.
+\mypara{Historical perspective}
+The past decades have seen intense research efforts towards ensuring high quality of 
+Internet applications by following two traditional approach: the {\em in-network} approach 
+and the {\em endpoint} approach.
+To optimize QoE under dynamic network conditions, ideally we need to accurate information 
+regarding both {\em user-perceived QoE} and {\em network conditions}, but both 
+in-network and encpoint approaches have fundamental limitations on at least one front, 
+and are ill-suited to meet QoE requirements of today's applications. 
+On one hand, the in-network approach has limited visibility to user-perceived QoE, and 
+requires costly re-architecting ISPs' infrastructure.
+On the other hand, the endpoint approach has to infer network conditions from limited, 
+and often noisy, local information of individual end users.
+As a result, we have seen that a substantial fraction of video viewers and VoIP users 
+suffer from suboptimal quality.
 
-The main contribution of this dissertation is to demonstrate the
-feasibility of {\em improving QoE by accurately predicting network conditions
-based on a real-time global view of QoE measured on millions of 
-end users, thus achieving 
-the best of both worlds of classic in-network and endpoint approaches.}
-We call this new paradigm Data-Driven Networking (\ddn).
-To make \ddn practical, this dissertation designs 
-and implements algorithms and end-to-end systems of \ddn to
-achieve non-trivial QoE improvement for video streaming and 
-Internet telephony in real-world deployment.
+%The main contribution of this dissertation is a suite of solutions to demonstrate the  
+%feasibility of an alternative \ddn approach -- {\em improving QoE by accurately predicting 
+%network conditions based on a real-time global view of QoE measured on millions of 
+%end users, thus achieving the best of both worlds of classic in-network and endpoint 
+%approaches.}
+%%We call this new paradigm Data-Driven Networking (\ddn).
+%This dissertation designs and implements algorithms and end-to-end systems of \ddn to
+%achieve non-trivial QoE improvement for video streaming and Internet telephony in 
+%real-world deployment.
+
+\mypara{Our thesis}
+The key contribution of this dissertation is to improve application QoE by bridging the
+long-standing gap between the visibility to user-perceived QoE and the visibility to
+network conditions.
+%by demonstrating the 
+%feasibility of a new approach, called data-driven networking, 
+%inspired by the recent success of data-driven 
+%techniques in other fields of computing.
+Our thesis is  that {\em one can substantially improve QoE by maintaining
+a global view of up-to-date network conditions based on the QoE information
+collected from many endpoints}.
+In essence, this thesis revisits the architectural question ``where to
+implement the functionality of QoE optimization''.
+Unlike prior work which optimizes QoE by in-network devices or
+individual endpoints, our approach optimizes QoE by a logically centralized
+controller that retains the visibility to QoE while attaining a global view
+of real-time network conditions by consolidating information from many endpoints.
+
+\mypara{Challenges} 
+This dissertation provides a suite of solutions to make this new paradigm, called data-driven
+networking (DDN), practical. In particular, these solutions address two fundamental challenges 
+of \ddn:
+(1) the need for {\em expressive models} to capture complex relations among 
+sessions who share similar QoE-determining factors, and
+(2) the need for {\em scalable control platforms} to make real-time decisions with 
+fresh data from geo-distributed clients.
 
 %In particular, we have developed complete solutions to address
 %the two challenges that are key to unleashing the full potential of \ddn.
+\mypara{Solutions inspired by the insight of persistent critical structures} 
 The key insight underlying this dissertation is that there are some 
-domain-specific {\em persistent structures} in the complex relation 
+domain-specific {\em persistent critical structures} in the complex relation 
 among session-level features, decisions, and QoE. 
-This insight has inspired our solutions to address the two 
-challenges that are key to unleashing the full potential of \ddn.
-
-\mypara{Expressive models}
-The main algorithmic challenge of \ddn is that we need a model 
-expressive enough to capture the high-dimensional relations 
-between session-level features, decisions, and QoE. 
-The insight of persistent structures have helped address
-this challenge on two fronts.
+%At a high level, these structures allow us to build expressive models that can 
+%identify network sessions with similar QoE-determining factors, and their 
+%temporal persistence allows us to build scalable platforms by decoupling 
+%offline structure-learning processes and real-time decision making processes.
 \begin{itemize}
-\item First, these structures can be used to reduce the complexity of 
-the problem by identifying the most 
-important features and the most promising decisions.
-\item Second, learning these structures might be hard, 
-since it often needs more data than making a real-time decision 
-based on known structures. But the fact that these structures tend
-to  persistent on longer timescales than QoE itself
-suggests that we can use a longer time window
-and learn the structures from more history data.
-\end{itemize}
-For instance, in CFA (Chapter~\ref{ch:cfa}) and DDA
-(Chapter~\ref{ch:dda}), we learn a small 
-subset of features which a session's QoE depends on,
-and in VIA (Chapter~\ref{ch:via}), Guided Exploration reduces
-the large decision spaces in Internet telephony by focusing
-on only a subset of the most promising relay paths.
 
+\item {\em Solutions to expressive models:}
+At a high level, the persistent critical structures allow us to build expressive models 
+that can identify a subset of network sessions with similar QoE-determining factors
+and a subset of decisions that are most promising. For instance,
+CFA (Chapter~\ref{ch:cfa}) and DDA (Chapter~\ref{ch:dda}) use a small 
+subset of critical features on which a session's QoE really depends to discover the
+video sessions who have similar quality. \hybrid (Chapter~\ref{ch:via}) uses 
+Guided Exploration to reduces the large decision spaces to a small subset of the 
+most promising relay paths. 
+Moreover, the fact that these structures tend to  persistent on longer timescales than 
+QoE itself suggests that we can use a longer time window and learn these structures 
+from more history data.
 
-
-\mypara{Scalable platforms}
-The system challenge of \ddn is how to make real-time decisions
-for millions of geo-distributed clients based on a fresh, global
-view of client-side QoE.
-The insight of persistent structures have helped address
-this challenge on two fronts.
-\begin{itemize}
-\item First,  these structures often correlate with network locality,
-so they enable an effective spatial decomposition of the global 
-data-driven process
-into smaller-scale subprocesses which are naturally amenable for 
-a scale-out implementation in today's cloud infrastructure.
-\item Second, because these structures are persistent, their 
-learning process, which requires a global view, can be decoupled
-from real-time decision-making process and run on a separate
-timescale.
-\end{itemize}
-For instance, in Pytheas (Chapter~\ref{ch:pytheas}), Group-based 
-Exploration-Exploitation (E2) decomposes the global E2 process
-into independent E2 processes each controlling a group of 
-clients sharing network locality (and other key features)
-and running in a geo-distributed frontend
-cluster with fresh data of these clients.
-As a result, we have shown that Pytheas can scale horizontally 
-and can make decision for a population of a site like YouTube (5
-billion users per day) with measurement data of 
+\item {\em Solutions to scalable control platforms:}
+Because the persistent critical structures often correlate with network locality, they 
+enable an effective spatial decomposition of the global data-driven process into 
+smaller-scale subprocesses which are naturally amenable for a scale-out 
+implementation in today's cloud infrastructure.
+Pytheas (Chapter~\ref{ch:pytheas}) uses Group-based E2 to decompose the 
+global E2 process of all sessions into independent E2 subprocesses, each of which
+controls a group of sessions sharing network locality as well as critical features
+and runs in a geo-distributed frontend cluster with fresh data of these sessions.
+Pytheas can scale horizontally  and can make decision for a population of a site 
+like YouTube (5billion users per day) with measurement data of 
 concurrent sessions in less than a second of delay.
+
+\end{itemize}
+
+
+
+%\mypara{Expressive models}
+%%The main algorithmic challenge of \ddn is that we need a model 
+%%expressive enough to capture the high-dimensional relations 
+%%between session-level features, decisions, and QoE. 
+%The insight of persistent structures have helped address
+%this challenge on two fronts.
+%\begin{itemize}
+%\item First, these structures can be used to reduce the complexity of 
+%the problem by identifying the most 
+%important features and the most promising decisions.
+%\item Second, learning these structures might be hard, 
+%since it often needs more data than making a real-time decision 
+%based on known structures. But the fact that these structures tend
+%to  persistent on longer timescales than QoE itself
+%suggests that we can use a longer time window
+%and learn the structures from more history data.
+%\end{itemize}
+%For instance, in CFA (Chapter~\ref{ch:cfa}) and DDA
+%(Chapter~\ref{ch:dda}), we learn a small 
+%subset of features which a session's QoE depends on,
+%and in VIA (Chapter~\ref{ch:via}), Guided Exploration reduces
+%the large decision spaces in Internet telephony by focusing
+%on only a subset of the most promising relay paths.
+%
+%
+%
+%\mypara{Scalable platforms}
+%The system challenge of \ddn is how to make real-time decisions
+%for millions of geo-distributed clients based on a fresh, global
+%view of client-side QoE.
+%The insight of persistent structures have helped address
+%this challenge on two fronts.
+%\begin{itemize}
+%\item First,  these structures often correlate with network locality,
+%so they enable an effective spatial decomposition of the global 
+%data-driven process
+%into smaller-scale subprocesses which are naturally amenable for 
+%a scale-out implementation in today's cloud infrastructure.
+%\item Second, because these structures are persistent, their 
+%learning process, which requires a global view, can be decoupled
+%from real-time decision-making process and run on a separate
+%timescale.
+%\end{itemize}
+%For instance, in Pytheas (Chapter~\ref{ch:pytheas}), Group-based 
+%Exploration-Exploitation (E2) decomposes the global E2 process
+%into independent E2 processes each controlling a group of 
+%clients sharing network locality (and other key features)
+%and running in a geo-distributed frontend
+%cluster with fresh data of these clients.
+%As a result, we have shown that Pytheas can scale horizontally 
+%and can make decision for a population of a site like YouTube (5
+%billion users per day) with measurement data of 
+%concurrent sessions in less than a second of delay.
 
 
 \mypara{QoE improvement} 
-Using a combination of real-world deployment, offline emulation
+Using a combination of real-world deployment and offline emulation
 driven by large-scale measurement of real traffic, we have shown
 that the solutions proposed in this dissertation can lead to substantial 
 QoE improvement in video streaming and VoIP. 
@@ -151,11 +208,15 @@ a budget for relaying traffic through the managed overlay.
 %In this section, we discuss some lessons learned from
 %the collaboration with industry and the deployment of \ddn.
 
+We summarize four lessons drew from the interaction with industry 
+(Conviva and Microsoft Skype) in our attempts to deploy the proposed solutions in 
+the real world.
+
 \mypara{Offline evaluation}
 One of the practical challenges we encountered in working with
 Conviva and Microsoft Skype has been how to demonstrate the 
-\ddn's benefit with sufficient confidence in an offline fashion, 
-i.e., no modification to the production system.
+\ddn's benefit with sufficient confidence in an  offline fashion, 
+i.e., {\em before} implementing our solutions in the production system.
 A natural solution is to use simulation driven by measurement
 trace collected from real traffic, but this could be greatly 
 biased by how
@@ -173,20 +234,18 @@ allows us to estimate the outcome of alternative decisions.
 Another consideration equally critical to these application 
 providers is the ability to gradually roll-out the proposed 
 solutions in real production settings to gain sufficient confidence
-before deploying them to more traffic. This could 
-take various forms--
-besides A/B testing, we also found sometimes even a 
-partial deployment of the proposed solution could be useful as well.
-For instance, while it is practically difficult to deploy 
-VIA on today's Skype relaying system which does not 
-directly support changing relays on a per-call basis
-as needed by VIA, we have found it beneficial to 
-even deploy the offline relay pruning part, because it only needs to
-be updated on a coarse timescale, and still offers rough prediction
-on which relays are more promising. 
-From our experience, we believe that it is sometimes 
-necessary to trade some performance benefit for an implementation
-compatible to the existing systems for practical reasons.
+before deploying them on a large scale. Besides the natural solution of 
+A/B testing, surprisingly, we found  that even deploying part of the 
+proposed solution could reveal useful information, and potentially
+lead to more confidence for deploying the end-to-end solution.
+For instance, it is difficult to deploy \hybrid's online relay selection in 
+today's Skype relaying system which does not support changing relays 
+on a per-call basis as needed by \hybrid, but it is practical to 
+deploy \hybrid's offline relay pruning part which updates the prediction 
+on relay performance on a coarse  timescale. While the resulting performance
+is suboptimal compared to that of the full system of \hybrid, 
+it is sometimes necessary to trade some performance benefit for an 
+implementation compatible to the existing systems for practical reasons.
 
 
 
@@ -203,11 +262,10 @@ still stream videos and quickly fall back to use the built-in local
 adaptation logic react to
 network conditions, 
 albeit with suboptimal quality. In essence, our insight of 
-persistent structures can be also viewed as an instantiation of
+persistent critical structures can be also viewed as an instantiation of
 application-level resilience.
 Though it is always more desirable to have a general-purpose 
-solution, we believe it might be
-possible to leverage application-specific resilience and
+solution, we believe it is possible to leverage application-specific resilience and
 engineer simpler schemes to meet the requirements of 
 specific applications.
 
@@ -226,24 +284,25 @@ specific applications.
 \mypara{Need for interpretability}
 Our conversations with domain experts revealed that they 
 were apprehensive about using complex machine learning 
-models (e.g., SVM or PCA) that use non-intuitive ``projections'' 
-of features. The reason is that the decisions made by these 
-algorithms are not mappable 
-to real-world effects (e.g., which CDN) that are 
-critical for diagnostics and incident response.
-Therefore, we also strove to integrate our solutions with
+models (e.g., SVM, PCA or neural network-based techniques) that 
+use non-intuitive ``projections''  of features, because the decisions made by 
+these algorithms are not mappable to real-world effects (e.g., which CDN), 
+which is critical to diagnostics and incident response.
+Therefore, we strove to integrate our solutions with
 interpretability~\cite{vellido2012making}, 
 allowing domain experts to combine
 their knowledge and diagnose prediction
 errors or resolve incidents.
 For instance, a practical benefit of CFA is that when we observe
 high prediction errors, we can check the critical features
-based on which predictions were made and try to correlate them 
+based on which predictions were made, and try to correlate them 
 with known network incidents.
 
 
-\section{Limitations}
+\section{Limitations of Proposed Solutions}
 \label{sec:concl:limitations}
+
+This section examines the limitations in our work.
 
 \mypara{Root cause diagnosis}
 While our algorithms provide the explanatory power of how a 
@@ -270,32 +329,29 @@ While driving decision making by QoE observed by
 millions of application sessions enjoys many advantages, 
 the view on network conditions provided by these sessions
 is fundamentally skewed in two aspects.
-(1) On one hand, since many applications 
-such as video streaming rely
+(1) Since many applications  such as video streaming rely
 heavily on CDNs to push content closer to clients, 
 network paths of today's application sessions are skewed 
 towards the paths from edge servers/caches to clients.
-(2) On the other hand, application quality is generally 
-imbalanced with most sessions having good quality, but it is 
-the identification of bad quality that leads to more 
-QoE improvement by avoiding bad decisions.
-For instance, in Section~\ref{sec:measurement:video}, 
-\problemclusters 
-usually do not have over 50\% bad-quality sessions, 
-but the fraction is still significantly higher than the 
-global average.
+(2) Application quality is generally imbalanced with most 
+sessions having good quality, but it is the identification of bad quality 
+that leads to more QoE improvement; 
+e.g., \problemclusters usually do not have over 50\% bad-quality 
+sessions, but the fraction is still significantly higher than the 
+global average (Section~\ref{sec:measurement:video}).
 
 
 \mypara{Handling flash crowds}
 Flash crowds happen when many sessions join at the same 
 time and cause part of the resources (decisions) to be overloaded.
 While Pytheas can handle load-induced QoE fluctuations that occur 
-in individual groups, overloads caused by flash crowds are different, in 
-that they could affect sessions in multiple groups. Therefore, those 
-affected sessions need to be regrouped immediately, but Pytheas 
-does not support such real-time group learning. 
-To handle flash crowds, Pytheas needs a mechanism to detect flash 
-crowds and create groups for the affected sessions in real time.
+in individual groups, overloads caused by flash crowds are different in 
+that they could affect sessions in multiple groups. A natural solution is 
+to regroup those affected sessions immediately after a flashcrowd occurs, 
+but Pytheas does not support such real-time update on groups. 
+To handle flash crowds, Pytheas would need a separate mechanism to 
+detect flash crowds and create groups for the affected sessions in 
+real time.
 
 %\mypara{Use of active measurement}
 %While our system relies entirely on passive QoE measurements as input of data-driven optimization, we see a new opportunity to augment the system with active measurements by orchestrating vantage points and controlled clients (e.g., Skype~\cite{via}) to establish fake traffic.
@@ -304,24 +360,26 @@ crowds and create groups for the affected sessions in real time.
 
 
 \mypara{Agnostic to cost of switching decisions}
-For now, our solutions assumes there is little cost to switch the decision
-during the course of an application session or to
-switch a large portion of clients from one decision to another. 
-While such assumption applies to today's DASH-based video 
-streaming protocols~\cite{dash-standard}, other applications (e.g., VoIP) 
+Our solutions do not consider the cost of switching decisions during the course 
+of an application session. 
+While they are reasonable to today's DASH-based video streaming 
+protocols~\cite{dash-standard}, in which switching bitrate and CDN merely needs
+a change of in the HTTP request, other applications (e.g., VoIP) 
 may have significant cost when switching decisions in the middle of a 
-session, so the control logic should not too sensitive to QoE fluctuations.
-Moreover, a content provider pays CDNs by 95th percentile traffic, 
-so we must carefully take the traffic distribution into account as well.
-We intend to explore decision-making logic that is 
-aware of these costs of switching decisions in the future.
+session, so to avoid excessive switching of decisions, the control logic must not 
+too sensitive to QoE fluctuations.
+Moreover, our solutions are agnostic to the cost of switching a large portion of clients 
+from one decision to another, and this may cause practical issues as well.
+For instance, content providers usually pay CDNs by the 95th percentile traffic, 
+so we must carefully take the traffic distribution into account.
+%We intend to explore decision-making logic that is 
+%aware of these costs of switching decisions in the future.
 
 
 \mypara{Limited decision space}
-A final limitation of \ddn approach is that its potential room of
+A final limitation of the \ddn approach is that its potential room of
 improvement is fundamentally limited by the granularity of the 
-``control knobs'' exposed
-by  the underlying delivery system. 
+``control knobs'' exposed by  the underlying delivery system. 
 For instance, in video streaming, our solutions currently select resources
 at the CDN granularity. This means we cannot
 do much if the CDN redirects the client based on its location
@@ -343,171 +401,238 @@ servers and improve quality.
 \section{Future Work}
 \label{sec:concl:future}
 
-Inspired by this dissertation, we believe there 
-will be tremendous opportunities for 
-data-driven techniques in networked and distributed systems 
-driven by both ``use pulls'' (high QoE/performance requirements and 
-the increasing complexity of networked systems) and ``technology 
-pushes'' (availability of big data in networking and new data 
-analytics capability).
-This section identifies several future research directions
-to explore this confluence of data-driven paradigms and 
-networked and distributed systems.
+The application of data-driven paradigm in networked and distributed systems is vast, 
+and still in its infancy. We believe this dissertation is merely a beginning and in the 
+near future, there will be tremendous opportunities for data-driven techniques, driven by 
+both ``use pulls'' (high QoE/performance requirements and the increasing complexity of 
+networked systems) and ``technology pushes'' (availability of big data in networking and 
+new data analytics capability).
+%Inspired by this dissertation, we believe there 
+%will be tremendous opportunities for 
+%data-driven techniques in networked and distributed systems 
+%driven by both ``use pulls'' (high QoE/performance requirements and 
+%the increasing complexity of networked systems) and ``technology 
+%pushes'' (availability of big data in networking and new data 
+%analytics capability).
 
-\subsection{Rethinking Classic Problems in Networking}
+This section identifies two broad research directions to explore this confluence of 
+data-driven paradigms and networked and distributed systems.
+\begin{itemize}
+\item The data-driven paradigm inspires rethinking many classic problems in networking 
+as well as enabling new services (Section~\ref{subsec:concl:future:rethinking}). 
+\item As diverse applications realize the benefit of the data-driven paradigm, there will be an 
+increasing need for a common, principled architecture to address common challenges and
+extract reusable design principles.
+ (Section~\ref{subsec:concl:future:principled}). 
+\end{itemize}
 
-The data-driven paradigm inspires rethinking many classic 
-problems in networking as well as enabling new services. 
+%we envision a common software stack and network architecture support to  allow
+%us to extract a general set of reusable design principles and 
+%solutions to avoid the problem of each
+%effort reinventing the wheel or worse ignoring some potential pitfalls.
+
+\subsection{Rethinking Classic and New Challenges in Networking}
+\label{subsec:concl:future:rethinking}
+
+%The data-driven paradigm inspires rethinking many classic 
+%problems in networking as well as enabling new services. 
 
 \mypara{End-to-end adaptation}
-As the Internet grows more complex, it has become increasingly difficult for transport protocols (e.g., TCP) and applications (e.g., Facebook Live) to adapt in real time to changes in network conditions and resource availability.
-I believe data-driven techniques offer a promising new approach. Consider TCP;
-I envision a new service that aggregates real-time performance of similar TCP connections and {\em predicts} the largest window size for which a TCP connection will not experience congestion losses.
-This service can potentially lead to better TCP performance than many state-of-the-art techniques, as it needs little active probing and can train the logic in near real time, rather than offline. 
-An early promise of this approach was shown in my prior work of CS2P~\cite{cs2p} which can accurately predict HTTP throughput using information of similar HTTP sessions, and CS2P could potentially be extended to inferring optimal window sizes from the HTTP throughput prediction.
+As the Internet grows more complex and diverse, it is untenable for traditional end-to-end 
+protocols, such as TCP congestion control, to react in real time to changes in network 
+conditions and resource availability based on local information. We believe data-driven 
+techniques offer a promising alternative. Consider TCP; we can envision a new service 
+that aggregates real-time performance of similar TCP connections and {\em predicts} 
+the largest window size for which a TCP connection will not experience congestion losses.
+This service can potentially lead to better TCP performance than many state-of-the-art 
+techniques, as it needs little active probing and can train the logic in near real time, 
+rather than offline. An early promise of this approach was shown in our prior work of 
+CS2P~\cite{cs2p} which can accurately predict HTTP throughput using information of 
+similar HTTP sessions, and CS2P could potentially be extended to inferring optimal window 
+sizes from the HTTP throughput prediction.
 
 \mypara{Internet traffic map}
-Many Internet services can benefit from a traffic map service that can predict performance (e.g., available bandwidth) of any network path, but prior efforts towards such a service suffer from limited coverage, high probing overhead, or significant data staleness. 
+Many Internet services can benefit from a traffic map service that can predict performance 
+(e.g., available bandwidth) of any network path, but prior efforts towards such a service suffer 
+from limited coverage, high probing overhead, or significant data staleness. 
 %what's new
-Fortunately, passive measurements of applications like video streaming offer a new enabler for such a service, as they provide real-time measurements of network state from millions of vantage points without incurring any probing overhead!
-My prior work~\cite{via,sun2014using} shows it is possible to predict coarse-grained performance metrics (e.g., RTT between ISPs) by mapping video quality to simple network models.
-Extending these maps to predicting fine-grained (e.g., link-level) metrics provide an interesting next step.
+Fortunately, passive measurements of applications like video streaming offer a new enabler 
+for such a service, as they provide real-time measurements of network state from millions of 
+vantage points without incurring any probing overhead!
+My prior work~\cite{via,sun2014using} shows it is feasible to predict coarse-grained 
+performance metrics (e.g., RTT between ISPs) by mapping video quality to simple network 
+models. Extending these maps to predicting fine-grained (e.g., link-level) metrics provide 
+an interesting next step.
 
-\mypara{Systematic trace-driven evaluation}
-The first question for any application provider (e.g., Netflix) is
-that before implementing DDN, ``can I quantify how much DDN would actually improve
-my application's quality (e.g., video quality)?''
-This is also known in ML literature as {\em off-policy evaluation}.
-It is, however, not straightforward to perform off-policy evaluation
-based on passively collected network traces, because data could be collected
-through a biased process or have high variance.
-A promising alternative is the recently proposed
-{\em doubly robust} (DR) estimator~\cite{doublerobust}.
-While the DR is a promising starting point,
-there are network-specific factors it does not consider. For instance, the DR
-estimator will not identify quality degradation due to server overload, if such overload
-never happens in the dataset.
+\mypara{Eliminating biases in trace-driven evaluation}
+Before implementing any \ddn-based algorithm, the first question asked by any content 
+provider is always ``can I quantify how much DDN would actually improve
+my application's quality?''
+A natural solution is to use the trace already available to content providers to extrapolate
+the counterfactual outcome of a different algorithm, but this is challenging, since the
+data could be biased by the trace collection process or could have high variance due to 
+data sparseness.
+This is known in ML literature as {\em off-policy evaluation} problem, and a promising 
+solution is the recently proposed {\em doubly robust} (DR) estimator~\cite{doublerobust}.
+While the DR is a promising starting point, there are network-specific factors that it does 
+not consider. For instance, the DR estimator will not identify quality degradation due to 
+server overload, if such overload never happens in the dataset.
 
-\subsection{Towards a Common Architecture for Data-Driven Networking}
+\mypara{Data-Driven Configurations in Internet of Things}
+%% pervasive analytics across low-capacity devices is one key feature of IoT
+The past few years have witnessed a dramatic increase in Internet of Things (IoT) devices 
+and their applications. One distinctive feature of these IoT applications is that they 
+emphasize more on data analytics that has diverse requirements (e.g., delay sensitive vs. 
+accuracy sensitive),  and operates on devices of heterogeneous capacity and power duration 
+(e.g., general-purpose machines vs. specialized hardware). 
+%For instance, unlike traditional video
+%streaming, most IoT-generated videos are not streamed for viewers 
+%to watch, but used  to extract useful 
+%information from the video feed. 
+%Moreover, these analytics tasks have extremely heterogeneous and dynamic 
+%characteristics.
+%They have diverse requirements (e.g., delay sensitive vs. accuracy sensitive),  
+%capacity of the devices (e.g., general-purpose machines vs. 
+%specialized hardware), and power duration.
+Moreover, as IoT devices need to constantly interact with users, their workloads are more 
+dynamic, if not more unpredictable, than traditional Internet hosts.
+Fortunately, the underlying techniques used in IoT data analytics offer many ``knobs'' that 
+could potentially cope with such a heterogeneity; e.g., tuning hype-parameters of deep 
+neural networks,  flexible consistency guarantees in database, and various types of
+cloud resources.
+%Fortunately, we observe that recent advances in ML and system research 
+%have offered to 
+%many ``knobs'' to cope with such a heterogeneity, including 
+%tuning hype-parameters of deep neural networks, 
+%flexible consistency guarantees in database, and various types of
+%cloud offerings).
+%% we observe an opportunity here by dynamically optimizing the system
+The challenge, however, is how to dynamically identify the configurations
+that are suitable to each IoT analytics task at any point of time.
+%% rule-based approach is not working
+%We argue that it would be suboptimal and unsustainable to rely on handcrafted
+%static rules to meet the requirement of any application and 
+%operating environments.
+%A parallel can be drawn from many similar problems, such as parameter
+%selection in congestion control and cloud configuration selection, where
+%static rule-based logic has failed to handle dynamic workload and
+%requirements of the underlying task.
+%%% data-driven is the solution
+%Instead, 
+A case in point is the selection of configurations in surveillance video 
+analytics~\cite{zhang2017live}, where it is challenging to strike a dynamic 
+balance between timeliness and fidelity for queries with diverse requirements.
+Drawing on a parallel to similar problems (e.g., parameter selection in congestion 
+control~\cite{remy} and cloud configuration selection~\cite{cherrypick}, 
+we argue we should leverage data-driven techniques to learn the best configurations 
+for these knobs based on real-time workload and monitoring data.
+Despite these conceptual similarity, IoT data analytics poses system challenges that have 
+not been fully understood; e.g., how to scale the process to millions of
+devices who has limited bandwidth and capacity.
 
-As a diverse set of applications can benefit from \ddn, we envision a common software stack and network architecture support to  allow
-us to extract a general set of reusable design principles and 
-solutions to avoid the problem of each
-effort reinventing the wheel or worse ignoring some potential pitfalls.
+
+
+
+
+\subsection{Towards a Principled Architecture for Data-Driven Networking}
+\label{subsec:concl:future:principled}
+
+%As a diverse set of applications can benefit from \ddn, we envision a common software stack and network architecture support to  allow
+%us to extract a general set of reusable design principles and 
+%solutions to avoid the problem of each
+%effort reinventing the wheel or worse ignoring some potential pitfalls.
 
 \mypara{Custom Data Analytics Stack for Networking}
-While data-driven techniques can be applied to many problems, there are several {\em common} challenges across these applications.
+While data-driven techniques can be applied to many problems, there are {\em common} 
+challenges across these applications.
 %\begin{packeditemize}
 %\item {\em Network-specific knowledge:} 
-First, while it is tempting to use general-purpose techniques to analyze networking data, one must take into account {\em network-specific knowledge} to avoid undesirable outcomes; 
-e.g., to optimize overall performance, ESPN may use small ISPs to use suboptimal CDNs and let Comcast users use optimal CDNs, causing a reverse network neutrality violation in which content providers discriminate against ISPs!
+First, while it is tempting to use general-purpose techniques to analyze networking data, 
+one must take into account {\em network-specific knowledge} to avoid undesirable outcomes; 
+e.g., to optimize overall performance, ESPN may use small ISPs to use suboptimal CDNs 
+and let Comcast users use optimal CDNs, causing a reverse network neutrality violation 
+in which content providers discriminate against ISPs!
 %\item {\em Application-specific resilience:}
-Second, one also needs to leverage {\em application-specific resilience}; e.g., to probe both optimal and suboptimal servers without affecting quality, a video player can use the optimal server to fetch most content, but use suboptimal servers when the buffer is full. 
+Second, one also needs to leverage {\em application-specific resilience}; e.g., to probe 
+both optimal and suboptimal servers without affecting quality, a video player can use the 
+optimal server to fetch most content, but use suboptimal servers when the buffer is full. 
 %\end{packeditemize}
-While data-driven approaches will have more benefits if these network-/application-specific opportunities can be utilized in a systematic way, unfortunately, there are few formal approaches to integrating them with existing ``black-box'' algorithms.
-To best utilize various network-/application-specific opportunities, I envision a {\em custom data analytics stack for networking} built on top of existing analytics stacks (e.g., Spark), which offers abstractions to express network/application concepts (e.g., sessions) and requirements (e.g., data staleness).
-It is helpful to draw a parallel to the efforts of building an analytics stack for graph processing~\cite{graphx}, where researchers realized the limitations of Spark in supporting graph processing operations, and customized Spark and built a software layer over it to support APIs specific for graph processing.
+%We will realize more benefits if these network-/application-specific opportunities can be utilized in a systematic way, unfortunately, there are few formal approaches to integrating them with existing ``black-box'' algorithms.
+Therefore, we envision a {\em custom data analytics stack for networking} built on top of 
+state-of-the-art analytics stacks (e.g., Spark), which leverages network-/application-specific 
+opportunities, and offers abstractions to express network/application concepts (e.g., sessions) 
+and requirements (e.g., data staleness).
+It is helpful to draw a parallel to the parallel efforts of building an analytics stack for graph 
+processing~\cite{graphx}, where researchers realized the limitations of Spark in supporting 
+graph processing operations, and customized Spark and built a software layer over it to 
+support APIs specific for graph processing.
 
 \mypara{Architecture of Cross-Provider Data Sharing}
-So far my work has been primarily within the scope of a single service provider, looking forward I argue that there is greater room for improving application QoE by bringing {\em more} service providers into the loop. These providers can be ISPs, CDNs, and cloud services, whose revenue is also driven, albeit indirectly, by high QoE.
-Unfortunately, in today's federated Internet structure, many problems arise because each service provider has little visibility into either the QoE of its sessions or the decisions made by others.
+So far our work has been primarily within the scope of a single service provider. Looking 
+forward, we argue that there is greater room for improving application QoE by bringing 
+{\em more} service providers into the loop. These providers can be ISPs, CDNs, and 
+cloud services, whose revenue is also driven, albeit indirectly, by high QoE. Unfortunately, 
+a fundamental limitation of today's federated Internet structure is that many problems arise 
+because each service provider has little visibility into either the QoE of its sessions or 
+the decisions made by others.
 %This causes many obstacles to QoE optimization, 
 %e.g., Amazon AWS cannot diagnose whether a spike in service latency of Comcast users is caused by itself or by Comcast, as well as how much the latency spike affects user experience.
-For instance, ESPN clients use HTTP-based bitrate-adaptation video players, which can select both CDN (e.g., Akamai and Limelight) and bitrate, and in many cases these players perform poorly because ESPN cannot know whether the bottleneck link is at edge ISPs (e.g., Comcast) or CDN servers (e.g., Akamai).
-Now, if Comcast shares with ESPN additional information that attributes bottlenecks to Comcast rather than Akamai, the players can react to ISP congestion by lowering the bitrate, rather than blindly switching between Akamai and Limelight. 
-Building on this intuition and my early work~\cite{eona}, I argue that the fundamental problem lies in the limited interfaces between service providers, and that a principled approach to re-architecting these interfaces with explicit QoE optimization in mind is needed.
-I envision an {\em Experience-Oriented Network Architecture} ({\em EONA}), where service providers share QoE information and key configuration changes in order to optimize user-perceived QoE in a coordinated way, while still keeping the federated structure.
-EONA can be realized without changing the data/control plane protocols; instead, it adds new interfaces between the ``controllers'' of service providers (e.g., an SDN controller, a cloud orchestrator, or a global video control plane~\cite{sigcomm12}).
+For instance, ESPN clients use HTTP-based bitrate-adaptation video players, which can 
+select both CDN (e.g., Akamai and Limelight) and bitrate, and in many cases these players 
+perform poorly because ESPN cannot know whether the bottleneck link is at edge ISPs 
+(e.g., Comcast) or CDN servers (e.g., Akamai).
+Now, if Comcast shares with ESPN additional information that attributes bottlenecks to 
+Comcast rather than Akamai, the players can react to ISP congestion by lowering the 
+bitrate, rather than blindly switching between Akamai and Limelight. 
+Building on this intuition and our early work~\cite{eona}, we argue that the fundamental 
+problem lies in the limited interfaces between service providers, and that a principled 
+approach to re-architecting these interfaces with explicit QoE optimization in mind is needed.
+We envision an {\em Experience-Oriented Network Architecture} ({\em EONA}), where 
+service providers share QoE information and key configuration changes in order to optimize 
+user-perceived QoE in a coordinated way, while still keeping the federated structure.
+EONA can be realized without changing the data/control plane protocols; instead, it adds 
+new interfaces between the ``controllers'' of service providers (e.g., an SDN controller, 
+a cloud orchestrator, or a global video control plane~\cite{sigcomm12}).
 Despite EONA's potential, there are many open-ended questions: 
 How to incentivize EONA to attract service providers?
 What is the minimal set of information that has to be shared? 
 How to preserve privacy when sharing data between providers?
 
-\subsection{Other Directions}
-
-\mypara{Data-Driven Configurations in Internet of Things}
-%% pervasive analytics across low-capacity devices is one key feature of IoT
-The past few years have witnessed a dramatic increase in 
-Internet of Things (IoT) devices and the proliferation of their applications. One 
-distinctive feature of
-these IoT applications is that they emphasize more on data analytics than 
-traditional network applications. For instance, unlike traditional video
-streaming, most IoT-generated videos are not streamed for viewers 
-to watch, but used  to extract useful 
-information from the video feed. 
-Moreover, these analytics tasks have extremely heterogeneous and dynamic 
-characteristics.
-They have diverse requirements (e.g., delay sensitive vs. accuracy sensitive),  
-capacity of the devices (e.g., general-purpose machines vs. 
-specialized hardware), and power duration.
-Moreover, as these devices need to constantly interact with users, 
-their workloads are more dynamic, if not more unpredictable, than traditional
-Internet-connected devices.
-Fortunately, we observe that recent advances in ML and system research 
-have offered to 
-many ``knobs'' to cope with such a heterogeneity, including 
-tuning hype-parameters of deep neural networks, 
-flexible consistency guarantees in database, and various types of
-cloud offerings).
-%% we observe an opportunity here by dynamically optimizing the system
-The challenge however is how to dynamically identify the configurations
-that are suitable to each analytics task at any point of time.
-%% rule-based approach is not working
-We argue that it would be suboptimal and unsustainable to rely on handcrafted
-static rules to meet the requirement of any application and 
-operating environments.
-A parallel can be drawn from many similar problems, such as parameter
-selection in congestion control and cloud configuration selection, where
-static rule-based logic has failed to handle dynamic workload and
-requirements of the underlying task.
-%% data-driven is the solution
-Instead, we argue a more systematic solution is to leverage data-driven
-techniques to learn the best configurations of these knobs based on
-real-time workload and monitoring data.
-A case in point is the selection of configurations in video 
-analytics~\cite{zhang2017live}, which seeks to strike a dynamic 
-balance between
-timeliness and fidelity.
-While conceptually similar to hyper-parameter training in 
-ML, data-driven adaptation in IoT poses system challenges that have 
-not been studied so far; including how to scale the process to millions of
-devices who has limited bandwidth and capacity.
-
-
 \mypara{Infonomics of Network Measurement Data}
 %% a key challenge in using measurement data is xxx
-A key challenge to democratize of the benefit 
-data-driven paradigm in networking is that most measurement 
-data are collected 
-and maintained by application providers (e.g., video sites, 
-web sites) or infrastructure providers (e.g., ISP, CDNs), so 
-it would be impractical to assume they will freely share 
-the insight extracted from their data for a common goal.
+A key practical challenge to democratize the benefit of data-driven paradigm in networking 
+is that most measurement data are independently collected  and maintained by individual 
+domains (e.g., video sites, web sites, ISP, CDNs). It would be impractical to assume they 
+will voluntarily share  the insight extracted from their data for a common goal.
 %% prior work has focused on privacy
-To address the issue, prior work has largely focused on how to ensure data privacy
-by techniques like differential privacy. 
-These efforts, however, have overlooked many key issues, including the 
+While prior studies have largely focused on how to ensure data privacy
+by techniques like differential privacy~\cite{papadimitriou2017dstress,chen2015prism}. 
+they have overlooked many key issues, including the 
 incentive structure of data sharing, and how data fidelity (timeliness, 
 granularity, etc) affect the willingness of others to use these data.
 %% pricing the key towards a common framework
 We argue that a more effective and comprehensive solution is to
 develop a marketplace of network measurement data, where the key
 is a {\em pricing} framework to quantify the value of these 
-network measurement data as well as the willingness of others to 
-purchase them rather than learning it from what they already have.
-In this context, we can think of learning of BGP path as a special case of 
-such marketplace 
-for sharing reachability information, where people have spent several decades
-to reach a pricing model for each ISP charges or peers with 
-neighboring ISPs.
+network measurement data as well as the incentive of others to 
+purchase them as oppose to learning it from what they already have.
+%In this context, we can think of learning of BGP path as a special case of 
+%such marketplace 
+%for sharing reachability information, where people have spent several decades
+%to reach a pricing model for each ISP charges or peers with 
+%neighboring ISPs.
 %A special case of this framework adopt simple ``peering'' protocols to allow sharing
 %of data, just as in exchange of reachability information in inter-domain 
 %routing.
 %% can borrow ideas from infonomics
 Such marketplace of network measurement data can be viewed
 as an instance of infonomics~\cite{infonomics}, an emerging notion in economics
-to measure, manage and monetize information as a real asset.
+to measure, manage and monetize data as a real asset. 
 %% challenge: how to formulate the net-specific concerns
+
+
+
+
 
 
 \section{Final Remark}

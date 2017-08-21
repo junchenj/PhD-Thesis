@@ -27,46 +27,41 @@
 
 In the previous chapter, we have demonstrated that if we observe the QoE of many 
 video sessions, we can improve QoE by predicting QoE of any given
-video session based on that of similar sessions. 
-However, it is not always possible for anyone to measure 
-QoE directly, 
+video session based on the QoE of similar sessions. 
+However, it is not always feasible for anyone to measure QoE directly, 
 as it requires access to the internal states of the client-side applications.
 In the meantime, there are public datasets on 
 throughput measurements, e.g., FCC Measuring 
-BroadBand America Platform~\cite{fcc-2014}.
-Inspired by this opportunity, in this chapter, we remove the assumption that QoE 
+BroadBand America Platform~\cite{fcc-2014}, which can be used as input to the QoE
+prediction system.
+To exploit this opportunity, we remove the assumption that QoE 
 can be observed from video sessions from the CFA formulation, and 
 pose the question that whether it is feasible to prediction end-to-end 
-throughput of any video session based on the throughput 
+throughput of a video session based on the throughput 
 observed from other HTTP sessions in third-party datasets.
 
-Achieving the new objective of throughput prediction can still greatly improve today's
-video QoE. For most video players today start
-streaming video in a low bitrate and then gradually increase 
-the bitrate using a local logic, which
-typically takes several seconds to tens of seconds 
-before it reaches a high and sustainable bitrate,
-if it ever does.
+The new objective of throughput prediction is particularly relevant to improving the
+video QoE of many content provide.  Most video players today start streaming videos 
+in a low bitrate and then gradually increase the bitrate using a local logic, which
+typically takes several seconds to tens of seconds before it reaches a high and 
+sustainable bitrate (if it ever does before the session ends).
 In contrast, if the player can accurately predict throughput before 
-a video session starts,
-it can start directly with the highest-yet-sustainable initial video bitrate 
-(Section~\ref{sec:dda:back}).
+a video session starts, it will be able to start streaming in the highest-yet-sustainable 
+bitrate (Section~\ref{sec:dda:back}).
 
 To accurately predict end-to-end throughput, this chapter 
 argues for a {\em cross-session} prediction approach inspired by \ddn, 
 where throughput measured on sessions of different servers and clients 
 is used to predict the throughput of a new session.
-We observe that there are substantial similarity among
-throughput of similar sessions, but it is challenging
-to transform such similarity to accurate throughput
+We observe substantial similarity among the throughput of similar sessions, 
+but it is challenging to transform such similarity to accurate throughput
 prediction due to complex relations between session-level features 
 and throughput. 
-We develop an accurate throughput predictor called \name, which 
+We develop an accurate throughput predictor called {\em \name}, which 
 combines the nearest neighbor model with the domain-specific 
-insight that
-throughput only depends a subset of session-level features 
-(Section~\ref{sec:dda:design}). \name can be viewed as another illustration 
-of how persistent structures used for predicting end-to-end performance.
+insight that throughput only depends a subset of session-level features 
+(Section~\ref{sec:dda:design}). \name is another illustration of persistent 
+critical structures.
 Using two throughput measurement datasets, we show that \name 
 predicts throughput more accurately than simple predictors and 
 conventional machine learning algorithms; e.g., \name's 80\%ile 
@@ -124,7 +119,7 @@ throughput measurement on many HTTP sessions to
 accurately predict throughput and has applied \name to initial video bitrate
 selection.
 %Many Internet applications can benefit from estimating end-to-end throughput.  This paper focuses on its application to initial video bitrate selection. 
-\name uses another illustration of persistent structures that HTTP throughput 
+\name uses another illustration of the persistent critical structures that HTTP throughput 
 depends on a subset of session-level features, which persist on long timescales.
 %throughput measured by different clients and servers to achieve accurate throughput prediction before a new session starts. 
 Evaluation based on two real-world datasets shows (i) \name predicts throughput more accurately than simple predictors and conventional machine learning algorithms, and (ii) with more accurate throughput prediction, a player can choose a higher-yet-sustainable bitrate (e.g., compared to initial bitrate without prediction, \name leads to $4\times$ higher average bitrate with less sessions using bitrate exceeding the throughput).

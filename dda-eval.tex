@@ -17,18 +17,18 @@ This section evaluates the prediction accuracy of \name (Section~\ref{subsec:acc
 \mypara{Distribution of prediction error} Figure~\ref{fig:prediction-error} shows the distribution of prediction error of \name and other algorithms.
 \name outperforms all algorithms, especially on the tail of prediction error. For the FCC dataset (Figure~\ref{fig:prediction-error-fcc}), 80\%ile prediction error of \name is 50\% to 80\% lower than that of other algorithms, and \name has less than 20\% sessions with more than 10\% prediction error, while all other algorithms have at least 30\% session with more than 10\% error. While the VoD dataset in general has higher prediction error than the FCC dataset (due to the lack of some features such as last-connection and longitudinal information), \name still outperforms other algorithms, showing that \name is robust to the available features.
 
-\begin{figure}[h!]
+\begin{figure}[t!]
 \centering
 %\hspace{-0.6cm}
 \subfloat[FCC]
 {
-        \includegraphics[width=0.46\textwidth]{figures/dda-temp-CDF.pdf}
+        \includegraphics[width=0.4\textwidth]{figures/dda-temp-CDF.pdf}
         \label{fig:prediction-error-fcc}
 }
 %\hspace{-0.6cm}
 \subfloat[VoD China]
 {
-        \includegraphics[width=0.46\textwidth]{figures/dda-temp-CDF-pptv.pdf}
+        \includegraphics[width=0.4\textwidth]{figures/dda-temp-CDF-pptv.pdf}
         \label{fig:prediction-error-pptv}
 }
 %\hspace{-0.6cm}

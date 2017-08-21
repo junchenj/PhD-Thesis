@@ -612,7 +612,7 @@ low load (instead of all possible decisions).
 \mypara{Intuitively explanation of persistent critical structures}
 The intuitive explanation of these persistent critical structures 
 is that in networked systems and application delivery  systems, performance
-bottlenecks are often persistent, and the persistent structures
+bottlenecks are often persistent, and the persistent critical structures
 can be viewed as ``manifestations'' of these bottlenecks in the space of 
 session-level features and decision-specific properties--a session's QoE
 only depend on history sessions and decisions 
@@ -662,6 +662,82 @@ problems based on real datasets.
 %\mypara{Why persistent critical structures are helpful}
 
 
+
+
+\subsection{How Intuitively Persistent Critical Structures Address the Challenges?}
+%Persistent critical structures are the key enabler behind our solutions of expressive 
+%models and scalable control platform for \ddn. 
+Next, we intuitively illustrate how the persistent critical structures help to address 
+challenges of \ddn (Figure~\ref{fig:overview:ideas}).
+In the next section, we will see more concrete ideas that are based on the insight 
+of persistent critical structures, and how they address challenges in the context of
+Internet video and Internet telephony.
+
+%\begin{itemize}
+
+\mypara{Reducing session-level feature spaces} 
+One implication of the criticality property of these domain-specific structures is that 
+the complex relationship between session-level features and QoE (an manifestation of 
+the challenge of expressive models in Section~\ref{subsec:overview:challenge1}) can be 
+expressed by low dimensional models that can be maintained with limited available data.
+%can be expressed by low dimensional models.
+%This allows us to build models that focus on these  domain-specific structures, 
+%which are expressive enough to capture the complex relations between 
+%session-level features and decisions with limited available data.
+To see this idea in action, let us consider the example of 
+Figure~\ref{subfig:overview-idea-1},  in which we want to make the decision for a new 
+session (the orange circle) based on the QoE measured by the history sessions (the 
+white circles). Now, it is suboptimal to look at only the sessions that match values on all 
+features (e.g., IP prefix, location, device, content, network path, etc) with the new session, 
+since it will give too few matches, and consequently unreliable decisions will not be reliable.
+Nor is it scalable to use all history sessions as the input to make the decision in real time.
+%It is not scalable to use all history sessions to make 
+%the decision in real time, and neither is it ideal to look at only the sessions that
+%match values on all features (e.g., IP prefix, location, device, content, network 
+%path, etc), which will leave too few matches.
+The advantage of persistent critical structures is that each session's QoE only depends 
+on by a few critical features (rather than all features). Therefore, we can find sufficient 
+amount of similar sessions by matching along the most relevant features. At a high level, 
+this idea resembles the ML techniques that leverage the ``locality'' in data to tackle 
+curse of dimensionality~\cite{ml101}.
+
+\mypara{Reducing large decision spaces} 
+Another implication of the criticality property is that the large decision spaces (another 
+manifestation of the challenge of expressive models in 
+Section~\ref{subsec:overview:challenge1}) can be reduced to a subset of most promising 
+decisions which can be explore efficiently by concurrent application sessions who share
+the same characteristics. Figure~\ref{subfig:overview-idea-2} illustrates an example of this 
+idea, where instead of exploring all decisions, it would be more efficient to focus on a subset 
+of decisions that are most likely to be optimal.
+
+
+\mypara{Decomposing the decision-making process} 
+In the context of network applications, the persistent critical structures often correlate with 
+network locality (e.g., clients in the same IP prefix). This observation allows us to strike a 
+balance between global view and data freshness (Section~\ref{subsec:overview:challenge2})
+with an implementation that is amenable to the infrastructure of geo-distribution frontend 
+clusters. At a high level, the idea is to decompose all sessions into {\em groups} of similar 
+sessions who share the persistent critical structure as well as the network locality. Since the 
+sessions in the same group share network locality, their QoE measurement will be sent to the 
+same nearby frontend cluster (illustrated in Figure~\ref{subfig:overview-idea-3}). To make 
+decisions for the sessions in a group, we can use a logic that runs in the same frontend cluster 
+where their fresh data is collected, and uses only the information of these similar sessions to 
+make decisions. In this way, the decisions are effectively equivalent to using a fresh global 
+view, because they are made with fresh data of the most relevant sessions.
+
+\mypara{Learning the persistent critical structures from data} 
+While the criticality of the persistent critical structures serves as the key to making \ddn practical, 
+it is unclear how to obtain these structures in the first place. The key to learning these structures 
+lies in their persistence. Since these structures tend to persist on long timescales, we can learn 
+these structures from massive data in a time window of a long timescale and use an offline 
+process that is separate from real-time decision making. Figure~\ref{subfig:overview-idea-3} 
+illustrates the idea: we can run an algorithm to discover the  persistent critical structures in the 
+backend cluster where the measurement data of all sessions are collected. And although the 
+data is slightly stale, it is still sufficient to learn the slow-changing persistent critical structures.
+
+
+%\end{itemize}
+
 \begin{figure}[t!]
 \captionsetup[subfigure]{justification=centering,farskip=-1pt,captionskip=5pt}
 \centering
@@ -690,85 +766,14 @@ of the available decisions (depicted as boxes) on the right. )}
 \end{figure}
 
 
-\subsection{How Intuitively Persistent Critical Structures Address the Challenges?}
-%Persistent critical structures are the key enabler behind our solutions of expressive 
-%models and scalable control platform for \ddn. 
-Here, we present an intuitive explanation of how persistent critical structures help to 
-address challenges of \ddn (illustrated in Figure~\ref{fig:overview:ideas}).
-
-%\begin{itemize}
-
-\mypara{Reducing session-level feature spaces} 
-One implication of the criticality property of these domain-specific structures is that 
-the complex relationship between session-level features and QoE (the first manifestation 
-of challenge of expressive models in Section~\ref{subsec:overview:challenge1}) can be 
-expressed low dimensional models that can be maintained with limited available data.
-%can be expressed by low dimensional models.
-%This allows us to build models that focus on these  domain-specific structures, 
-%which are expressive enough to capture the complex relations between 
-%session-level features and decisions with limited available data.
-To see this idea in action, let us consider the example of 
-Figure~\ref{subfig:overview-idea-1},  in which we want to make the decision for a new 
-session (the orange circle) based on the QoE measured by the history sessions 
-(the white circles). It is not ideal to look at only the sessions that
-match values on all features (e.g., IP prefix, location, device, content, network 
-path, etc), which will leave too few matches.
-%It is not scalable to use all history sessions to make 
-%the decision in real time, and neither is it ideal to look at only the sessions that
-%match values on all features (e.g., IP prefix, location, device, content, network 
-%path, etc), which will leave too few matches.
-As we will see, an illustration of persistent critical structures is that each session's 
-QoE only depends on by a few critical features (rather than all features). Therefore, 
-we can find many similar sessions by matching along the most relevant features. 
-This idea resembles the ML techniques that leverage the ``locality'' in data to tackle 
-curse of dimensionality~\cite{ml101}.
-
-\mypara{Reducing large decision spaces} Another implication of the criticality property is that the large decision spaces 
-(the second manifestation of challenge of expressive models in 
-Section~\ref{subsec:overview:challenge1}) can be reduced to a subset of most promising 
-decisions which can be explore efficiently by concurrent application sessions who share
-the same characteristics. Figure~\ref{subfig:overview-idea-2} illustrates an example of this 
-idea, where instead of exploring all decisions, it is sufficient to focus on a subset of 
-decisions that are most likely to be the optimal one.
-
-
-\mypara{Decomposing the decision-making process} 
-In the context of network applications, the persistent critical structures often 
-correlate with network locality (e.g., clients in the same IP prefix). This allows us to strike
-a balance between global view and data freshness (Section~\ref{subsec:overview:challenge2}). 
-The critical structures enable an effective decomposition of all sessions into {\em groups} of
-similar sessions who share the persistent critical structure as well as the network locality. 
-Figure~\ref{subfig:overview-idea-3} illustrates how such decomposition helps to strike
-a balance between global view and data freshness. 
-Since the sessions in the same group share network locality, their QoE measurement
-will be sent to the same nearby frontend cluster. This suggests that in each group, we can 
-use a decision-making logic that runs in the frontend cluster and only uses the information 
-of these similar sessions. In this way, the decisions are effectively equivalent to using a 
-fresh global view, because they are made with fresh data of the most relevant sessions.
-
-\mypara{Learning the persistent critical structures from data} 
-While the criticality of these persistent critical structures serves the key to addressing
-many challenges of \ddn, it is so far unclear how to obtain these structures in the first place. 
-The key to learn these structures lies in their persistence. 
-Since these structures tend to persist on longer timescales than QoE itself does, we can learn 
-these structures from more history data with an offline process separate from real-time decision 
-making. Figure~\ref{subfig:overview-idea-3} illustrates the idea: we can run an algorithm in the 
-backend cluster to discover the  persistent critical structures, because the 
-backend cluster the measurement data of all clients, and although the data is slightly stale,
-we found that it is still suitable to learn the slow-changing persistent critical structures.
-
-
-%\end{itemize}
-
-
-
 
 
 \section{Making \ddn Practical by Persistent Critical Structures}
 \label{sec:overview:solutions}
 
-The insight of persistent critical structures enables our key ideas 
-(Figure~\ref{fig:overview-roadmap})  to address \ddn's challenges. 
+The insight of persistent critical structures enables three key ideas 
+(Figure~\ref{fig:overview-roadmap})  to address \ddn's challenges in the  context of
+Internet video streaming and Internet telephony.
 %Figure~\ref{fig:overview-roadmap} summarizes the 
 %the mapping between the challenges and the ideas.
 %We conclude the section by discussing a unifying
@@ -790,24 +795,19 @@ The insight of persistent critical structures enables our key ideas
 \subsection{Critical Features Analysis}
 \label{subsec:overview:cfa}
 
-As we have seen, video QoE can be improved by
-a prediction system that accurately predicts the QoE 
-of a video session if it uses a certain CDN and bitrate.
-The challenge is that this prediction system must be 
-(a) expressive enough to capture complex relations 
-between video quality and observed session features, 
-and (b) capable of updating quality predictions in near 
-real time.
-We used several off-the-shelf machine learning 
-techniques, such as random forests and SVM, but 
-found they did not produce expected QoE improvements, 
-because the long-term historical data is too coarse grained 
-for these algorithms to capture the dynamics of video 
-quality, while the short-term historical data is not sufficient 
-for the algorithms to learn complex relations between 
-video quality and observed session features.
+Prior work has shown that video QoE can be improved by a prediction system that 
+accurately predicts the QoE of a video session, if it uses a certain CDN and bitrate.
+The challenge is that this prediction system must be (a) expressive enough to capture 
+complex relations between video quality and observed session features, and (b) 
+capable of updating quality predictions in near real time.
+We have tried several off-the-shelf machine learning techniques, such as random 
+forests and SVM, but found they did not produce expected QoE improvements, 
+because the long-term historical data is too coarse-grained  for these algorithms to 
+capture the dynamics of video  quality, while the short-term historical data is not sufficient 
+for the algorithms to learn complex relations between video quality and observed 
+session features.
 
-Our solution leverages an instantiation of persistent structures
+Our solution leverages an instantiation of persistent critical structures
 in video streaming, called 
 {\em persistent critical features: each video session has 
 a small set of critical features that ultimately determines 
@@ -903,7 +903,7 @@ data-driven QoE  optimization as a real-time
 exploration and exploitation process, and build 
 a practical system to run it among all clients at 
 scale. 
-Our key insight is inspired by the criticality of persistent
+Our key insight is inspired by the criticality of persistent critical
 structures -- {\em the clients that exhibit similar 
 QoE behavior will have similar network-level 
 features (e.g., same IP prefix), and thus their 
@@ -984,7 +984,7 @@ the dynamic network performance between each
 AS pair.
 
 The key insight to address this challenge is  another
-illustration of persistent structure --
+illustration of persistent critical structures --
 {\em the stability of promising relay choices: for each pair of 
 caller AS and callee AS, there is a small and 
 stable subset of relays that almost always 
@@ -1030,32 +1030,27 @@ calls in real time.
 
 \section{Summary}
 
-In this section, we have discussed the advantages
-of \ddn over prior approaches. 
-In particular, as an application-level endpoint 
-approach, \ddn enjoys the advantage of direct 
-access to user-perceived QoE, and at the same
-time, compensates the limited insight to network 
-conditions by consolidating real-time measurement
-from many endpoints, thus achieving the best world
-of both endpoint solutions and in-network solutions.
+In this section, we first discussed the advantages of \ddn over prior approaches. 
+As an application-level endpoint approach, \ddn enjoys the advantage of direct 
+access to user-perceived QoE, and at the same time, compensates the limited 
+insight to network conditions by consolidating real-time measurement from many 
+endpoints, thus achieving the best world of both endpoint solutions and in-network 
+solutions.
 
-We have also presented an overview of our solutions
-to address \ddn's technical challenges--the need for 
-expressive models and scalable systems. 
-In particular, there are the three key ideas underlying 
-our solutions: 
-(1) critical feature analysis to enable an expressive 
-QoE prediction model, 
-(2) group-based control to enable real-time 
-exploration-exploitation process at scale, and
-(3) guided exploration to handle the large 
-decision spaces in Internet telephony.
-Finally, we summarize the section by distilling 
-a unifying insight from these 
-ideas--\ddn can be made practical by integrating
-machine learning with the insight that there are 
-persistent domain-specific structures.
+We have also presented an overview of our solutions to address \ddn's technical 
+challenges--the need for expressive models and scalable systems. 
+Our key insight is that there are persistent critical structures in the relationship 
+between session-level features, decisions, and QoE.
+This insight has led to three concrete ideas, which we will present in the next 
+chapters: (1) critical feature analysis to enable an expressive QoE prediction model, 
+(2) group-based control to enable real-time  exploration-exploitation process at 
+scale, and (3) guided exploration to handle the large decision spaces, particularly in 
+Internet telephony.
+%Finally, we summarize the section by distilling 
+%a unifying insight from these 
+%ideas--\ddn can be made practical by integrating
+%machine learning with the insight that there are 
+%persistent domain-specific structures.
 
 
 
