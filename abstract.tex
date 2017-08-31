@@ -6,19 +6,24 @@ depend on user-perceived Quality of Experience (QoE).
 %For instance, even one short buffering interruption can lead to much less 
 %video viewing time and cause significant revenue losses for the video site. 
 Despite intense research towards better QoE, existing approaches
-have failed to achieve the QoE needed by today's  applications. 
+have failed to achieve the QoE needed by today's  applications,
+because they are not acting on the ``right feedback signal'':
+they either seek to rearchitect the in-network devices 
+which have little information on user-perceived QoE, 
+or propose end-to-end protocols which have limited knowledge on 
+network conditions.
 %Two classes of solutions have been proposed: in-network approach
 %which re-architects the in-network devices to improve network quality of service, 
 %and endpoint approach which uses local information of individual endpoints
 %to react to dynamic network conditions.
-Their limitations stem from the fundamental trade-off between 
-visibility to {\em user-perceived QoE} and visibility to {\em network conditions}, 
-both of which are crucial to ensuring high QoE;
-%while endpoints have direct access to user-perceived QoE, they have limited 
-%knowledge of the network conditions.
-they either seek to rearchitect the in-network devices which have little visibility to QoE, 
-or propose end-to-end protocols which have limited visibility to 
-network conditions.
+%Their limitations stem from the fundamental trade-off between 
+%visibility to {\em user-perceived QoE} and visibility to {\em network conditions}, 
+%both of which are crucial to ensuring high QoE;
+%%while endpoints have direct access to user-perceived QoE, they have limited 
+%%knowledge of the network conditions.
+%they either seek to rearchitect the in-network devices which have little visibility to QoE, 
+%or propose end-to-end protocols which have limited visibility to 
+%network conditions.
 
 %{\em where they implement the 
 %functionality of QoE optimization}. 
@@ -33,9 +38,9 @@ network conditions.
 %the in-network devices (i.e., little visibility to QoE), or rely on suboptimal endpoint-based 
 %protocols (i.e., limited knowledge of the network conditions).
 
-The key contribution of this dissertation is to improve application QoE by bridging the 
-long-standing gap between the visibility to user-perceived QoE and the visibility to 
-network conditions. 
+The key contribution of this dissertation is to bridge the long-standing gap between 
+the visibility to user-perceived QoE and the visibility to network conditions by a 
+data-driven approach. 
 %by demonstrating the 
 %feasibility of a new approach, called data-driven networking, 
 %inspired by the recent success of data-driven 
@@ -43,28 +48,30 @@ network conditions.
 The thesis is  that {\em one can substantially improve QoE by maintaining
 a global view of up-to-date network conditions based on the QoE information
 collected from many endpoints}.
-In essence, this thesis revisits the architectural question ``where to
-implement the functionality of QoE optimization''.
+In essence, this thesis revisits the architectural question of where to
+implement the functionality of QoE optimization.
 Unlike prior work which optimizes QoE by in-network devices or 
 individual endpoints, our approach optimizes QoE by a logically centralized 
 controller that retains the visibility to QoE while attaining a global view
 of real-time network conditions by consolidating information from many endpoints.
 
 To prove the thesis, this dissertation provides a suite of solutions to address 
-two fundamental challenges:
-(1) the need for expressive models to capture complex relations among sessions
-who share similar QoE-determining factors, and 
-(2) the need for scalable platforms to make real-time decisions with fresh data 
+two fundamental challenges.
+First, we need expressive models to capture complex relations among 
+QoE, decisions, and application sessions who share similar QoE-determining 
+factors.
+Second, we need scalable platforms to make real-time decisions with fresh data 
 from geo-distributed clients. 
+
 Our key insight that there are {\em persistent critical structures} in the relations between 
 QoE and session-level features. 
 These structures allow us to build expressive models that can identify network
 sessions with similar QoE-determining factors, and their temporal persistence allows
 us to build scalable platforms by decoupling offline structure-learning
 processes and real-time decision making processes.
-By integrating standard machine-learning techniques with the insight of persistent
-critical structures, we have developed algorithms 
-and end-to-end systems, and used real-world deployment and 
+We have developed algorithms and end-to-end systems, which integrate 
+machine-learning techniques with our insight of persistent
+critical structures. We have used real-world deployment and 
 simulation driven by real datasets to show that our solutions 
 can yield substantial QoE improvement and consequently higher user 
 engagement for video streaming and Internet telephony 
